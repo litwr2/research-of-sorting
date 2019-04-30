@@ -1,0 +1,31 @@
+<style type=text/css>
+table, th, td {
+   border-width:thin;
+   border-style:solid;
+   border-color:green;
+   border-spacing:0px;
+}
+</style>
+<table border=1>
+<tr><th rowspan=2>Алгоритм<th colspan=7>Тип заполнения
+<tr><th align=center>I<th>II<th>III<th>IV<th>V<th>VI<th>VII
+<tr><td>shell (e-based)<td align=right>1<td align=right>2<td align=right>5<td align=right>2<td align=right>2<td align=right>4<td align=right>5
+<tr><td>qsort (clib)<td align=right>3<td align=right>4<td align=right>8<td align=right>5<td align=right>3<td align=right>4<td align=right>5
+<tr><td>qsort (Hoare)<td align=right>2<td align=right>2<td align=right>5<td align=right>3<td align=right>2<td align=right>7489<td align=right>3
+<tr><td>qsort (no pivot)<td align=right>7803<td align=right>6442<td align=right>65<td align=right>5130<td align=right>7802<td align=right>865<td align=right>47
+<tr><td>qsort (Lomuto)<td align=right>6760<td align=right>6615<td align=right>72<td align=right>3119<td align=right>6227<td align=right>2181<td align=right>6397
+<tr><td>std::sort<td align=right>2<td align=right>2<td align=right>4<td align=right>2<td align=right>2<td align=right>3<td align=right>7
+<tr><td>std::stable_sort<td align=right>2<td align=right>2<td align=right>3<td align=right>3<td align=right>2<td align=right>2<td align=right>3
+<tr><td>timsort<td align=right>0<td align=right>0<td align=right>8<td align=right>3<td align=right>0<td align=right>2<td align=right>1
+<tr><td>heapsort (bsd)<td align=right>18<td align=right>17<td align=right>19<td align=right>23<td align=right>28<td align=right>18<td align=right>18
+<tr><td>heapsort (boost)<td align=right>7<td align=right>7<td align=right>7<td align=right>8<td align=right>10<td align=right>7<td align=right>7
+<tr><td>spreadsort<td align=right>0<td align=right>2<td align=right>1<td align=right>1<td align=right>0<td align=right>1<td align=right>3
+<tr><td>pdqsort<td align=right>0<td align=right>1<td align=right>2<td align=right>0<td align=right>0<td align=right>3<td align=right>4
+<tr><td>spinsort<td align=right>0<td align=right>0<td align=right>4<td align=right>2<td align=right>0<td align=right>1<td align=right>2
+<tr><td>flat_stable_sort<td align=right>0<td align=right>0<td align=right>5<td align=right>2<td align=right>0<td align=right>2<td align=right>2
+<tr><td>hash_sort<td align=right>3<td align=right>3<td align=right>382<td align=right>6740<td align=right>0<td align=right>3<td align=right>2539
+<tr><td>tree_sort<td align=right>16<td align=right>17<td align=right>23<td align=right>14<td align=right>15<td align=right>14<td align=right>14
+<tr><td>selection_sort<td align=right>3773<td align=right>3776<td align=right>3774<td align=right>3777<td align=right>3774<td align=right>3775<td align=right>3778
+<tr><td>bubble_sort<td align=right>0<td align=right>6361<td align=right>12605<td align=right>10397<td align=right>0<td align=right>5944<td align=right>127
+</table>
+

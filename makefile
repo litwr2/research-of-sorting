@@ -1,4 +1,4 @@
-CXXFLAGS = -O3 
+CXXFLAGS = -O3
 LDFLAGS = -lstdc++ -lbsd
 
 nsort: nsort.o

@@ -14,20 +14,13 @@
 #include <functional>
 #include <climits>
 #include <cstring>
-#include "timsort.hpp"   // https://github.com/gfx/cpp-TimSort - only the header is required
-#include <bsd/stdlib.h>  // for heapsort
-#include <boost/sort/spreadsort/spreadsort.hpp>
-#include <boost/sort/pdqsort/pdqsort.hpp>
-#include <boost/sort/sort.hpp>
-#include <boost/container/set.hpp>
-using namespace std;
 
-#include "oms7.cpp" //from https://habr.com/ru/post/335920/
+using namespace std;
 
 #define FN "tempd"
 //#define PLAININT
-#define STRINGS
-//#define CSTRINGS
+//#define STRINGS
+#define CSTRINGS
 //#define COUNTERS
 //#define ALL_VARIANTS  //SS must be less than 14 (14 means a many hours calculation)
 #define RANDOM_ORDER
@@ -39,7 +32,7 @@ using namespace std;
 //#define SLOW_QSORT1_ORDER
 
 #ifndef ALL_VARIANTS
-#define SS 100'000'000 //limits due to int types of indice are slightly above 2'000'000'000
+#define SS 100'000 //limits due to int types of indice are slightly above 2'000'000'000
 #else
 #define SS 12
 #define RDTSC
@@ -94,186 +87,13 @@ void fill_for_quadratic_qsort1(vector<T> &v, int size) {
 	v.insert(v.end(), l.begin(), l.end());     
 }
 
-template <class T>
-void timsort(vector<T> &a) {
-   gfx::timsort(a.begin(), a.end(), std::less<T>());
-}
-
-template <>
-void timsort(vector<const char*> &a) {
-   gfx::timsort(&a[0], &a[0] + SS, [](const char *l, const char *r) { return strcmp(l, r) < 0; });
-}
-
-template <class T>
-void spreadsort(vector<T> &a) {
-   //boost::sort::spreadsort::spreadsort(&a[0], &a[0] + SS);
-   boost::sort::spreadsort::integer_sort(&a[0], &a[0] + SS);
-}
-
-template <>
-void spreadsort(vector<string> &a) {
-   boost::sort::spreadsort::string_sort(&a[0], &a[0] + SS);
-}
-
-template <>
-void spreadsort(vector<int> &a) {
-   boost::sort::spreadsort::integer_sort(&a[0], &a[0] + SS);
-}
-
-/*struct bracket {
-  inline unsigned char operator()(const char* x, size_t offset) const {
-    return x[offset];
-  }
-};
-
-struct getsize {
-  inline size_t operator()(const char *x) const { return strlen(x); }
-};
-
-template <>
-void spreadsort(vector<const char*> &a) {
-   boost::sort::spreadsort::string_sort(&a[0], &a[0] + SS, bracket(), getsize());
-}*/
-
-template <class T>
-void pdqsort(vector<T> &a) {
-   boost::sort::pdqsort(&a[0], &a[0] + SS);
-}
-
-template <>
-void pdqsort(vector<const char*> &a) {
-   boost::sort::pdqsort(&a[0], &a[0] + SS, [](const char *l, const char *r) { return strcmp(l, r) < 0; });
-}
-
-template <class T>
-void spinsort(vector<T> &a) {
-   boost::sort::spinsort(&a[0], &a[0] + SS);
-}
-
-template <>
-void spinsort(vector<const char*> &a) {
-   boost::sort::spinsort(&a[0], &a[0] + SS, [](const char *l, const char *r) { return strcmp(l, r) < 0; });
-}
-
-template <class T>
-void flat_stable_sort(vector<T> &a) {
-   boost::sort::flat_stable_sort(&a[0], &a[0] + SS);
-}
-
-template <>
-void flat_stable_sort(vector<const char*> &a) {
-   boost::sort::flat_stable_sort(&a[0], &a[0] + SS, [](const char *l, const char *r) { return strcmp(l, r) < 0; });
-}
-
-template <class T>
-int cmpfunc(const void *a, const void *b) {
-#ifndef STRINGS
-   return *(T*)a - *(T*)b;
-#else
-   return ((string*)a)->compare(*(string*)b);  //doesn't work
-#endif
-}
-
-int cmpfunc_char(const void *s1, const void *s2) {
-        return strcmp(*(const char**)s1, *(const char**)s2);
-}
-
-template <class T>
-void mergesort_bsd(vector<T> &a) {
-   mergesort(&a[0], SS, sizeof(T), cmpfunc<T>);
-}
-
-template <>
-void mergesort_bsd(vector<const char*> &a) {
-   mergesort(&a[0], SS, sizeof(char*), cmpfunc_char);
-}
-
-template <class T>
-void hsort_bsd(vector<T> &a) {
-   heapsort(&a[0], SS, sizeof(T), cmpfunc<T>);
-}
-
-template <>
-void hsort_bsd(vector<const char*> &a) {
-   heapsort(&a[0], SS, sizeof(char*), cmpfunc_char);
-}
-
-template <class T>
-void hsortstl(vector<T> &a) {
-   make_heap(a.begin(), a.end());
-   sort_heap(a.begin(), a.end());
-}
-
-template <>
-void hsortstl(vector<const char*> &a) {
-   make_heap(a.begin(), a.end(), [](const char *l, const char *r) { return strcmp(l, r) < 0; });
-   sort_heap(a.begin(), a.end(), [](const char *l, const char *r) { return strcmp(l, r) < 0; });
-}
-
-template<class T>
-void radix_bsd(vector<T> &a) {
-}
-
-template<>
-void radix_bsd(vector<const char*> &a) {
-    radixsort((const unsigned char**)&a[0], SS, 0, 0);   
-}
-
-template<class T>
-void sradix_bsd(vector<T> &a) {
-}
-
-template<>
-void sradix_bsd(vector<const char*> &a) {
-    sradixsort((const unsigned char**)&a[0], SS, 0, 0);   
-}
-
-template <class T>
-void stl_sort(vector<T> &a) {
-   sort(a.begin(), a.end());
-}
-
-template <>
-void stl_sort(vector<const char*> &a) {
-   sort(a.begin(), a.end(), [](const char *l, const char *r) { return strcmp(l, r) < 0; });
-}
-
-template <class T>
-void stl_stable_sort(vector<T> &a) {
-   stable_sort(a.begin(), a.end());
-}
-
-template <>
-void stl_stable_sort(vector<const char*> &a) {
-   stable_sort(a.begin(), a.end(), [](const char *l, const char *r) { return strcmp(l, r) < 0; });
-}
-
-template<class T>
-inline int digit(T n, int k, int N, int M) {
-	return n >> N*k & M - 1;
-}
-
-template<class T>
-void radixsort(vector<T> &a, int N) {
-#ifndef STRINGS
-	int k = 8;
-        if (sizeof(T) == sizeof(int(a[0])) || typeid(T) == typeid(int)) k = 4;
-        k = (k*8 + N - 1) / N;
-	int M = 1 << N;
-	vector<T> b(a.size());
-	for (int i = 0; i < k; i++) {
-                int c[M] = {0};
-		for (int j = 0; j < a.size(); j++)
-			c[digit(a[j], i, N, M)]++;
-		for (int j = 1; j < M; j++)
-			c[j] += c[j - 1];
-		for (int j = a.size() - 1; j >= 0; j--)
-			b[--c[digit(a[j], i, N, M)]] = a[j];
-		a = b;
-	}
-#endif
-}
-
+#include "oms7.cpp"
+#include "baseop.cpp"
+#include "tim.cpp"
+#include "std.cpp"
+#include "boost.cpp"
+#include "bsd.cpp"
+#include "radix.cpp"
 #include "qsort.cpp"
 #include "shell.cpp"
 #include "tree.cpp"
@@ -484,7 +304,9 @@ int main() {
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(tree_sort_stl<X>, placeholders::_1)), "tree_stl");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(tree_sort_boost<X>, placeholders::_1)), "tree_boost");
 
-    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1)), "array");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 1)), "array*1");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 2)), "array*2");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 3)), "array*3");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hash_sort<X>, placeholders::_1)), "hash");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hashbt_sort_std<X>, placeholders::_1)), "hashbt_std");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hashbt_sort2<X>, placeholders::_1)), "hashbt");

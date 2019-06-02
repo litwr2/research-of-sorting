@@ -1,14 +1,3 @@
-uint32_t convert(const char *s) {
-    uint32_t r = 0.;
-    for (int i = 0; s[i] && i < 4; ++i)
-        r += s[i]*(1U << ((3 - i) << 3));
-    return r;
-}
- 
-uint32_t operator-(const string &s1, const string &s2) {
-    return convert(s1.c_str()) - convert(s2.c_str());
-}
-
 template<class T> int hash_func(T d, T minElem, T maxElem) {
     return long(d - minElem)*(SS - 1)/(maxElem - minElem);
 }

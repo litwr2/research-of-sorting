@@ -3,7 +3,7 @@ LDFLAGS = -lstdc++ -lbsd
 
 nsort: nsort.o
 
-nsort.o: nsort.cpp
+nsort.o: nsort.cpp $(wildcard [^z]*.cpp)
 
 clean:
 	rm *.o nsort

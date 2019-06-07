@@ -1,14 +1,19 @@
 template <class T>
 int cmpfunc(const void *a, const void *b) {
-#ifndef STRINGS
-   return *(T*)a - *(T*)b;
-#else
-   return ((string*)a)->compare(*(string*)b);  //doesn't work
-#endif
+    return *(T*)a - *(T*)b;
 }
 
-int cmpfunc_char(const void *s1, const void *s2) {
-        return strcmp(*(const char**)s1, *(const char**)s2);
+template<>
+int cmpfunc<int64_t>(const void *a, const void *b) {
+    int64_t r = *(int64_t*)a - *(int64_t*)b;
+    if (r < 0) return -1;
+    if (r > 0) return 1;
+    return 0;
+}
+
+template<>
+int cmpfunc<const char*>(const void *s1, const void *s2) {
+    return strcmp(*(const char**)s1, *(const char**)s2);throw 3;
 }
 
 uint32_t convert(const char *s) {

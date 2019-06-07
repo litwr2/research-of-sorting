@@ -7,7 +7,7 @@ void mergesort_bsd(vector<T> &a) {
 
 template <>
 void mergesort_bsd(vector<const char*> &a) {
-     mergesort(&a[0], SS, sizeof(char*), cmpfunc_char);
+     mergesort(&a[0], SS, sizeof(char*), cmpfunc<const char*>);
 }
 
 template <class T>
@@ -17,7 +17,7 @@ void hsort_bsd(vector<T> &a) {
 
 template <>
 void hsort_bsd(vector<const char*> &a) {
-     heapsort(&a[0], SS, sizeof(char*), cmpfunc_char);
+     heapsort(&a[0], SS, sizeof(char*), cmpfunc<const char*>);
 }
 
 template<class T>

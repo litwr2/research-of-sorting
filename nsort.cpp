@@ -18,9 +18,9 @@
 using namespace std;
 
 #define FN "tempd"
-#define PASSES 2
-//#define PLAININT
-#define INT64
+#define PASSES 1
+#define PLAININT
+//#define INT64
 //#define STRINGS
 //#define CSTRINGS
 //#define COUNTERS
@@ -34,7 +34,7 @@ using namespace std;
 //#define SLOW_QSORT1_ORDER
 
 #ifndef ALL_VARIANTS
-#define SS 100'000 //limits due to int types of indice are slightly above 2'000'000'000
+#define SS 10'000 //limits due to int types of indice are slightly above 2'000'000'000
 #else
 #define SS 12
 #define RDTSC
@@ -61,7 +61,7 @@ typedef string X;
 #elif defined(CSTRINGS)
 typedef const char *X;
 #elif defined(INT64)
-typedef uint64_t X;
+typedef int64_t X;
 #else
 struct X {
     int k;
@@ -69,6 +69,7 @@ struct X {
     operator int() { return k; }
 };
 bool operator<(const X &a, const X &b) { return a.k < b.k; }
+//bool operator-(const X &a, const X &b) { return a.k - b.k; }
 #endif
 
 template<class T>
@@ -151,12 +152,13 @@ size_t test(fstream &fio, vector<const char*> &v, function<void(vector<const cha
     f(v);
     auto te = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     check(v);
+    if (title[0] == 'Z') goto L;
     cout << setw(16) << left << title << setw(10) << right << te - ts
 #ifdef COUNTERS
         << "\t" << comp_cnt << "\t" << exch_cnt
 #endif
         << endl;
-
+L:
     fio.seekg(0);
     fio.read(reinterpret_cast<char*>(&v[0]), SS*sizeof(char*));
     return te - ts;
@@ -236,7 +238,7 @@ int main() {
 #elif defined(CSTRINGS)
        v.push_back([]{ int lim = rand()%16 + 1; char *s = new char[lim + 1]; int i; for (i = 0; i < lim; ++i) s[i] = ' ' + rand()%94; s[i] = 0; return s;}());
 #else
-       v.push_back({X(1)*rand()*rand()});
+       v.push_back({X{1}*abs(rand()*rand())});
 #endif
 #elif defined(ASCENDED_ORDER) || defined(ASCENDED_RANDOM_ORDER)
        v.push_back({i});
@@ -275,6 +277,7 @@ L:
 
 #if !defined(STRINGS) && !defined(CSTRINGS)
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radixsort<X>, placeholders::_1, 8)), "radix8");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radixsort<X>, placeholders::_1, 11)), "radix11");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radixsort<X>, placeholders::_1, 16)), "radix16");
 #ifdef PLAININT
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(oms7_helper<X>, placeholders::_1, 5)), "shell_10/3_oms7");
@@ -288,7 +291,7 @@ L:
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radix_bsd<X>, placeholders::_1)), "radix_bsd");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(sradix_bsd<X>, placeholders::_1)), "sradix_bsd");
 #endif
-    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort0<X>, placeholders::_1)), "clib_qsort");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort0<X>, placeholders::_1)), "clib_qsort");
     //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hsort_bsd<X>, placeholders::_1)), "heapsort_bsd");
     //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(mergesort_bsd<X>, placeholders::_1)), "mergesort_bsd");
 #endif
@@ -314,19 +317,19 @@ L:
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(tree_sort_stl<X>, placeholders::_1)), "tree_stl");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(tree_sort_boost<X>, placeholders::_1)), "tree_boost");
 
-    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 1)), "array*1");
-    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 2)), "array*2");
-    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 3)), "array*3");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 1)), "array*1");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 2)), "array*2");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 3)), "array*3");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hash_sort<X>, placeholders::_1)), "hash");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hashbt_sort_std<X>, placeholders::_1)), "hashbt_std");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hashbt_sort2<X>, placeholders::_1)), "hashbt");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hashbt_sort_boost<X>, placeholders::_1)), "hashbt_boost");
 
-    if (passes--) goto L;
+    if (--passes) goto L;
     fio.close();
     remove(FN);
 #endif
-    cout << "ok\t" << SS << ' ' <<  typeid(X).name() << "\n";
+    cerr << "zok\t" << SS << ' ' <<  typeid(X).name() << "\n";
     //for (int i = 0; i < SS; ++i) cout << v[i] << '\n';
     return 0;
 }

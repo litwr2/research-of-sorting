@@ -1,4 +1,19 @@
 template <class T>
+void qsort0(vector<T> &a) {
+   qsort((void*)&a[0], SS, sizeof(T), cmpfunc<T>);
+}
+
+template <>
+void qsort0(vector<const char*> &a) {
+   qsort((void*)&a[0], SS, sizeof(char*), cmpfunc<const char*>);
+}
+
+template <>
+void qsort0(vector<int64_t> &a) {
+   qsort((void*)&a[0], SS, sizeof(char*), cmpfunc<int64_t>);
+}
+
+template <class T>
 void hsortstl(vector<T> &a) {
     make_heap(a.begin(), a.end());
     sort_heap(a.begin(), a.end());

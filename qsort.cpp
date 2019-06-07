@@ -1,14 +1,4 @@
 template <class T>
-void qsort0(vector<T> &a) {
-   qsort((void*)&a[0], SS, sizeof(T), cmpfunc<T>);
-}
-
-template <>
-void qsort0(vector<const char*> &a) {
-   qsort((void*)&a[0], SS, sizeof(char*), cmpfunc_char);
-}
-
-template <class T>
 void qsort1(vector<T> &a, int LBound, int UBound) { //Hoare, variant 1
     int i = LBound, j = UBound;
     T x = a[(i + j)/2];

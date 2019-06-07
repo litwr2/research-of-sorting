@@ -2,6 +2,10 @@ template<class T> int hash_func(T d, T minElem, T maxElem) {
     return long(d - minElem)*(SS - 1)/(maxElem - minElem);
 }
 
+template<> int hash_func(int64_t d, int64_t minElem, int64_t maxElem) {
+    return (long double)(d - minElem)*(SS - 1)/(maxElem - minElem);
+}
+
 template<> int hash_func(const char *d, const char *minElem, const char *maxElem) {
     return long(convert(d) - convert(minElem))*(SS - 1)/(convert(maxElem) - convert(minElem));
 }

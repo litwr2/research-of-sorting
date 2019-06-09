@@ -5,9 +5,8 @@ inline int digit(T n, int k, int N, int M) {
 
 template<class T>
 void radixsort(vector<T> &a, int N) {
-#ifndef STRINGS
-	int k = 8;
-        if (sizeof(T) == sizeof(int(a[0])) || typeid(T) == typeid(int)) k = 4;
+	int k = sizeof(T);
+        if (k == sizeof(int(a[0]))) k = 4; //for X type
         k = (k*8 + N - 1) / N;
 	int M = 1 << N;
 	vector<T> b(a.size());
@@ -21,6 +20,5 @@ void radixsort(vector<T> &a, int N) {
 			b[--c[digit(a[j], i, N, M)]] = a[j];
 		a = b;
 	}
-#endif
 }
 

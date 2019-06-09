@@ -17,24 +17,35 @@
 
 using namespace std;
 
+#ifndef FN
 #define FN "tempd"
+#endif
+#ifndef PASSES
 #define PASSES 1
-#define PLAININT
+#endif
+//#define PLAININT
+//#define INT1P4
 //#define INT64
+//#define INT128
+//#define FLOAT
 //#define STRINGS
 //#define CSTRINGS
 //#define COUNTERS
 //#define ALL_VARIANTS  //SS must be less than 14 (14 means a many hours calculation)
-#define RANDOM_ORDER
+//#define RANDOM_ORDER
 //#define ASCENDED_ORDER
 //#define ASCENDED_RANDOM_ORDER
 //#define DESCENDED_ORDER
 //#define LOW_VARIATION_ORDER
+#ifndef LOW_VARIATION_CONST
 #define LOW_VARIATION_CONST 100
+#endif
 //#define SLOW_QSORT1_ORDER
 
 #ifndef ALL_VARIANTS
+#ifndef SS
 #define SS 10'000 //limits due to int types of indice are slightly above 2'000'000'000
+#endif
 #else
 #define SS 12
 #define RDTSC
@@ -50,7 +61,7 @@ uint64_t comp_cnt, exch_cnt, comp_sum, exch_sum, total_sum, comp_max, total_max,
     exch_max, exch_min = INT_MAX, total_min = INT_MAX, total_min_comp, total_max_comp, total_min_exch,
     total_max_exch, counter, timer_sum;
 
-#if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS) + defined(INT64) > 1
+#if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) > 1
 #error AMBIGUOUS TYPE
 #endif
 
@@ -62,14 +73,20 @@ typedef string X;
 typedef const char *X;
 #elif defined(INT64)
 typedef int64_t X;
-#else
+#elif defined(INT128)
+typedef __int128 X;
+#elif defined(FLOAT)
+typedef double X;
+#elif defined(INT1P4)
 struct X {
     int k;
     int v[4];
     operator int() { return k; }
 };
 bool operator<(const X &a, const X &b) { return a.k < b.k; }
-//bool operator-(const X &a, const X &b) { return a.k - b.k; }
+int operator-(const X &a, const X &b) { return a.k - b.k; }
+#else
+#error This type is not known
 #endif
 
 template<class T>
@@ -130,7 +147,7 @@ size_t test(fstream &fio, vector<T> &v, function<void(vector<T>&)> f, const char
 //for (int i = 0; i < SS; i++) cout << v[i] << " ";cout << endl;
     check(v);
     if (title[0] == 'Z') goto L;
-    cout << setw(16) << left << title << setw(10) << right << te - ts
+    cout << setw(16) << left << title << setw(11) << right << te - ts
 #ifdef COUNTERS
         << "\t" << comp_cnt << "\t" << exch_cnt
 #endif
@@ -153,7 +170,7 @@ size_t test(fstream &fio, vector<const char*> &v, function<void(vector<const cha
     auto te = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     check(v);
     if (title[0] == 'Z') goto L;
-    cout << setw(16) << left << title << setw(10) << right << te - ts
+    cout << setw(16) << left << title << setw(11) << right << te - ts
 #ifdef COUNTERS
         << "\t" << comp_cnt << "\t" << exch_cnt
 #endif
@@ -275,7 +292,7 @@ L:
     //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell2<X>, placeholders::_1, 2)), "shell_exp_tab");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell2<X>, placeholders::_1, 4)), "shell_prime_10/3");
 
-#if !defined(STRINGS) && !defined(CSTRINGS)
+#if !defined(STRINGS) && !defined(CSTRINGS) && !defined(FLOAT)
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radixsort<X>, placeholders::_1, 8)), "radix8");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radixsort<X>, placeholders::_1, 11)), "radix11");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radixsort<X>, placeholders::_1, 16)), "radix16");
@@ -311,15 +328,18 @@ L:
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(spinsort<X>, placeholders::_1)), "spin");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(flat_stable_sort<X>, placeholders::_1)), "flat_stable");
 
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(bubble_sort<X>, placeholders::_1)), "bubble");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(selection_sort<X>, placeholders::_1)), "selection");
+    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(bubble_sort<X>, placeholders::_1)), "bubble");
+    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(selection_sort<X>, placeholders::_1)), "selection");
 
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(tree_sort_stl<X>, placeholders::_1)), "tree_stl");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(tree_sort_boost<X>, placeholders::_1)), "tree_boost");
 
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 1)), "array*1");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 2)), "array*2");
+    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 1)), "array*1");
+    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 2)), "array*2");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 3)), "array*3");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 5)), "array*5");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 7)), "array*7");
+
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hash_sort<X>, placeholders::_1)), "hash");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hashbt_sort_std<X>, placeholders::_1)), "hashbt_std");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hashbt_sort2<X>, placeholders::_1)), "hashbt");

@@ -29,12 +29,11 @@ table, th, td {
 <textarea cols=100% rows=17 id=listing_of_bubble_sort readonly>
 template&lt;class T&gt;
 void bubble_sort(std::vector&lt;T&gt; &a) {
-    int i, UBound;
     bool epf;
-    UBound = a.size() - 1;
+    int UBound = a.size() - 1;
     do {
         epf = false;
-        for (i = 0; i &lt; UBound; ++i)
+        for (int i = 0; i &lt; UBound; ++i)
             if (a[i] &gt; a[i + 1]) {
                 std::swap(a[i], a[i + 1]);
                 epf = true;
@@ -68,7 +67,7 @@ void choice_sort(vector&lt;T&gt; &a) {
 </textarea>
 </div>
 
-<p>Сортировка <a href=https://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D1%80%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0_%D0%A8%D0%B5%D0%BB%D0%BB%D0%B0>Шелла</a> (shell sort) является самой простой среди быстрых методов и вполне пригодной для реализации только начинающими изучать программирование учащимися. Она является лишь некоторым видоизменением пузырьковой сортировки. Разница между ними только в том, что в сортирове Шелла расстояние между сравниваемыми элементами берётся меняющимся от прохода к проходу, от большего на первом проходе, до 1 на последних, таким образом, на этих последних проходах метод Шелла вырождается в примитивную сортировку пузырьком. Дональд Шелл опубликован базовый алгоритм сортировки, получившей его имя, в 1959 году. Таким образом, это одна из первых универсальных сортировок, которые работают быстро. Для сравнения, алгоритм быстрой сортировки был опубликован спустя два года, а популярные ныне сортировка Тима или интроспективная сортировка стали известны только в 90-е. Удивительно, но сортировка Шелла до сих пор является довольно плохо теоретически изученной: с ней связано несколько интересных нерешённых математических проблем, главная из которых &ndash; это как оптимально выбирать смещения между сравниваемыми элементами. Долгое время для смещений широко использовались степени 2, потом стали использовать числа близкие к степеням 3. Постепенно обнаружились некоторые рекордные последовательности, например, <a href=https://oeis.org/A102549>A102549</a>. Такие последовательности находят путем колоссальных вычислений, поэтому они имеют очень небольшую длину, A102549 &ndash; это всего 8 элементов, что хватает только для данных до примерно из 3000 элементов. Для больших данных продолжения нужно искать почти наугад. Попробовал, например, использовать последовательность (листинг алгоритма, её использующего, приведён ниже), из простых чисел, близких к степеням числа e, и получил на больших данных весьма неплохие по скорости результаты. Пробовал ещё продолжить A102549, домножая последний элемент на степени того же <i>е</i>, результаты для больших данных получились почти одинаковые с предыдущим случаем. Будет ли когда-нибудь найден способ находить оптимальные смещения? Возможно, но осмелюсь предположить, что не ранее, чем через 100 лет. Михаил Опанасенко также пытаелся разгадать сортировку Шелла и получил очень интересный результат о том, что смещения, выбираемые по формуле <i>s<sub>n+1</sub>=10s<sub>n</sub>/3</i>, дают очень хороший эффект. Вынужден признать, что предложенные выше табличные методы выбора смещения работают чуть (примено на 5%) медленнее. Попробовал брать простые числа, ближайшие к числам из приведённой последовательности, но это в среднем не улучшило результаты. Однако, при сортировке структур данных с ключом было выявлено, что эти табличные методы работают несколько быстрее (опять примерно до 5%), что можно объяснить тем, что они производят меньше перестановок.
+<p>Сортировка <a href=https://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D1%80%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0_%D0%A8%D0%B5%D0%BB%D0%BB%D0%B0>Шелла</a> (shell sort) является самой простой среди быстрых методов и вполне пригодной для реализации только начинающими изучать программирование учащимися. Она является лишь некоторым видоизменением пузырьковой сортировки. Разница между ними только в том, что в сортирове Шелла расстояние между сравниваемыми элементами берётся меняющимся от прохода к проходу, от большего на первом проходе, до 1 на последних, таким образом, на этих последних проходах метод Шелла вырождается в примитивную сортировку пузырьком. Дональд Шелл опубликован базовый алгоритм сортировки, получившей его имя, в 1959 году. Таким образом, это одна из первых универсальных сортировок, которые работают быстро. Для сравнения, алгоритм быстрой сортировки был опубликован спустя два года, а популярные ныне сортировка Тима или интроспективная сортировка стали известны только в 90-е. Удивительно, но сортировка Шелла до сих пор является довольно плохо теоретически изученной: с ней связано несколько интересных нерешённых математических проблем, главная из которых &ndash; это как оптимально выбирать смещения между сравниваемыми элементами. Долгое время для смещений широко использовались степени 2, потом стали использовать числа близкие к степеням 3. Постепенно обнаружились некоторые рекордные последовательности, например, <a href=https://oeis.org/A102549>A102549</a>. Такие последовательности находят путем колоссальных вычислений, поэтому они имеют очень небольшую длину, A102549 &ndash; это всего 8 элементов, что хватает только для данных до примерно из 3000 элементов. Для больших данных продолжения нужно искать почти наугад. Попробовал, например, использовать последовательность (листинг алгоритма, её использующего, приведён ниже), из простых чисел, близких к степеням числа e, и получил на больших данных весьма неплохие по скорости результаты. Пробовал ещё продолжить A102549, домножая последний элемент на степени того же <i>е</i>, результаты для больших данных получились почти одинаковые с предыдущим случаем. Будет ли когда-нибудь найден способ находить оптимальные смещения? Возможно, но осмелюсь предположить, что не ранее, чем через 100 лет. Михаил Опанасенко также пытаелся разгадать сортировку Шелла и получил очень интересный результат о том, что смещения, выбираемые по формуле <i>s<sub>n+1</sub>=10s<sub>n</sub>/3</i>, дают очень хороший эффект и возможно даже, что близкий к идеальному. Вынужден признать, что предложенные выше табличные методы выбора смещения работают чуть (примено на 5%) медленнее. Попробовал брать простые числа, ближайшие к числам из приведённой последовательности, но это в среднем не улучшило результаты. Однако, при сортировке структур данных с ключом было выявлено, что эти табличные методы работают несколько быстрее (опять примерно до 5%), что можно объяснить тем, что они производят меньше перестановок.
  
 <div align=center>
 <textarea cols=100% rows=19 id=listing_of_shellsort readonly>
@@ -162,9 +161,8 @@ void qsort(std::vector&lt;T&gt; &a, int LBound, int UBound) {
     }
     if (i - 1 &gt; LBound) qsort(a, LBound, i - 1);
     if (j + 1 &lt; UBound) qsort(a, j + 1, UBound);
-}
-</textarea><td style=border:0;align=center;vertical-align:top>
-<button type=button id=button_qsort_no_pivot style=width:40px onclick="if(document.getElementById('listing_of_qsort_no_pivot').rows==5){document.getElementById('listing_of_qsort_no_pivot').rows=25;document.getElementById('button_qsort_no_pivot').innerHTML='Pull Up'}else{document.getElementById('listing_of_qsort_no_pivot').rows=5;document.getElementById('button_qsort_no_pivot').innerHTML='Fall Out'}">Fall Out</button>
+}</textarea><td style=border:0;align=center;vertical-align:top>
+<button type=button id=button_qsort_no_pivot style=width:40px onclick="if(document.getElementById('listing_of_qsort_no_pivot').rows==5){document.getElementById('listing_of_qsort_no_pivot').rows=24;document.getElementById('button_qsort_no_pivot').innerHTML='Pull Up'}else{document.getElementById('listing_of_qsort_no_pivot').rows=5;document.getElementById('button_qsort_no_pivot').innerHTML='Fall Out'}">Fall Out</button>
 </table>
 </div>
 
@@ -240,18 +238,75 @@ template&lt;class T&gt; void hash_sort(std::vector&lt;T&gt; &a) {
              j = hs.hashData[j].next;
          }
     }
-}
-</textarea><td style=border:0;align=center;vertical-align:top>
-<button type=button id=button_hash style=width:40px onclick="if(document.getElementById('listing_of_hashsort').rows==5){document.getElementById('listing_of_hashsort').rows=68;document.getElementById('button_hash').innerHTML='Pull Up'}else{document.getElementById('listing_of_hashsort').rows=5;document.getElementById('button_hash').innerHTML='Fall Out'}">Fall Out</button>
+}</textarea><td style=border:0;align=center;vertical-align:top>
+<button type=button id=button_hash style=width:40px onclick="if(document.getElementById('listing_of_hashsort').rows==5){document.getElementById('listing_of_hashsort').rows=67;document.getElementById('button_hash').innerHTML='Pull Up'}else{document.getElementById('listing_of_hashsort').rows=5;document.getElementById('button_hash').innerHTML='Fall Out'}">Fall Out</button>
 </table>
 </div>
 
-<p>Одна из самых быстрых сортировок, вообще не использующая сравнений, &ndash; это известная ещё с XIX века <a href=https://ru.wikipedia.org/wiki/%D0%9F%D0%BE%D1%80%D0%B0%D0%B7%D1%80%D1%8F%D0%B4%D0%BD%D0%B0%D1%8F_%D1%81%D0%BE%D1%80%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0>поразрядная сортировка</a>. Её идея очень проста &ndash; нужно работать с группами разрядов представления данных (точнее, только ключа данных). По каждой группе строятся таблицы, а результаты потом сравнительно простым способом объединяют. Существует два основных способа использовать поразрядную сортировку. Для сортировки чисел разряды удобнее брать справа-налево, а для сортировки строк слева-направо. Поразрядная сортировка часто бывает значительно быстрее любых других методов упорядочения данных. Удивительно, что поддержка поразрядной сортировки до сих пор не слишком значительна в программировании: её нет ни в boost, ни в стандартной библиотеке С++, мне неизвестен даже её вариант для какой-нибудь известной библиотеки для работы с числами или строками С++. У этой сортировки есть, конечно, и недостатки. Например, ей требуется дополнительная память, чуть большая, чем для исходных данных (это существенно меньше, чем для сортировки хэшем и тем более деревом). Она также чувствительна к типу данных для сортировки, например, нужно иметь свой вариант такой сортировки для данных каждого размера. Могу предположить, что сделать поразрядную сортировку для вещественных чисел и некоторых других типов данных &ndash; это скорее нетривиальная и даже сложная задача. 
+<p>Сортировка массивом (arraysort) очень похожа на предыдущую, но в отличие от неё вообще не использует сравнений. Также используется вспомогательный массив, куда хэш-функцией заносятся значения. При коллизии нужно сдвинуть непрерывный фрагмент занятых элементов на позицию влево или вправо, освобождая указываемую хэш-функцией позицию ддя нового элемента. Для получения хорошей скорости нужно, чтобы вспомогательный массив был в несколько раз (от 2-3) больше исходного. С ростом размера вспомогательного массива скорость работы увеличивается только до некоторого предела, зависящего от сортируемых данных и связанной с ними хэш-функции, а затем (типично с 4-5) падает. Скорость работы &ndash; примерно такая же как и у хэша, но хороших данных чуть быстрее, а на плохих &ndash; заметно медленнее. 
+
+<div align=center>
+<table style=border:0><tr><td style=border:0><textarea cols=100% rows=5 id=listing_of_arraysort readonly>
+template&lt;class T&gt; void array_sort(vector&lt;T&gt; &a, const int f) {
+    vector&lt;T&gt; auxArray(f*SS);
+    T maxElem = a[0], minElem = a[0];
+    vector&lt;bool&gt; used(f*SS);
+    int i, j, l, k, m;
+    for (int i = 1; i &lt; SS; ++i) {
+        if (maxElem &lt; a[i]) maxElem = a[i];
+        if (minElem &gt; a[i]) minElem = a[i];
+    }
+    if (maxElem == minElem) return;
+    for (i = 0; i &lt; SS; ++i) {
+        j = long(a - minElem)*(f*SS - 1)/(maxElem - minElem);
+        if (!used[j])
+            auxArray[j] = a[i], used[j] = true;
+        else {
+            if (auxArray[j] &gt; a[i]) {
+                while (j &gt; 0)
+                    if (used[j - 1] && auxArray[j - 1] &gt; a[i])
+                        --j;
+                    else
+                        break;
+                m = -1;
+            } else {
+                while (j + 1 &lt; f*SS)
+                    if (used[j + 1] && auxArray[j + 1] &lt; a[i])
+                        ++j;
+                    else
+                        break;
+                m = 1;
+           }
+           k = 0;
+           for (;;) {
+               if (k + j &gt;= 0 && k + j &lt; f*SS && !used[k + j])
+                   break;
+               if (k &gt; 0) k = -k; else k = 1 - k;
+           }
+           l = j + k;
+           if (k &gt; 0) k = 1; else k = -1;
+           j += (m + k)/2;
+           while (l != j) {
+               auxArray[l] = auxArray[l - k];used[l] = true;
+               l -= k;
+           }
+           auxArray[j] = a[i];used[j] = true;
+        }
+    }
+    for (i = j = 0; i &lt; SS; ++j)
+        if (used[j])
+            a[i++] = auxArray[j];
+}</textarea><td style=border:0;align=center;vertical-align:top>
+<button type=button id=button_array style=width:40px onclick="if(document.getElementById('listing_of_arraysort').rows==5){document.getElementById('listing_of_arraysort').rows=50;document.getElementById('button_array').innerHTML='Pull Up'}else{document.getElementById('listing_of_arraysort').rows=5;document.getElementById('button_array').innerHTML='Fall Out'}">Fall Out</button>
+</table>
+</div>
+
+<p>Одна из самых быстрых сортировок, также вообще не использующая сравнений, &ndash; это известная ещё с XIX века <a href=https://ru.wikipedia.org/wiki/%D0%9F%D0%BE%D1%80%D0%B0%D0%B7%D1%80%D1%8F%D0%B4%D0%BD%D0%B0%D1%8F_%D1%81%D0%BE%D1%80%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0>поразрядная сортировка</a> (radix sort). Её идея очень проста &ndash; нужно работать с группами разрядов представления данных (точнее, только ключа данных). По каждой группе строятся таблицы, а результаты потом сравнительно простым способом объединяют. Существует два основных способа использовать поразрядную сортировку. Для сортировки чисел разряды удобнее брать справа-налево, а для сортировки строк слева-направо. Поразрядная сортировка часто бывает значительно быстрее любых других методов упорядочения данных. Удивительно, что поддержка поразрядной сортировки до сих пор не слишком значительна в программировании: её нет ни в boost, ни в стандартной библиотеке С++, мне неизвестен даже её вариант для какой-нибудь известной библиотеки для работы с числами или строками С++. У этой сортировки есть, конечно, и недостатки. Например, ей требуется дополнительная память, чуть большая, чем для исходных данных (это существенно меньше, чем для сортировки хэшем или массивом и тем более деревом). Она также чувствительна к типу данных для сортировки, например, нужно иметь свой вариант такой сортировки для данных каждого размера. Кроме того, нужно делать специальный вариант для отрицательных целых чисел, а поддержка работы с вещественными числами может потребовать немаленьких усилий. 
 
 <p>Далее рассмотрим некоторые сортировоки, которые можно встретить в стандартых библиотеках: 
 
 <ul>
-<li>быструю из стандартной библиотеки C (qsort), о ней уже писал;
+<li>быструю из стандартной библиотеки C (qsort), о ней уже писал. Могу здесь только добавить, что это сортировка как и другие С-сортировки (например, следующие далее из библиотеки BSD) непригодны для работы с объектными данными, в частности, строками С++, что вызвано тем, что такие данные не являются <a href=https://ru.wikipedia.org/wiki/%D0%9F%D1%80%D0%BE%D1%81%D1%82%D0%B0%D1%8F_%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0_%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85>POD</a>. Имея исходники проблему легко решить, заменяя операции типа memcpy на обычные присваивания;
 
 <li><a href=https://ru.wikipedia.org/wiki/Introsort>интроспективную</a> из стандартной библиотеки C++ (std::sort);
 
@@ -259,9 +314,9 @@ template&lt;class T&gt; void hash_sort(std::vector&lt;T&gt; &a) {
 
 <li><a href=https://ru.wikipedia.org/wiki/Timsort>Тима</a> из <a href=https://github.com/gfx/cpp-TimSort>github-репозитория</a>, она является стандартной в языке питон;
 
-<li>поразрядная из BSD библиотеки C (radixsort), там же есть устойчивый вариант этой сортировки (sradixsort). К сожалению, обе эти сортировки можно использовать только для С-строк;
+<li>поразрядная из BSD библиотеки C (radixsort), там же есть устойчивый вариант этой сортировки (sradixsort). К сожалению, обе эти сортировки можно использовать только для С-строк. Как будет видно из данных по тестам &ndash; это сегодня набыстрейший способ отсортировать строки и поэтому удивительно, что нет её варианта стандартного для строк С++;
 
-<li><a href=https://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D1%80%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0_%D1%81%D0%BB%D0%B8%D1%8F%D0%BD%D0%B8%D0%B5%D0%BC>слиянием</a> из BSD библиотеки C (mergesort). Кстати, эта она известна ещё с 1948 и одним из её разработчиков был небезизвестный фон Нейман;
+<li><a href=https://ru.wikipedia.org/wiki/%D0%A1%D0%BE%D1%80%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0_%D1%81%D0%BB%D0%B8%D1%8F%D0%BD%D0%B8%D0%B5%D0%BC>слиянием</a> из BSD библиотеки C (mergesort). Эта сортировка известна как одна из самых быстрых для данных с последовательным доступом (файлы, списки) и возможно используется в стандартной библиотеке С++ для сортировки списков (std::list и std::forward_list). Кстати, эта она известна ещё с 1948 и одним из её разработчиков был небезизвестный фон Нейман;
 
 <li><a href=https://ru.wikipedia.org/wiki/%D0%9A%D1%83%D1%87%D0%B0_(%D1%81%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D0%B0_%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85)>кучей</a> из BSD библиотеки C (heapsort);
 
@@ -283,23 +338,27 @@ template&lt;class T&gt; void hash_sort(std::vector&lt;T&gt; &a) {
 <table border=1>
 <tr><th rowspan=2>Алгоритм<th colspan=3>Время работы<th rowspan=2>Устойчивость<th rowspan=2>Дополнительная<br>память
 <tr><th>наилучшее<th>среднее<th>наихудшее
-<tr><td>shellsort<td align=center>&#x223d;<i>N</i>log <i>N</i><td colspan=2 align=center>&#x223d;<i>N</i>(log <i>N</i>/log log <i>N</i>)<sup>2</sup><td align=center rowspan=3>нет<td align=right>0
-<tr><td>qsort<td colspan=2 align=center>&#x223d;<i>N</i>log <i>N</i><td align=center>&#x223d;<i>N</i><sup>2</sup><td align=right>&#x223d;log <i>N</i>*
+<tr><td>radix<td colspan=3 align=center>&#x223d;<i>N</i><td align=center>***<td align=right>&#x223d;<i>N</i>
+<tr><td>shell<td align=center>&#x223d;<i>N</i>log <i>N</i><td colspan=2 align=center>&#x223d;<i>N</i>(log <i>N</i>/log log <i>N</i>)<sup>2</sup><td align=center rowspan=3>нет<td align=right>0
+<tr><td>quick<td colspan=2 align=center>&#x223d;<i>N</i>log <i>N</i><td align=center>&#x223d;<i>N</i><sup>2</sup><td align=right>&#x223d;log <i>N</i>*
 <tr><td>std::sort<td colspan=3 align=center>&#x223d;<i>N</i>log <i>N</i><td align=right>&#x223d;log <i>N</i>
 <tr><td>std::stable_sort<td colspan=2 align=center>&#x223d;<i>N</i>log <i>N</i><td align=center>&#x223d;<i>N</i>(log <i>N</i>)<sup>2</sup><td rowspan=2 align=center>еcть<td align=right>от 0 до <i>N</i>**
-<tr><td>timsort<td align=center rowspan=7>&#x223d;<i>N</i><td colspan=2 rowspan=5 align=center>&#x223d;<i>N</i>log <i>N</i><td align=right><i>N</i>
-<tr><td>spreadsort<td rowspan=2 align=center>нет<td align=right style=color:red>&#x223d;log <i>N</i>
-<tr><td>pdqsort<td align=right>&#x223d;log <i>N</i>
-<tr><td>spinsort<td rowspan=2 align=center>есть<td align=right><i>N</i>/2
-<tr><td>flat_stable_sort<td align=right><i>N</i>/256 + 8KB
-<tr><td>hash_sort<td align=center style=color:red>&#x223d;<i>N</i>log <i>N</i><td align=center>&#x223d;<i>N</i><sup>2</sup><td rowspan=5 align=center>нет<td align=right>&#x223d;<i>N</i>
-<tr><td>bubble_sort<td colspan=2 align=center>&#x223d;<i>N</i><sup>2</sup><td align=right rowspan=2>0
-<tr><td>heapsort<td colspan=3 rowspan=2 align=center>&#x223d;<i>N</i>log <i>N</i>
-<tr><td>treesort<td align=right>&#x223d;<i>N</i>
-<tr><td>selection_sort<td colspan=3 align=center>&#x223d;<i>N</i><sup>2</sup><td align=right>0
+<tr><td>tim<td align=center rowspan=8>&#x223d;<i>N</i><td colspan=2 rowspan=5 align=center>&#x223d;<i>N</i>log <i>N</i><td align=right><i>N</i>
+<tr><td>spread<td rowspan=2 align=center>нет<td align=right style=color:red>&#x223d;log <i>N</i>
+<tr><td>pdq<td align=right>&#x223d;log <i>N</i>
+<tr><td>spin<td rowspan=2 align=center>есть<td align=right><i>N</i>/2
+<tr><td>flat_stable<td align=right><i>N</i>/256 + 8KB
+<tr><td>hash<td align=center style=color:red rowspan=2>&#x223d;<i>N</i>log <i>N</i><td align=center rowspan=2>&#x223d;<i>N</i><sup>2</sup><td rowspan=5 align=center>нет<td align=right rowspan=2>&#x223d;<i>N</i>
+<tr><td>array
+<tr><td>bubble<td colspan=2 align=center>&#x223d;<i>N</i><sup>2</sup><td align=right rowspan=2>0
+<tr><td>heap<td colspan=3 rowspan=3 align=center>&#x223d;<i>N</i>log <i>N</i>
+<tr><td>tree<td align=right>&#x223d;<i>N</i>
+<tr><td>merge<td align=center>***<td align=right><i>N</i>
+<tr><td>selection<td colspan=3 align=center>&#x223d;<i>N</i><sup>2</sup><td align=center rowspan=4>нет<td align=right>0
 </table>
 <p>* &ndash; при использовании оптимизации хвостовой рекурсии по методу, предложенному Седгевиком (Sedgewick).
 <p>** &ndash; при наличие дополнительной памяти производительность повышается.
+<p>*** &ndash; зависит от реализации.
 </div>
 
 <p>Рассмотрим таблицу времени (в мс) работы этих алгоритмов на массиве случайных целых чисел (32-битных) на компьютере с 8 ГБ оперативной памяти с процессором AMD Phenom&#x2122; II X4 955 @3.214 МГц. Тайминги приводятся по среднему от пяти прогонов. Хотя из-за того, что процессоры работают, переключаясь между разными частотами, а также из-за особенностей работы с кешем, эти результаты в лучшем случае только приблизительны (могу предполагать что неточности таймингов могут доходить до 20%). На лучших современных процессорах для ПК результат может быть получен в 2-3 раза быстрее. Следует подчеркнуть, что это самый типичный случай заполнения массива, все остальные способы &ndash; это крайне редкие и даже почти невозможные при нормальной работе частности.

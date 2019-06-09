@@ -10,6 +10,11 @@ void spreadsort(vector<T> &a) {
 }
 
 template <>
+void spreadsort(vector<double> &a) {
+    boost::sort::spreadsort::spreadsort(&a[0], &a[0] + SS);
+}
+
+template <>
 void spreadsort(vector<string> &a) {
     boost::sort::spreadsort::string_sort(&a[0], &a[0] + SS);
 }

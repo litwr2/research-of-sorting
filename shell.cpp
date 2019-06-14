@@ -25,6 +25,33 @@ void shell1(vector<T> &a) {
   }
 }
 
+template<>  //Shell sort v1 (stepping by a value close to 3)
+void shell1(vector<const char*> &a) {
+  int i, j, h;
+  const char *v;
+  h = 1;
+  while (h < a.size())
+     h = 3*h + 1;
+  h = (h - 1)/3;
+  while (h) {
+     i = h;
+     j = i;
+     v = a[i];
+     while (i < a.size()) {
+        j -= h;
+        while (j >= 0 && strcmp(v,a[j]) <= 0) {
+           a[j + h] = a[j];
+           j -= h;
+        }
+        a[j + h] = v;
+        ++i;
+        j = i;
+        v = a[i];
+     }
+     h = (h - 1)/3;
+  }
+}
+
 template<class T>  //Shell sort v2 (table)
 void shell2(vector<T> &a, int type) {
   static const int x0[] = {485165237, 178482289, 65659969, 24154967, 8886109, 3269011, 1202609, 442439, 162713, 59879, 22027, 8101, 2971, 1097, 401, 149, 53, 19, 7, 3, 1, 0};  //primes approximately close to powers of e

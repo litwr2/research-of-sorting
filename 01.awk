@@ -29,11 +29,11 @@ BEGIN {
     ss["pdq"] = 1
     ss["spin"] = 1
     ss["flat_stable"] = 1
-    ss["bubble"] = 1
-    ss["selection"] = 1
+    ss["bubble"] = 0
+    ss["selection"] = 0
     ss["tree_stl"] = 1
     ss["tree_boost"] = 1
-    ss["array*1"] = 1
+    ss["array*1"] = 0
     ss["array*2"] = 1
     ss["array*3"] = 1
     ss["array*5"] = 1
@@ -43,34 +43,37 @@ BEGIN {
     ss["hashbt"] = 1
     ss["hashbt_boost"] = 1
 
-    excl = "grep -vE '"
-    for (i in ss)
-        if (!ss[i]) excl = excl "\"" i "\"|"
-    excl = excl "NOFIND' nsort.cpp >nsort2.cpp"
-	passes = 2
 	t["PLAININT"] = 1
         t["INT1P4"] = 1
 	t["INT64"] = 1
 	t["INT128"] = 1
 	t["FLOAT"] = 1
-	t["STRINGS"] = 1
-	t["CSTRINGS"] = 1
-        #ALL_VARIANTS  //SS must be less than 14 (14 means a many hours calculation)
+	t["STRINGS"] = 0
+	t["CSTRINGS"] = 0
+
 	ft["RANDOM_ORDER"] = 1
 	ft["ASCENDED_ORDER"] = 0
 	ft["ASCENDED_RANDOM_ORDER"] = 0
 	ft["DESCENDED_ORDER"] = 0
 	ft["LOW_VARIATION_ORDER"] = 0
-	LOW_VARIATION_CONST = 100
 	ft["SLOW_QSORT1_ORDER"] = 0
-        SS = 10000
+
+	passes = 2
+        LOW_VARIATION_CONST = 100
+        SS = 1000*1000*100
+
+        excl = "("
+        for (i in ss)
+            if (!ss[i]) excl = excl "echo " i ";"
+        excl = excl ")|grep -vFf - nsort.cpp >nsort2.cpp;"
+
 	for (i = 0; i < 1; ++i) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
               if (t[i1])
                  for (i2 in ft)
                     if (ft[i2])
-                       print excl ";touch always.cpp;EXTRA=\"-D" i1 " -D" i2 " -DSS=" SS " -DPASSES=" passes "\" make && nsort2 >>results/" nSS "-" i1 "-" i2 "-z || echo ERROR!!!!!"
+                       print excl "touch always.cpp;EXTRA=\"-D" i1 " -D" i2 " -DSS=" SS " -DLOW_VARIATION_CONST=" LOW_VARIATION_CONST " -DPASSES=" passes "\" make && nsort2 >>results/" nSS "-" i1 "-" i2 "-z || echo ERROR!!!!!"
            SS *= 10
         }
         print "echo ok"

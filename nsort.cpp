@@ -30,38 +30,35 @@ using namespace std;
 //#define FLOAT
 //#define STRINGS
 //#define CSTRINGS
-//#define ALL_VARIANTS  //SS must be less than 14 (14 means a many hours calculation)
 //#define RANDOM_ORDER
 //#define ASCENDED_ORDER
 //#define ASCENDED_RANDOM_ORDER
 //#define DESCENDED_ORDER
 //#define LOW_VARIATION_ORDER
+//#define SLOW_QSORT1_ORDER
+
 #ifndef LOW_VARIATION_CONST
 #define LOW_VARIATION_CONST 100
 #endif
-//#define SLOW_QSORT1_ORDER
 
-#ifndef ALL_VARIANTS
 #ifndef SS
 #define SS 10'000 //limits due to int types of indice are slightly above 2'000'000'000
 #endif
-#else
-#define SS 12
-#define RDTSC
+
+#if defined(RANDOM_ORDER) + defined(ASCENDED_ORDER) + defined(ASCENDED_RANDOM_ORDER) + defined(DESCENDED_ORDER) + defined(LOW_VARIATION_ORDER) + defined(SLOW_QSORT1_ORDER) > 1
+#error AMGIOUS ORDER
 #endif
 
-uint64_t rdtsc(){
-    unsigned int lo, hi;
-    __asm__ __volatile__ ("rdtsc" : "=a" (lo), "=d" (hi));
-    return ((uint64_t)hi << 32) | lo;
-}
-
-//uint64_t comp_cnt, exch_cnt, comp_sum, exch_sum, total_sum, comp_max, total_max, comp_min = INT_MAX,
-//    exch_max, exch_min = INT_MAX, total_min = INT_MAX, total_min_comp, total_max_comp, total_min_exch,
-//    total_max_exch, counter, timer_sum;
+#if defined(RANDOM_ORDER) + defined(ASCENDED_ORDER) + defined(ASCENDED_RANDOM_ORDER) + defined(DESCENDED_ORDER) + defined(LOW_VARIATION_ORDER) + defined(SLOW_QSORT1_ORDER) == 0
+#define RANDOM_ORDER
+#endif
 
 #if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) > 1
 #error AMBIGUOUS TYPE
+#endif
+
+#if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) == 0
+#define PLAININT
 #endif
 
 #ifdef PLAININT
@@ -138,11 +135,9 @@ void check(vector<const char*>& v) {
 
 template<class T>
 size_t test(fstream &fio, vector<T> &v, function<void(vector<T>&)> f, const char *title) {
-//for (int i = 0; i < SS; i++) cout << v[i] << " ";cout << endl;
     auto ts = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     f(v);
     auto te = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-//for (int i = 0; i < SS; i++) cout << v[i] << " ";cout << endl;
     check(v);
     if (title[0] == 'Z') goto L;
     cout << setw(16) << left << title << setw(11) << right << te - ts
@@ -177,47 +172,6 @@ int main() {
     srand(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
     vector<X> v;
 
-#ifdef ALL_VARIANTS
-    vector<X> vs;
-    for (int i = 0; i < SS; ++i) v.push_back(i);
-    uint64_t counter = 0;
-    do {
-        counter++;
-        vs = v;
-        comp_cnt = exch_cnt = 0;
-#ifdef RDTSC
-	auto ts = rdtsc();
-#else
-        auto ts = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
-#endif
-        //qsort0(vs);
-        //qsort2(vs, 0, SS - 1);
-        //shell2(vs, 1);
-        sort(vs.begin(), vs.end());
-        //stable_sort(vs.begin(), vs.end());
-        //gfx::timsort(vs.begin(), vs.end(), std::less<X>());
-        //heapsort(&vs[0], SS, sizeof(X), cmpfunc<X>);
-        //hsortstl(vs);
-        //tree_sort(vs);
-        //hash_sort(vs);
-        //array_sort(vs);
-        //boost::sort::spreadsort::integer_sort(&vs[0], &vs[0] + SS);
-        //boost::sort::pdqsort(&vs[0], &vs[0] + SS);
-        //boost::sort::spinsort(&vs[0], &vs[0] + SS);
-        //boost::sort::flat_stable_sort(&vs[0], &vs[0] + SS);
-        //bubble_sort<X>(vs);
-        //selection_sort<X>(vs);
-#ifdef RDTSC
-	auto te = rdtsc();
-#else
-        auto te = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
-#endif
-        check(vs);
-        timer_sum += te - ts;
-    }
-    while (next_permutation(v.begin(), v.end()));
-    cout << double(timer_sum)/counter << endl;
-#else
 #ifdef SLOW_QSORT1_ORDER
     fill_for_quadratic_qsort1(v, SS);
 #else
@@ -287,7 +241,7 @@ L:
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(mergesort_bsd<X>, placeholders::_1)), "mergesort_bsd");
 #endif
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort1<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort1tc<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare_tco");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort1tc<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare_tco"); //not tested with all data types 
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort2<X>, placeholders::_1, 0, SS - 1)), "qsort_no_pivot");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort3<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare2");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort4<X>, placeholders::_1, 0, SS - 1)), "qsort_lomuto");
@@ -321,7 +275,7 @@ L:
     if (--passes) goto L;
     fio.close();
     remove(FN);
-#endif
+
     cerr << "zok\t" << SS << ' ' <<  typeid(X).name() << "\n";
     //for (int i = 0; i < SS; ++i) cout << v[i] << '\n';
     return 0;

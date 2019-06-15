@@ -17,9 +17,9 @@ template<class T> void array_sort(vector<T> &a, const int f) {
     }
     if (maxElem == minElem) return;
     //if (sizeof(int)*f - f >> 3 > sizeof(T)*(f - 1)) {
-    if (sizeof(T) <= sizeof(int))
+    if (sizeof(T) <= sizeof(int)) {
 	    vector<T> auxArray(f*SS);
-	    vector<bool> used(f*SS) {
+	    vector<bool> used(f*SS);
 	    for (i = 0; i < SS; ++i) {
 		j = array_index(a[i], minElem, maxElem, f);
 		if (!used[j])

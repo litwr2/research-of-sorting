@@ -80,18 +80,9 @@ void shell2(vector<T> &a, int type) {
         //T t = a[j + gap];
         while (a[j] > a[j + gap]) {
            //a[j] = a[j + gap];
-#ifdef COUNTERS
-           ++comp_cnt;
-           ++exch_cnt;
            swap(a[j], a[j + gap]);
            if (j >= gap) j -= gap; else break;
         }
-        ++comp_cnt;
-#else
-           swap(a[j], a[j + gap]);
-           if (j >= gap) j -= gap; else break;
-        }
-#endif
         //a[j] = t;
      }
   }
@@ -125,18 +116,9 @@ void shell2(vector<const char*> &a, int type) {
         //T t = a[j + gap];
         while (strcmp(a[j], a[j + gap]) > 0) {
            //a[j] = a[j + gap];
-#ifdef COUNTERS
-           ++comp_cnt;
-           ++exch_cnt;
            swap(a[j], a[j + gap]);
            if (j >= gap) j -= gap; else break;
         }
-        ++comp_cnt;
-#else
-           swap(a[j], a[j + gap]);
-           if (j >= gap) j -= gap; else break;
-        }
-#endif
         //a[j] = t;
      }
   }
@@ -159,18 +141,9 @@ void shell3(vector<T> &a) {
         //T t = a[j + gap];
         while (a[j] > a[j + gap]) {
            //a[j] = a[j + gap];
-#ifdef COUNTERS
-           ++comp_cnt;
-           ++exch_cnt;
            swap(a[j], a[j + gap]);
            if (j >= gap) j -= gap; else break;
         }
-        ++comp_cnt;
-#else
-           swap(a[j], a[j + gap]);
-           if (j >= gap) j -= gap; else break;
-        }
-#endif
         //a[j] = t;
      }
   }
@@ -193,18 +166,9 @@ void shell3(vector<const char *> &a) {
         //T t = a[j + gap];
         while (strcmp(a[j], a[j + gap]) > 0) {
            //a[j] = a[j + gap];
-#ifdef COUNTERS
-           ++comp_cnt;
-           ++exch_cnt;
            swap(a[j], a[j + gap]);
            if (j >= gap) j -= gap; else break;
         }
-        ++comp_cnt;
-#else
-           swap(a[j], a[j + gap]);
-           if (j >= gap) j -= gap; else break;
-        }
-#endif
         //a[j] = t;
      }
   }

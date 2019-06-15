@@ -15,20 +15,11 @@ template<class T> struct HashSort {
         T data;
         int next;
     };
-    HashElement *hashData;
-    int *hashPtr, freePtr;
+    vector<HashElement> hashData;
+    vector<int> hashPtr;
+    int freePtr;
+    HashSort() : hashData(SS), hashPtr(SS, -1), freePtr(0) {}
     T minElem, maxElem;
-    HashSort() {
-        hashData = new HashElement[SS];
-        hashPtr = new int[SS];
-        freePtr = 0;
-        for (int i = 0; i < SS; ++i)
-           hashPtr[i] = -1;
-    }
-    ~HashSort() {
-        delete [] hashData;
-        delete [] hashPtr;
-    }
     void addElement(T d) {
         int prevPtr, j = hash_func(d, minElem, maxElem), curPtr = hashPtr[j];
         if (curPtr == -1) {
@@ -107,7 +98,7 @@ template<class T> void hash_sort(vector<T> &a) {
     }
 }
 
-template<> void hash_sort(vector<const char *> &a) {
+template<> void hash_sort(vector<const char*> &a) {
     HashSort<const char *> hs;
     hs.maxElem = hs.minElem = a[0];
     for (int i = 1; i < SS; ++i) {
@@ -129,14 +120,9 @@ template<> void hash_sort(vector<const char *> &a) {
 
 template<class T> struct HashBTSort {
     typedef std::multiset<T> HashElement;
-    HashElement *hashData;
+    vector<HashElement> hashData;
     T minElem, maxElem;
-    HashBTSort() {
-        hashData = new HashElement[SS];
-    }
-    ~HashBTSort() {
-        delete [] hashData;
-    }
+    HashBTSort() : hashData(SS) {}
     void addElement(T d) {
         hashData[hash_func(d, minElem, maxElem)].insert(d);
     }
@@ -144,14 +130,9 @@ template<class T> struct HashBTSort {
 
 template<> struct HashBTSort<const char*> {
     typedef std::multiset<const char*, pchar_less> HashElement;
-    HashElement *hashData;
+    vector<HashElement> hashData;
     const char *minElem, *maxElem;
-    HashBTSort() {
-        hashData = new HashElement[SS];
-    }
-    ~HashBTSort() {
-        delete [] hashData;
-    }
+    HashBTSort() : hashData(SS) {}
     void addElement(const char *d) {
         hashData[hash_func(d, minElem, maxElem)].insert(d);
     }
@@ -191,14 +172,9 @@ template<> void hashbt_sort_std(vector<const char*> &a) {
 
 template<class T> struct HashBTSort_boost {
     typedef boost::container::multiset<T> HashElement;
-    HashElement *hashData;
+    vector<HashElement> hashData;
     T minElem, maxElem;
-    HashBTSort_boost() {
-        hashData = new HashElement[SS];
-    }
-    ~HashBTSort_boost() {
-        delete [] hashData;
-    }
+    HashBTSort_boost() : hashData(SS) {}
     void addElement(T d) {
         hashData[hash_func(d, minElem, maxElem)].insert(d);
     }
@@ -206,14 +182,9 @@ template<class T> struct HashBTSort_boost {
 
 template<> struct HashBTSort_boost<const char*> {
     typedef boost::container::multiset<const char*, pchar_less> HashElement;
-    HashElement *hashData;
+    vector<HashElement> hashData;
     const char *minElem, *maxElem;
-    HashBTSort_boost() {
-        hashData = new HashElement[SS];
-    }
-    ~HashBTSort_boost() {
-        delete [] hashData;
-    }
+    HashBTSort_boost() : hashData(SS) {}
     void addElement(const char *d) {
         hashData[hash_func(d, minElem, maxElem)].insert(d);
     }

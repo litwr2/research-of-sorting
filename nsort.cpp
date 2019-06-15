@@ -30,7 +30,6 @@ using namespace std;
 //#define FLOAT
 //#define STRINGS
 //#define CSTRINGS
-//#define COUNTERS
 //#define ALL_VARIANTS  //SS must be less than 14 (14 means a many hours calculation)
 //#define RANDOM_ORDER
 //#define ASCENDED_ORDER
@@ -57,9 +56,9 @@ uint64_t rdtsc(){
     return ((uint64_t)hi << 32) | lo;
 }
 
-uint64_t comp_cnt, exch_cnt, comp_sum, exch_sum, total_sum, comp_max, total_max, comp_min = INT_MAX,
-    exch_max, exch_min = INT_MAX, total_min = INT_MAX, total_min_comp, total_max_comp, total_min_exch,
-    total_max_exch, counter, timer_sum;
+//uint64_t comp_cnt, exch_cnt, comp_sum, exch_sum, total_sum, comp_max, total_max, comp_min = INT_MAX,
+//    exch_max, exch_min = INT_MAX, total_min = INT_MAX, total_min_comp, total_max_comp, total_min_exch,
+//    total_max_exch, counter, timer_sum;
 
 #if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) > 1
 #error AMBIGUOUS TYPE
@@ -81,7 +80,7 @@ typedef double X;
 struct X {
     int k;
     int v[4];
-    operator int() { return k; }
+    operator int() const { return k; }
 };
 bool operator<(const X &a, const X &b) { return a.k < b.k; }
 int operator-(const X &a, const X &b) { return a.k - b.k; }
@@ -139,7 +138,6 @@ void check(vector<const char*>& v) {
 
 template<class T>
 size_t test(fstream &fio, vector<T> &v, function<void(vector<T>&)> f, const char *title) {
-    comp_cnt = exch_cnt = 0;
 //for (int i = 0; i < SS; i++) cout << v[i] << " ";cout << endl;
     auto ts = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     f(v);
@@ -148,9 +146,6 @@ size_t test(fstream &fio, vector<T> &v, function<void(vector<T>&)> f, const char
     check(v);
     if (title[0] == 'Z') goto L;
     cout << setw(16) << left << title << setw(11) << right << te - ts
-#ifdef COUNTERS
-        << "\t" << comp_cnt << "\t" << exch_cnt
-#endif
         << endl;
 L:
     fio.seekg(0);
@@ -164,16 +159,12 @@ L:
 
 template<>
 size_t test(fstream &fio, vector<const char*> &v, function<void(vector<const char*>&)> f, const char *title) {
-    comp_cnt = exch_cnt = 0;
     auto ts = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     f(v);
     auto te = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     check(v);
     if (title[0] == 'Z') goto L;
     cout << setw(16) << left << title << setw(11) << right << te - ts
-#ifdef COUNTERS
-        << "\t" << comp_cnt << "\t" << exch_cnt
-#endif
         << endl;
 L:
     fio.seekg(0);
@@ -189,7 +180,9 @@ int main() {
 #ifdef ALL_VARIANTS
     vector<X> vs;
     for (int i = 0; i < SS; ++i) v.push_back(i);
+    uint64_t counter = 0;
     do {
+        counter++;
         vs = v;
         comp_cnt = exch_cnt = 0;
 #ifdef RDTSC
@@ -221,29 +214,9 @@ int main() {
 #endif
         check(vs);
         timer_sum += te - ts;
-        counter++;
-#ifdef COUNTERS
-        comp_sum += comp_cnt;
-        exch_sum += exch_cnt;
-        total_sum += comp_cnt + exch_cnt;
-        if (comp_min > comp_cnt) comp_min = comp_cnt;
-        if (comp_max < comp_cnt) comp_max = comp_cnt;
-        if (exch_min > exch_cnt) exch_min = exch_cnt;
-        if (exch_max < exch_cnt) exch_max = exch_cnt;
-        if (total_min > comp_cnt + exch_cnt) total_min = comp_cnt + exch_cnt, total_min_comp = comp_cnt, total_min_exch = exch_cnt;
-        if (total_max < comp_cnt + exch_cnt) total_max = comp_cnt + exch_cnt, total_max_comp = comp_cnt, total_max_exch = exch_cnt;
-#endif
-        //for (int i = 0; i < SS; i++) cout << v[i].a << " ";
-        //cout << comp_cnt << " " << exch_cnt << endl;
     }
     while (next_permutation(v.begin(), v.end()));
-    cout << double(timer_sum)/counter
-#ifdef COUNTERS
-        << ' ' << comp_min << "/" << exch_min << "/" << total_min << "=" << total_min_comp << "+" << total_min_exch << " "
-        << comp_max << "/" << exch_max << "/" << total_max << "=" << total_max_comp << "+" << total_max_exch << " " 
-        << double(comp_sum)/counter << "+" << double(exch_sum)/counter << "=" << double(total_sum)/counter
-#endif
-        << endl;
+    cout << double(timer_sum)/counter << endl;
 #else
 #ifdef SLOW_QSORT1_ORDER
     fill_for_quadratic_qsort1(v, SS);
@@ -286,40 +259,40 @@ int main() {
     } while (eps > 2);
     int passes = PASSES;
 L:
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell1<X>, placeholders::_1)), "shell_a3n");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell3<X>, placeholders::_1)), "shell_10/3");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell2<X>, placeholders::_1, 0)), "shell_prime_e");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell2<X>, placeholders::_1, 1)), "shell_a102549");
-    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell2<X>, placeholders::_1, 2)), "shell_exp_tab");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell2<X>, placeholders::_1, 2)), "shell_exp_tab");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell2<X>, placeholders::_1, 4)), "shell_prime_10/3");
 
 #if !defined(STRINGS) && !defined(CSTRINGS) && !defined(FLOAT)
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radixsort<X>, placeholders::_1, 8)), "radix8");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radixsort<X>, placeholders::_1, 11)), "radix11");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radixsort<X>, placeholders::_1, 16)), "radix16");
+#endif
 #ifdef PLAININT
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(oms7_helper<X>, placeholders::_1, 5)), "shell_10/3_oms7");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(oms7_helper<X>, placeholders::_1, 7)), "radix8_oms7");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(oms7_helper<X>, placeholders::_1, 8)), "msd8_oms7");
 #endif
-#endif
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hsortstl<X>, placeholders::_1)), "heapsort_stl");
-#ifndef STRINGS
 #ifdef CSTRINGS
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radix_bsd<X>, placeholders::_1)), "radix_bsd");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(sradix_bsd<X>, placeholders::_1)), "sradix_bsd");
 #endif
+#ifndef STRINGS
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort0<X>, placeholders::_1)), "clib_qsort");
-    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hsort_bsd<X>, placeholders::_1)), "heapsort_bsd");
-    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(mergesort_bsd<X>, placeholders::_1)), "mergesort_bsd");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hsort_bsd<X>, placeholders::_1)), "heapsort_bsd");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(mergesort_bsd<X>, placeholders::_1)), "mergesort_bsd");
 #endif
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort1<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare");
-    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort1tc<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare_tco");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort1tc<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare_tco");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort2<X>, placeholders::_1, 0, SS - 1)), "qsort_no_pivot");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort3<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare2");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort4<X>, placeholders::_1, 0, SS - 1)), "qsort_lomuto");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(stl_sort<X>, placeholders::_1)), "stlsort");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(stl_stable_sort<X>, placeholders::_1)), "stlstable");
-
 
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(timsort<X>, placeholders::_1)), "timsort");
 
@@ -328,14 +301,14 @@ L:
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(spinsort<X>, placeholders::_1)), "spin");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(flat_stable_sort<X>, placeholders::_1)), "flat_stable");
 
-    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(bubble_sort<X>, placeholders::_1)), "bubble");
-    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(selection_sort<X>, placeholders::_1)), "selection");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(bubble_sort<X>, placeholders::_1)), "bubble");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(selection_sort<X>, placeholders::_1)), "selection");
 
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(tree_sort_stl<X>, placeholders::_1)), "tree_stl");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(tree_sort_boost<X>, placeholders::_1)), "tree_boost");
 
-    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 1)), "array*1");
-    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 2)), "array*2");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 1)), "array*1");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 2)), "array*2");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 3)), "array*3");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 5)), "array*5");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 7)), "array*7");

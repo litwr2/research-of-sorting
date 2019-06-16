@@ -1,14 +1,16 @@
+#define STRING_BASE 1'000'000'000
+
 template<class T> T cnv(int n) {
     return {n};
 }
 
 template<> string cnv(int n) {
-    return to_string(n).c_str();
+    return to_string(n + STRING_BASE).c_str();
 }
 
 template<> const char *cnv(int n) {
     char *s = new char [to_string(n).length() + 1];
-    strcpy(s, to_string(n).c_str());
+    strcpy(s, to_string(n + STRING_BASE).c_str());
     return s;
 }
 
@@ -71,7 +73,6 @@ template<class T> void fill(vector<T> &v) {
 #ifdef SLOW_QSORT1_ORDER
     fill_for_quadratic_qsort1(v);
 #else
-uint64_t sum = 0, cnt = 0, max = 0, minl = 88888888;
     for (int i = 0; i < SS; i++)
 #ifdef RANDOM_ORDER
 #ifdef STRINGS_SHORT
@@ -79,7 +80,6 @@ uint64_t sum = 0, cnt = 0, max = 0, minl = 88888888;
 #elif defined(STRINGS)
        v.push_back([]{ string s = ""; int lim = rand()%256 + 1; for (int i = 0; i < lim; ++i) s += ' ' + rand()%94; return s;}());
 #elif defined(STRINGS_LONG)
-{
        v.push_back([]{
            static uint64_t sum = 0, cnt = 0;
            string s ="";
@@ -90,13 +90,6 @@ uint64_t sum = 0, cnt = 0, max = 0, minl = 88888888;
            for (int i = 0; i < lim; ++i)
                s += '@' + rand()%26;
            return s;}());
-int l = v.back().length();
-sum += l;
-cnt++;
-if (l > max) max = l;
-if (l < minl) minl = l;
-if (v.size() == SS) cout << "avg = " << double(sum)/cnt << " max = " << max << " min = " << minl << endl;
-}
 #elif defined(CSTRINGS_SHORT)
        v.push_back([]{ int lim = rand()%16 + 1; char *s = new char[lim + 1]; int i = 0; for (; i < lim; ++i) s[i] = ' ' + rand()%94; s[i] = 0; return s;}());
 #elif defined(CSTRINGS)
@@ -118,11 +111,11 @@ if (v.size() == SS) cout << "avg = " << double(sum)/cnt << " max = " << max << "
        v.push_back({X{1}*abs(rand()*rand())});
 #endif
 #elif defined(ASCENDED_ORDER) || defined(ASCENDED_RANDOM_ORDER)
-       v.push_back({i});
+       v.push_back(cnv<T>(i));
 #elif defined(DESCENDED_ORDER)
-       v.push_back({SS - i});
+       v.push_back(cnv<T>(SS - i));
 #elif defined(LOW_VARIATION_ORDER)
-       v.push_back({rand()%LOW_VARIATION_CONST});
+       v.push_back(cnv<T>(rand()%LOW_VARIATION_CONST));
 #else
 #error NO ORDER IS SET
 #endif
@@ -130,7 +123,7 @@ if (v.size() == SS) cout << "avg = " << double(sum)/cnt << " max = " << max << "
 
 #ifdef ASCENDED_RANDOM_ORDER
     for (int i = 0; i < SS/100; i++)
-        v[rand()%SS] = rand();
+        v[rand()%SS] = cnv<T>(rand()%STRING_BASE);
 #endif
 }
 

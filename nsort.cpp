@@ -28,8 +28,12 @@ using namespace std;
 //#define INT64
 //#define INT128
 //#define FLOAT
+//#define STRINGS_SHORT
 //#define STRINGS
+//#define STRINGS_LONG
+//#define CSTRINGS_SHORT
 //#define CSTRINGS
+//#define CSTRINGS_LONG
 //#define RANDOM_ORDER
 //#define ASCENDED_ORDER
 //#define ASCENDED_RANDOM_ORDER
@@ -46,26 +50,26 @@ using namespace std;
 #endif
 
 #if defined(RANDOM_ORDER) + defined(ASCENDED_ORDER) + defined(ASCENDED_RANDOM_ORDER) + defined(DESCENDED_ORDER) + defined(LOW_VARIATION_ORDER) + defined(SLOW_QSORT1_ORDER) > 1
-#error AMGIOUS ORDER
+#error AMBIGUOUS ORDER
 #endif
 
 #if defined(RANDOM_ORDER) + defined(ASCENDED_ORDER) + defined(ASCENDED_RANDOM_ORDER) + defined(DESCENDED_ORDER) + defined(LOW_VARIATION_ORDER) + defined(SLOW_QSORT1_ORDER) == 0
 #define RANDOM_ORDER
 #endif
 
-#if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) > 1
+#if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS) + defined(CSTRINGS_SHORT) + defined(CSTRINGS_LONG) + defined(STRINGS_SHORT) + defined(STRINGS_LONG) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) > 1
 #error AMBIGUOUS TYPE
 #endif
 
-#if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) == 0
+#if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS_SHORT) + defined(CSTRINGS_LONG) + defined(STRINGS_SHORT) + defined(STRINGS_LONG) + defined(CSTRINGS) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) == 0
 #define PLAININT
 #endif
 
 #ifdef PLAININT
 typedef int X;
-#elif defined(STRINGS)
+#elif defined(STRINGS) || defined(STRINGS_SHORT) || defined(STRINGS_LONG)
 typedef string X;
-#elif defined(CSTRINGS)
+#elif defined(CSTRINGS) || defined(CSTRINGS_SHORT) || defined(CSTRINGS_LONG)
 typedef const char *X;
 #elif defined(INT64)
 typedef int64_t X;
@@ -79,34 +83,15 @@ struct X {
     int v[4];
     operator int() const { return k; }
 };
-bool operator<(const X &a, const X &b) { return a.k < b.k; }
+//bool operator<(const X &a, const X &b) { return a.k < b.k; }
 int operator-(const X &a, const X &b) { return a.k - b.k; }
 #else
 #error This type is not known
 #endif
 
-template<class T>
-void insert2(vector<T> &v, list<T> &l, int final = 0) {
-	v.push_back(v.back() + 1);
-	l.push_back(l.front());
-	l.erase(l.begin());
-	if (!final)
-		l.push_back(v.back()++);
-}
-
-template<class T>
-void fill_for_quadratic_qsort1(vector<T> &v, int size) {
-	v = {1, 3};
-	list<T> l{2, 0};
-	for (int i = 0; i < (size - 4)/2; i++)
-		insert2(v, l);
-	if (SS%2)
-		insert2(v, l, 1);
-	v.insert(v.end(), l.begin(), l.end());     
-}
-
 #include "oms7.cpp"
 #include "baseop.cpp"
+#include "fillings.cpp"
 #include "tim.cpp"
 #include "std.cpp"
 #include "boost.cpp"
@@ -144,7 +129,7 @@ size_t test(fstream &fio, vector<T> &v, function<void(vector<T>&)> f, const char
         << endl;
 L:
     fio.seekg(0);
-#ifndef STRINGS
+#if !defined(STRINGS) && !defined(STRINGS_SHORT) && !defined(STRINGS_LONG)
     fio.read(reinterpret_cast<char*>(&v[0]), SS*sizeof(T));
 #else
     for (int i = 0; i < SS; ++i) getline(fio, v[i]);
@@ -171,46 +156,23 @@ int main() {
     //cerr << sizeof(X) << endl;
     srand(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
     vector<X> v;
-
-#ifdef SLOW_QSORT1_ORDER
-    fill_for_quadratic_qsort1(v, SS);
-#else
-    for (int i = 0; i < SS; i++)
-#ifdef RANDOM_ORDER
-#ifdef STRINGS
-       v.push_back([]{ string s =""; int lim = rand()%16 + 1; for (int i = 0; i < lim; ++i) s += ' ' + rand()%94; return s;}());
-#elif defined(CSTRINGS)
-       v.push_back([]{ int lim = rand()%16 + 1; char *s = new char[lim + 1]; int i; for (i = 0; i < lim; ++i) s[i] = ' ' + rand()%94; s[i] = 0; return s;}());
-#else
-       v.push_back({X{1}*abs(rand()*rand())});
-#endif
-#elif defined(ASCENDED_ORDER) || defined(ASCENDED_RANDOM_ORDER)
-       v.push_back({i});
-#elif defined(DESCENDED_ORDER)
-       v.push_back({SS - i});
-#elif defined(LOW_VARIATION_ORDER)
-       v.push_back({rand()%LOW_VARIATION_CONST});
-#else
-#error NO ORDER IS SET
-#endif
-#endif
-
-#ifdef ASCENDED_RANDOM_ORDER
-    for (int i = 0; i < SS/100; i++)
-        v[rand()%SS] = rand();
-#endif
     fstream fio(FN, fio.binary | fio.trunc | fio.in | fio.out);
-#ifndef STRINGS
+
+    fill(v);
+
+#if !defined(STRINGS) && !defined(STRINGS_SHORT) && !defined(STRINGS_LONG)
     fio.write(reinterpret_cast<char*>(&v[0]), SS*sizeof(X));
 #else
     for (int i = 0; i < SS; ++i) fio << v[i] << endl;
 #endif
-    size_t eps, itv, tv = test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell3<X>, placeholders::_1)), "Z"); //train gc & cache
+
+    size_t eps, itv, tv = test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell3<X>, placeholders::_1)), "Z"); //train gc & cache, it is just a delay
     do {
         itv = test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell3<X>, placeholders::_1)), "Z");
         eps = abs(int((double(itv)/tv - 1)*100));
         tv = itv;
     } while (eps > 2);
+
     int passes = PASSES;
 L:
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell1<X>, placeholders::_1)), "shell_a3n");
@@ -220,7 +182,7 @@ L:
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell2<X>, placeholders::_1, 2)), "shell_exp_tab");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell2<X>, placeholders::_1, 4)), "shell_prime_10/3");
 
-#if !defined(STRINGS) && !defined(CSTRINGS) && !defined(FLOAT)
+#if !defined(STRINGS) && !defined(CSTRINGS) && !defined(STRINGS_SHORT) && !defined(CSTRINGS_SHORT) && !defined(STRINGS_LONG) && !defined(CSTRINGS_LONG) && !defined(FLOAT)
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radixsort<X>, placeholders::_1, 8)), "radix8");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radixsort<X>, placeholders::_1, 11)), "radix11");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radixsort<X>, placeholders::_1, 16)), "radix16");
@@ -231,20 +193,20 @@ L:
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(oms7_helper<X>, placeholders::_1, 8)), "msd8_oms7");
 #endif
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hsortstl<X>, placeholders::_1)), "heapsort_stl");
-#ifdef CSTRINGS
+#if defined(CSTRINGS) || defined(CSTRINGS_SHORT) || defined(CSTRINGS_LONG)
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radix_bsd<X>, placeholders::_1)), "radix_bsd");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(sradix_bsd<X>, placeholders::_1)), "sradix_bsd");
 #endif
-#ifndef STRINGS
+#if !defined(STRINGS) && !defined(STRINGS_SHORT) && !defined(STRINGS_LONG)
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort0<X>, placeholders::_1)), "clib_qsort");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hsort_bsd<X>, placeholders::_1)), "heapsort_bsd");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(mergesort_bsd<X>, placeholders::_1)), "mergesort_bsd");
 #endif
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort1<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort1tc<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare_tco"); //not tested with all data types 
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort2<X>, placeholders::_1, 0, SS - 1)), "qsort_no_pivot");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort3<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare2");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort4<X>, placeholders::_1, 0, SS - 1)), "qsort_lomuto");
+ //   test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort1<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare");
+    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort1tc<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare_tco"); //not tested with all data types 
+ //   test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort2<X>, placeholders::_1, 0, SS - 1)), "qsort_no_pivot");
+ //   test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort3<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare2");
+ //   test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort4<X>, placeholders::_1, 0, SS - 1)), "qsort_lomuto");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(stl_sort<X>, placeholders::_1)), "stlsort");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(stl_stable_sort<X>, placeholders::_1)), "stlstable");
 
@@ -253,7 +215,7 @@ L:
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(spreadsort<X>, placeholders::_1)), "spread");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(pdqsort<X>, placeholders::_1)), "pdq");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(spinsort<X>, placeholders::_1)), "spin");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(flat_stable_sort<X>, placeholders::_1)), "flat_stable");
+ //   test(fio, v, static_cast<function<void(vector<X>&)>>(bind(flat_stable_sort<X>, placeholders::_1)), "flat_stable");
 
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(bubble_sort<X>, placeholders::_1)), "bubble");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(selection_sort<X>, placeholders::_1)), "selection");

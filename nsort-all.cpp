@@ -25,8 +25,12 @@ using namespace std;
 //#define INT64
 //#define INT128
 //#define FLOAT
+//#define STRINGS_SHORT
 //#define STRINGS
+//#define STRINGS_LONG
+//#define CSTRINGS_SHORT
 //#define CSTRINGS
+//#define CSTRINGS_LONG
 
 #define SS 12
 #define RDTSC
@@ -37,19 +41,19 @@ uint64_t rdtsc(){
     return ((uint64_t)hi << 32) | lo;
 }
 
-#if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) > 1
+#if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS) + defined(CSTRINGS_SHORT) + defined(CSTRINGS_LONG) + defined(STRINGS_SHORT) + defined(STRINGS_LONG) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) > 1
 #error AMBIGUOUS TYPE
 #endif
 
-#if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) == 0
+#if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS_SHORT) + defined(CSTRINGS_LONG) + defined(STRINGS_SHORT) + defined(STRINGS_LONG) + defined(CSTRINGS) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) == 0
 #define PLAININT
 #endif
 
 #ifdef PLAININT
 typedef int X;
-#elif defined(STRINGS)
+#elif defined(STRINGS) || defined(STRINGS_SHORT) || defined(STRINGS_LONG)
 typedef string X;
-#elif defined(CSTRINGS)
+#elif defined(CSTRINGS) || defined(CSTRINGS_SHORT) || defined(CSTRINGS_LONG)
 typedef const char *X;
 #elif defined(INT64)
 typedef int64_t X;

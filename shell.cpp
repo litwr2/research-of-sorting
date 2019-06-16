@@ -10,14 +10,14 @@ void shell1(vector<T> &a) {
      i = h;
      j = i;
      v = a[i];
-     while (i < a.size()) {
+     for(;;) {
         j -= h;
         while (j >= 0 && v <= a[j]) {
            a[j + h] = a[j];
            j -= h;
         }
         a[j + h] = v;
-        ++i;
+        if (++i == a.size()) break;
         j = i;
         v = a[i];
      }

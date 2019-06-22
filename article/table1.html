@@ -1,3 +1,7 @@
+<meta charset=utf-8>
+<script src=data.js></script>
+<script src=actions.js></script>
+
 <style type=text/css>
 table, th, td {
    border-width:thin;
@@ -6,26 +10,39 @@ table, th, td {
    border-spacing:0px;
 }
 </style>
-<table border=1>
-<tr><th rowspan=2>Ранг<th rowspan=2>Алгоритм<th colspan=5>Размер данных
-<tr><th align=center>1'000'000'000<th>100'000'000<th>10'000'000<th>1'000'000<th>100'000
-<tr><td align=center>12<td>shell (e-based)<td align=right>206115<td align=right>17127<td align=right>1363<td align=right>106<td align=right>8
-<tr><td align=center>11<td>qsort (clib)<td align=right>189623<td align=right>15570<td align=right>1361<td align=right>115<td align=right>10
-<tr><td align=center>7<td>qsort (Hoare)<td align=right>131372<td align=right>11930<td align=right>1046<td align=right>92<td align=right>8
-<tr><td align=center>9<td>qsort (no pivot)<td align=right>146293<td align=right>12816<td align=right>1130<td align=right>96<td align=right>8
-<tr><td align=center>6<td>qsort (Lomuto)<td align=right>117664<td align=right>10329<td align=right>902<td align=right>77<td align=right>6
-<tr><td align=center>3<td>std::sort<td align=right>100364<td align=right>8920<td align=right>779<td align=right>66<td align=right>6
-<tr><td align=center>2<td>std::stable_sort<td align=right>72527<td align=right>6572<td align=right>575<td align=right>47<td align=right>4
-<tr><td align=center>10<td>timsort<td align=right>180933<td align=right>15917<td align=right>1397<td align=right>118<td align=right>10
-<tr><td align=center>15<td>heapsort (bsd)<td align=right>1158527<td align=right>80469<td align=right>4870<td align=right>273<td align=right>20
-<tr><td align=center>14<td>heapsort<td align=right>1332114<td align=right>81155<td align=right>4103<td align=right>153<td align=right>8
-<tr><td align=center>1<td>spreadsort<td align=right>73769<td align=right>5661<td align=right>442<td align=right>49<td align=right>3
-<tr><td align=center>4<td>pdqsort<td align=right>101903<td align=right>8946<td align=right>774<td align=right>66<td align=right>6
-<tr><td align=center>5<td>spinsort<td align=right>107592<td align=right>9404<td align=right>816<td align=right>69<td align=right>6
-<tr><td align=center>8<td>flat_stable_sort<td align=right>136273<td align=right>12585<td align=right>1057<td align=right>85<td align=right>7
-<tr><td align=center>13<td>hash_sort<td align=right>550'000*<td align=right>36248<td align=right>2301<td align=right>135<td align=right>6
-<tr><td align=center>16<td>tree_sort<td align=right>3'000'000*<td align=right>230277<td align=right>14674<td align=right>772<td align=right>31
-<tr><td align=center>17<td>selection_sort<td align=right>385'958'110'000*<td align=right>3'859'581'100*<td align=right>38595811<td align=right>385957<td align=right>3647
-<tr><td align=center>18<td>bubble_sort<td align=right>1'258'786'120'000*<td align=right>12'587'861'200*<td align=right>125878612<td align=right>1258709<td align=right>12576
-</table>
+<p><script>
+var Data1 = JSON.parse(JSON.stringify(Data))
+var order = "RANDOM_ORDER"
+var type = "PLAININT"
+var precision = 10
+var option1 = 0
+var option2 = 0
+</script>
+
+<p align=left>
+<table border=0 style=border-collapse:collapse; id=tab1a></table>
+<span id=myselect></span>
+
+<p>
+<select id=options1 onchange=changeOpt1()>
+<option value=0>absolute</option>
+<option value=1>average</option>
+<option value=2>median</option>
+<option value=3>minimum</option>
+<option value=4>maximum</option>
+</select>
+<select id=options2 onchange=changeOpt2()>
+<option value=1>1</option>
+<option value=2>2</option>
+<option value=3>3</option>
+<option value=0>unlimited</option>
+</select>
+
+<p>
+<table border=1 id=tab1></table>
+
+<script>
+document.getElementById("tab1").innerHTML = drawTable1()
+document.getElementById("tab1a").innerHTML = drawActionTable1()
+</script>
 

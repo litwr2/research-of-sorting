@@ -10,27 +10,18 @@ table, th, td {
    border-spacing:0px;
 }
 </style>
-<p><script>
+<script>
 var Data1 = JSON.parse(JSON.stringify(Data))
-var order = "RANDOM_ORDER"
-var type = "PLAININT"
+var order = ["RANDOM_ORDER", "RANDOM_ORDER"]
+var type = ["PLAININT", "PLAININT"]
 var precision = 10
 var option1 = 0
 var option2 = 0
 </script>
 
-<p align=left>
-<table border=0 style=border-collapse:collapse; id=tab1a></table>
-<span id=myselect></span>
+<p align=left id=tab1a>
 
-<p>
-<select id=options1 onchange=changeOpt1()>
-<option value=0>absolute</option>
-<option value=1>average</option>
-<option value=2>median</option>
-<option value=3>minimum</option>
-<option value=4>maximum</option>
-</select>
+<p>precision:
 <select id=options2 onchange=changeOpt2()>
 <option value=1>1</option>
 <option value=2>2</option>

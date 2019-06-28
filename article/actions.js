@@ -59,15 +59,15 @@ function changeOpt1() {
     option1 = document.getElementById("options1").value
     if (option1 == 1)  //average
         pivot = DataAvg();
-    else if (options1 == 2)  //median
+    else if (option1 == 2)  //median
         pivot = DataMedian();
-    else if (options1 == 3)  //minimum
+    else if (option1 == 3)  //minimum
         pivot = DataMin();
-    else if (options1 == 4)  //maximum
+    else if (option1 == 4)  //maximum
         pivot = DataMax();
     
     for (var sortm in Data1[order[0]][type[0]])
-        for (i = 0; i < 5; ++i)
+        for (var i = 0; i < 5; ++i)
              Data1[order[0]][type[0]][sortm][i] = precRound(Data[order[0]][type[0]][sortm][i]/pivot)
     document.getElementById("tab1").innerHTML = drawTable1()
 }
@@ -121,7 +121,7 @@ function drawActionTable1() {
     var cmpType = ["absolute", "average", "median", "minimum", "maximum"]
     if (duoMode[0] + duoMode[1] == 0) { 
         text += "<select id=options1 onchange=changeOpt1()>"
-        for (var i = 0; i < 4; ++i) {
+        for (var i = 0; i < cmpType.length; ++i) {
             text += "<option value=" + i.toString()
             if (i == option1)
                 text += " selected"

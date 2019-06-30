@@ -34,14 +34,22 @@ using namespace std;
 //#define CSTRINGS_SHORT
 //#define CSTRINGS
 //#define CSTRINGS_LONG
-//#define RANDOM_ORDER
-//#define ASCENDED_ORDER
-//#define ASCENDED_RANDOM_ORDER
-//#define DESCENDED_ORDER
-//#define LOW_VARIATION_ORDER
-//#define SLOW_QSORT1_ORDER
+//#define RANDOM
+//#define ASCENDED
+//#define ASCENDED_RANDOM
+//#define DESCENDED_RANDOM
+//#define DESCENDED
+//#define LOW_VARIATION1
+//#define LOW_VARIATION2
+//#define LOW_VARIATION100
+//#define SLOW_QSORT_HOARE
 
-#ifndef LOW_VARIATION_CONST
+#define LOW_VARIATION_CONST 0
+#ifdef LOW_VARIATION_CONST1
+#define LOW_VARIATION_CONST 1
+#elif defined(LOW_VARIATION_CONST2)
+#define LOW_VARIATION_CONST 2
+#elif defined(LOW_VARIATION_CONST100)
 #define LOW_VARIATION_CONST 100
 #endif
 
@@ -49,12 +57,12 @@ using namespace std;
 #define SS 10'000 //limits due to int types of indice are slightly above 2'000'000'000
 #endif
 
-#if defined(RANDOM_ORDER) + defined(ASCENDED_ORDER) + defined(ASCENDED_RANDOM_ORDER) + defined(DESCENDED_ORDER) + defined(LOW_VARIATION_ORDER) + defined(SLOW_QSORT1_ORDER) > 1
+#if defined(RANDOM) + defined(ASCENDED) + defined(ASCENDED_RANDOM) + defined(DESCENDED_RANDOM)+ defined(DESCENDED) + defined(LOW_VARIATION1) + defined(LOW_VARIATION2) + defined(LOW_VARIATION100) + defined(SLOW_QSORT_HOARE) > 1
 #error AMBIGUOUS ORDER
 #endif
 
-#if defined(RANDOM_ORDER) + defined(ASCENDED_ORDER) + defined(ASCENDED_RANDOM_ORDER) + defined(DESCENDED_ORDER) + defined(LOW_VARIATION_ORDER) + defined(SLOW_QSORT1_ORDER) == 0
-#define RANDOM_ORDER
+#if defined(RANDOM) + defined(ASCENDED) + defined(ASCENDED_RANDOM) + defined(DESCENDED_RANDOM)+ defined(DESCENDED) + defined(LOW_VARIATION1) + defined(LOW_VARIATION2) + defined(LOW_VARIATION100) + defined(SLOW_QSORT_HOARE) == 0
+#define RANDOM
 #endif
 
 #if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS) + defined(CSTRINGS_SHORT) + defined(CSTRINGS_LONG) + defined(STRINGS_SHORT) + defined(STRINGS_LONG) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) > 1
@@ -202,11 +210,11 @@ L:
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hsort_bsd<X>, placeholders::_1)), "heapsort_bsd");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(mergesort_bsd<X>, placeholders::_1)), "mergesort_bsd");
 #endif
- //   test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort1<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort1<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare");
     //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort1tc<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare_tco"); //not tested with all data types 
- //   test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort2<X>, placeholders::_1, 0, SS - 1)), "qsort_no_pivot");
- //   test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort3<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare2");
- //   test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort4<X>, placeholders::_1, 0, SS - 1)), "qsort_lomuto");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort2<X>, placeholders::_1, 0, SS - 1)), "qsort_no_pivot");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort3<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare2");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort4<X>, placeholders::_1, 0, SS - 1)), "qsort_lomuto");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(stl_sort<X>, placeholders::_1)), "stlsort");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(stl_stable_sort<X>, placeholders::_1)), "stlstable");
 
@@ -215,7 +223,7 @@ L:
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(spreadsort<X>, placeholders::_1)), "spread");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(pdqsort<X>, placeholders::_1)), "pdq");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(spinsort<X>, placeholders::_1)), "spin");
- //   test(fio, v, static_cast<function<void(vector<X>&)>>(bind(flat_stable_sort<X>, placeholders::_1)), "flat_stable");
+    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(flat_stable_sort<X>, placeholders::_1)), "flat_stable");
 
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(bubble_sort<X>, placeholders::_1)), "bubble");
     test(fio, v, static_cast<function<void(vector<X>&)>>(bind(selection_sort<X>, placeholders::_1)), "selection");

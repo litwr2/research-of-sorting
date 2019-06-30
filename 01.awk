@@ -5,9 +5,9 @@ BEGIN {
     ss["shell_a102549"] = 1
     ss["shell_exp_tab"] = 1
     ss["shell_prime_10/3"] = 1
-    ss["radix8"] = 1
-    ss["radix11"] = 1
-    ss["radix16"] = 1
+    ss["radix8"] = 2
+    ss["radix11"] = 2
+    ss["radix16"] = 2
     ss["shell_10/3_oms7"] = 1
     ss["radix8_oms7"] = 1
     ss["msd8_oms7"] = 1
@@ -43,28 +43,34 @@ BEGIN {
     ss["hashbt"] = 1
     ss["hashbt_boost"] = 1
 
-	t["PLAININT"] = 0
-        t["INT1P4"] = 0
-	t["INT64"] = 0
-	t["INT128"] = 0
+	t["PLAININT"] = 1
+        t["INT1P4"] = 1
+	t["INT64"] = 1
+	t["INT128"] = 1
 	t["FLOAT"] = 0
-	t["STRINGS"] = 1
-	t["CSTRINGS"] = 1
+	t["STRINGS"] = 0
+	t["CSTRINGS"] = 0
+	t["STRINGS_SHORT"] = 0
+	t["CSTRINGS_SHORT"] = 0
+	t["STRINGS_LONG"] = 0
+	t["CSTRINGS_LONG"] = 0
 
-	ft["RANDOM_ORDER"] = 1
-	ft["ASCENDED_ORDER"] = 0
-	ft["ASCENDED_RANDOM_ORDER"] = 0
-	ft["DESCENDED_ORDER"] = 0
-	ft["LOW_VARIATION_ORDER"] = 0
-	ft["SLOW_QSORT1_ORDER"] = 0
+	ft["RANDOM"] = 1
+	ft["ASCENDED"] = 0
+	ft["DESCENDED"] = 0
+	ft["ASCENDED_RANDOM"] = 0
+        ft["DESCENDED_RANDOM"] = 0
+	ft["LOW_VARIATION1"] = 0
+	ft["LOW_VARIATION2"] = 0
+	ft["LOW_VARIATION100"] = 0
+	ft["SLOW_QSORT_HOARE"] = 0
 
-	passes = 2
-        LOW_VARIATION_CONST = 100
-        SS = 1000*1000*100
+	passes = 5
+        SS = 100*1000
 
         excl = "("
         for (i in ss)
-            if (!ss[i]) excl = excl "echo " i ";"
+            if (ss[i] != 2) excl = excl "echo " i ";"
         excl = excl ")|grep -vFf - nsort.cpp >nsort2.cpp;"
 
 	for (i = 0; i < 1; ++i) {
@@ -73,7 +79,7 @@ BEGIN {
               if (t[i1])
                  for (i2 in ft)
                     if (ft[i2])
-                       print excl "touch always.cpp;EXTRA=\"-D" i1 " -D" i2 " -DSS=" SS " -DLOW_VARIATION_CONST=" LOW_VARIATION_CONST " -DPASSES=" passes "\" make && nsort2 >>results/" nSS "-" i1 "-" i2 "-z || echo ERROR!!!!!"
+                       print excl "touch always.cpp;EXTRA=\"-D" i1 " -D" i2 " -DSS=" SS " -DPASSES=" passes "\" make && nsort2 >results/" nSS "-" i1 "-" i2 "-z || echo ERROR!!!!!"
            SS *= 10
         }
         print "echo ok"

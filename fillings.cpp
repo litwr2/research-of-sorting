@@ -70,11 +70,11 @@ void fill_for_quadratic_qsort1(vector<T> &v) {
 }
 
 template<class T> void fill(vector<T> &v) {
-#ifdef SLOW_QSORT1_ORDER
+#ifdef SLOW_QSORT1_HOARE
     fill_for_quadratic_qsort1(v);
 #else
     for (int i = 0; i < SS; i++)
-#ifdef RANDOM_ORDER
+#ifdef RANDOM
 #ifdef STRINGS_SHORT
        v.push_back([]{ string s = ""; int lim = rand()%16 + 1; for (int i = 0; i < lim; ++i) s += ' ' + rand()%94; return s;}());
 #elif defined(STRINGS)
@@ -110,18 +110,18 @@ template<class T> void fill(vector<T> &v) {
 #else
        v.push_back({X{1}*abs(rand()*rand())});
 #endif
-#elif defined(ASCENDED_ORDER) || defined(ASCENDED_RANDOM_ORDER)
+#elif defined(ASCENDED) || defined(ASCENDED_RANDOM)
        v.push_back(cnv<T>(i));
-#elif defined(DESCENDED_ORDER)
+#elif defined(DESCENDED) || defined(DESCENDED_RANDOM)
        v.push_back(cnv<T>(SS - i));
-#elif defined(LOW_VARIATION_ORDER)
+#elif LOW_VARIATION_CONST
        v.push_back(cnv<T>(rand()%LOW_VARIATION_CONST));
 #else
 #error NO ORDER IS SET
 #endif
 #endif
 
-#ifdef ASCENDED_RANDOM_ORDER
+#if defined(ASCENDED_RANDOM) || defined(DESCENDED_RANDOM)
     for (int i = 0; i < SS/100; i++)
         v[rand()%SS] = cnv<T>(rand()%STRING_BASE);
 #endif

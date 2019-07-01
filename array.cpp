@@ -1,11 +1,16 @@
 template<class T>
-int array_index(const T &a, const T &minElem, const T &maxElem, int f) {
-    return long(a - minElem)*(f*SS - 1)/(maxElem - minElem);
+int array_index(const T &a, T minElem, T maxElem, int c1) {
+    return long(a - minElem)*c1/(maxElem - minElem);
 }
 
 template<>
-int array_index(const int64_t &a, const int64_t &minElem, const int64_t &maxElem, int f) {
-    return (long double)(a - minElem)*(f*SS - 1)/(maxElem - minElem);
+int array_index(const int64_t &a, int64_t minElem, int64_t maxElem, int c1) {
+    return (long double)(a - minElem)*c1/(maxElem - minElem);
+}
+
+template<>
+int array_index(const __int128 &a, __int128 minElem, __int128 maxElem, int c1) {
+    return (long double)(a - minElem)*c1/(maxElem - minElem);
 }
 
 template<class T> void array_sort(vector<T> &a, const int f) {
@@ -16,12 +21,13 @@ template<class T> void array_sort(vector<T> &a, const int f) {
 	if (minElem > a[i]) minElem = a[i];
     }
     if (maxElem == minElem) return;
+    int c1 = f*SS - 1, c2 = maxElem - minElem;
     //if (sizeof(int)*f - f >> 3 > sizeof(T)*(f - 1)) {
     if (sizeof(T) <= sizeof(int)) {
 	    vector<T> auxArray(f*SS);
 	    vector<bool> used(f*SS);
 	    for (i = 0; i < SS; ++i) {
-		j = array_index(a[i], minElem, maxElem, f);
+		j = array_index(a[i], minElem, maxElem, c1);
 		if (!used[j])
 		    auxArray[j] = a[i], used[j] = true;
 		else {
@@ -114,9 +120,11 @@ template<> void array_sort(vector<const char*> &a, const int f) {
         if (strcmp(maxElem, a[i]) < 0) maxElem = a[i];
         if (strcmp(minElem, a[i]) > 0) minElem = a[i];
     }
+    if (maxElem == minElem) return;
     int c1 = f*SS - 1, c2 = convert(maxElem) - convert(minElem);
+    if (c2 == 0) c2 = 1;
     for (i = 0; i < SS; ++i) {
-        j = long(convert(a[i]) - convert(minElem))*(f*SS - 1)/(convert(maxElem) - convert(minElem));
+        j = long(convert(a[i]) - convert(minElem))*c1/c2;
         if (!used[j])
             auxArray[j] = a[i], used[j] = true;
         else {

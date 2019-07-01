@@ -6,8 +6,15 @@ template<> int hash_func(int64_t d, int64_t minElem, int64_t maxElem) {
     return (long double)(d - minElem)*(SS - 1)/(maxElem - minElem);
 }
 
+template<> int hash_func(__int128 d, __int128 minElem, __int128 maxElem) {
+    return (long double)(d - minElem)*(SS - 1)/(maxElem - minElem);
+}
+
 template<> int hash_func(const char *d, const char *minElem, const char *maxElem) {
-    return long(convert(d) - convert(minElem))*(SS - 1)/(convert(maxElem) - convert(minElem));
+    int dv = convert(maxElem) - convert(minElem);
+    if (dv == 0)
+        return convert(d) - convert(minElem);
+    return long(convert(d) - convert(minElem))*(SS - 1)/dv;
 }
 
 template<class T> struct HashSort {

@@ -23,6 +23,22 @@ uint32_t convert(const char *s) {
     return r;
 }
 
+char *pchar_difference(const char *s1, const char *s2) {
+    int i = 0, l = max(strlen(s1), strlen(s2));
+    while (s1[i] == s2[i] && s1[i] != 0) ++i;
+    char *b = new char[l - i + 1];
+    int p = i;
+    if (i == l) goto L1;
+    if (strlen(s1) > strlen(s2) {
+        int d = strlen(s1);
+        
+    }
+
+L1:
+    b[p] = 0;
+    return b;
+}
+
 uint32_t operator-(const string &s1, const string &s2) {
     return convert(s1.c_str()) - convert(s2.c_str());
 }

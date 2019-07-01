@@ -70,7 +70,7 @@ void fill_for_quadratic_qsort1(vector<T> &v) {
 }
 
 template<class T> void fill(vector<T> &v) {
-#ifdef SLOW_QSORT1_HOARE
+#ifdef SLOW_QSORT_HOARE
     fill_for_quadratic_qsort1(v);
 #else
     for (int i = 0; i < SS; i++)

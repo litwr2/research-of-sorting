@@ -45,11 +45,11 @@ using namespace std;
 //#define SLOW_QSORT_HOARE
 
 #define LOW_VARIATION_CONST 0
-#ifdef LOW_VARIATION_CONST1
+#ifdef LOW_VARIATION1
 #define LOW_VARIATION_CONST 1
-#elif defined(LOW_VARIATION_CONST2)
+#elif defined(LOW_VARIATION2)
 #define LOW_VARIATION_CONST 2
-#elif defined(LOW_VARIATION_CONST100)
+#elif defined(LOW_VARIATION100)
 #define LOW_VARIATION_CONST 100
 #endif
 

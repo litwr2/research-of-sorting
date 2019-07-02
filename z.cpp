@@ -6,17 +6,10 @@ using namespace std;
 
 #include "baseop.cpp"
 
-void printstr4(const char *s) {
-    for (int i = 0; i < 4; ++i)
-        cout << (int) s[i] << ' ';
-    cout << endl;
-}
-
 int main() {
     string in1, in2, out;
     getline(cin, in1);
     getline(cin, in2);
-    char *p = pchar_difference(in1.c_str(), in2.c_str());
-    printstr20(p);
+    cout << pchar_difference(in1.c_str(), in2.c_str()) << endl;
 }
 

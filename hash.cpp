@@ -11,10 +11,10 @@ template<> int hash_func(__int128 d, __int128 minElem, __int128 maxElem) {
 }
 
 template<> int hash_func(const char *d, const char *minElem, const char *maxElem) {
-    int dv = convert(maxElem) - convert(minElem);
+    size_t dv = pchar_difference(maxElem, minElem);
     if (dv == 0)
-        return convert(d) - convert(minElem);
-    return long(convert(d) - convert(minElem))*(SS - 1)/dv;
+        return pchar_difference(d, minElem);
+    return long(pchar_difference(d, minElem))*(SS - 1)/dv;
 }
 
 template<class T> struct HashSort {

@@ -121,10 +121,10 @@ template<> void array_sort(vector<const char*> &a, const int f) {
         if (strcmp(minElem, a[i]) > 0) minElem = a[i];
     }
     if (maxElem == minElem) return;
-    int c1 = f*SS - 1, c2 = convert(maxElem) - convert(minElem);
+    int c1 = f*SS - 1, c2 = pchar_difference(maxElem, minElem);
     if (c2 == 0) c2 = 1;
     for (i = 0; i < SS; ++i) {
-        j = long(convert(a[i]) - convert(minElem))*c1/c2;
+        j = long(pchar_difference(a[i], minElem))*c1/c2;
         if (!used[j])
             auxArray[j] = a[i], used[j] = true;
         else {

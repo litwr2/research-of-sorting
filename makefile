@@ -1,4 +1,4 @@
-CXXFLAGS = -g $(EXTRA)
+CXXFLAGS = -O3 $(EXTRA)
 LDFLAGS = -lstdc++ -lbsd
 FN = nsort2
 

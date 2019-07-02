@@ -23,19 +23,20 @@ uint32_t convert(const char *s) {
     return r;
 }
 
-char *pchar_difference(const char *s1, const char *s2) {
-    int i = 0, l = max(strlen(s1), strlen(s2));
-    while (s1[i] == s2[i] && s1[i] != 0) ++i;
-    char *b = new char[l - i + 1];
-    int p = i;
-    if (i == l) goto L1;
-    if (strlen(s1) > strlen(s2) {
-        int d = strlen(s1);
-        
+char* pchar_difference(const char *s1, const char *s2) {
+    const size_t mbs = 4;
+    static char b[mbs];
+    int i = 0, l1 = strlen(s1), l2 = strlen(s2), lmax = max(l1, l2), lmin = min(l1, l2);
+    while (s1[i] == s2[i] && i < lmin) ++i;
+    int p = i, sign = 0;
+    for (size_t k = 0; k < mbs; ++k) {
+        int o1 = 0, o2 = 0;
+        if (p + mbs - k - 1 < l1) o1 = s1[p + mbs - k - 1];
+        if (p + mbs - k - 1 < l2) o2 = s2[p + mbs - k - 1];
+        b[mbs - k - 1] = o1 - o2 - sign;
+        if (o1 < o2 || sign == 1 && o1 == o2) sign = 1; else sign = 0;
     }
-
 L1:
-    b[p] = 0;
     return b;
 }
 

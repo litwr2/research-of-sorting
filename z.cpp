@@ -6,8 +6,8 @@ using namespace std;
 
 #include "baseop.cpp"
 
-void printstr20(const char *s) {
-    for (int i = 0; i < 20; ++i)
+void printstr4(const char *s) {
+    for (int i = 0; i < 4; ++i)
         cout << (int) s[i] << ' ';
     cout << endl;
 }

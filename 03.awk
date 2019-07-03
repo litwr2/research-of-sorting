@@ -65,8 +65,6 @@ BEGIN {
 	ft["LOW_VARIATION100"] = 0
 	ft["SLOW_QSORT_HOARE"] = 0
 
-        SS = 1000
-
 	for (SS = 1000; SS <= 1000*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
@@ -77,10 +75,10 @@ BEGIN {
                        if (i3 == z && SS >= 100*1000 && i2 != "ASCENDED" && i2 != "ASCENDED_RANDOM" && i2 != "LOW_VARIATION1")
                            excl = excl "echo " z ";"
                        z = "selection"
-                       if (i3 == z && SS >= 1000*1000)
+                       if (i3 == z && SS >= 1000*100)
                            excl = excl "echo " z ";"
                        z = "array*1"
-                       if (i3 == z && SS >= 1000*1000)
+                       if (i3 == z && SS >= 1000*100)
                            excl = excl "echo '" z "';"
                    }
                    if (excl != "")
@@ -92,6 +90,7 @@ BEGIN {
                    if (SS <= 1000) passes = 10
                    else if (SS <= 10000) passes = 4
                    else if (SS <= 1000000) passes = 2
+       passes = 1 #remove it!!!!
                    print excl "touch always.cpp;EXTRA=\"-D" i1 " -D" i2 " -DSS=" SS " -DPASSES=" passes "\" make && nsort2 >>results/" nSS "-" i1 "-" i2 " || echo ERROR!!!!!"
                }
         }

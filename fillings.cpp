@@ -1,16 +1,27 @@
 #define STRING_BASE 1'000'000'000
 
+#if defined(STRINGS_SHORT) || defined(CSTRINGS_SHORT)
+#define SL 6
+#elif defined(STRINGS) || defined(CSTRINGS)
+#define SL 250
+#else
+#define SL 506
+#endif
+
 template<class T> T cnv(int n) {
     return {n};
 }
 
 template<> string cnv(int n) {
-    return to_string(n + STRING_BASE).c_str();
+    return to_string(n + STRING_BASE).c_str() + string(rand()%SL + 1, 'A');
 }
 
 template<> const char *cnv(int n) {
-    char *s = new char [to_string(n).length() + 1];
+    unsigned r = rand()%SL + 1;
+    unsigned l = to_string(n + STRING_BASE).length() + r + 1;
+    char *s = new char [l];
     strcpy(s, to_string(n + STRING_BASE).c_str());
+    strcat(s, string(r, 'A').c_str());
     return s;
 }
 
@@ -19,14 +30,17 @@ template<class T> T nxt(T n) {
 }
 
 template<> string nxt(string n) {
-    return to_string(stoi(n) + 1).c_str();
+    return to_string(stoi(n) + 1) + string(rand()%SL + 1, 'A');
 }
 
 template<> const char *nxt(const char *n) {
     int t = atoi(n) + 1;
     delete n;
-    char *s = new char [to_string(t).length() + 1];
+    unsigned r = rand()%SL + 1;
+    unsigned l = to_string(t).length() + r + 1;
+    char *s = new char [l];
     strcpy(s, to_string(t).c_str());
+    strcat(s, string(r, 'A').c_str());
     return s;
 }
 

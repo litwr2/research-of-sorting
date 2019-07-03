@@ -44,13 +44,14 @@ using namespace std;
 //#define LOW_VARIATION100
 //#define SLOW_QSORT_HOARE
 
-#define LOW_VARIATION_CONST 0
 #ifdef LOW_VARIATION1
 #define LOW_VARIATION_CONST 1
 #elif defined(LOW_VARIATION2)
 #define LOW_VARIATION_CONST 2
 #elif defined(LOW_VARIATION100)
 #define LOW_VARIATION_CONST 100
+#else
+#define LOW_VARIATION_CONST 0
 #endif
 
 #ifndef SS

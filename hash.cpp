@@ -1,19 +1,17 @@
-template<class T> int hash_func(T d, T minElem, T maxElem) {
-    return double(d - minElem)*(SS - 1)/(maxElem - minElem);
+template<class T> int hash_func(T d, T minElem, double diff) {
+    return (long double)(d - minElem)*(SS - 1)/diff;
 }
 
-template<> int hash_func(int64_t d, int64_t minElem, int64_t maxElem) {
-    return (long double)(d - minElem)*(SS - 1)/(maxElem - minElem);
+template<> int hash_func(int64_t d, int64_t minElem, double diff) {
+    return (long double)(d - minElem)*(SS - 1)/diff;
 }
 
-template<> int hash_func(__int128 d, __int128 minElem, __int128 maxElem) {
-    return (long double)(d - minElem)*(SS - 1)/(maxElem - minElem);
+template<> int hash_func(__int128 d, __int128 minElem, double diff) {
+    return (long double)(d - minElem)*(SS - 1)/diff;
 }
 
-template<> int hash_func(const char *d, const char *minElem, const char *maxElem) {
-    auto dv = convert(maxElem) - convert(minElem);
-    if (dv == 0) return 0;
-    return (convert(d) - convert(minElem))*(SS - 1)/dv;
+template<> int hash_func(const char *d, const char *minElem, double diff) {
+    return (convert(d) - convert(minElem))*(SS - 1)/diff;
 }
 
 template<class T> struct HashSort {
@@ -26,8 +24,9 @@ template<class T> struct HashSort {
     int freePtr;
     HashSort() : hashData(SS), hashPtr(SS, -1), freePtr(0) {}
     T minElem, maxElem;
+    double diff;
     void addElement(T d) {
-        int prevPtr, j = hash_func(d, minElem, maxElem), curPtr = hashPtr[j];
+        int prevPtr, j = hash_func(d, minElem, diff), curPtr = hashPtr[j];
         if (curPtr == -1) {
            hashPtr[j] = freePtr;
            goto l1;
@@ -57,7 +56,7 @@ l2:
 
 template<>
 void HashSort<const char*>::addElement(const char *d) {
-    int prevPtr, j = hash_func(d, minElem, maxElem), curPtr = hashPtr[j];
+    int prevPtr, j = hash_func(d, minElem, diff), curPtr = hashPtr[j];
     if (curPtr == -1) {
         hashPtr[j] = freePtr;
         goto l1;
@@ -92,6 +91,8 @@ template<class T> void hash_sort(vector<T> &a) {
         if (hs.minElem > a[i]) hs.minElem = a[i];
     }
     if (hs.maxElem == hs.minElem) return;
+    hs.diff = hs.maxElem - hs.minElem;
+    if (hs.diff == 0) hs.diff = 1;
     for (int i = 0; i < SS; ++i) 
          hs.addElement(a[i]);
     hs.freePtr = 0;
@@ -112,6 +113,8 @@ template<> void hash_sort(vector<const char*> &a) {
         if (strcmp(hs.minElem, a[i]) > 0) hs.minElem = a[i];
     }
     if (hs.maxElem == hs.minElem) return;
+    hs.diff = convert(hs.maxElem) - convert(hs.minElem);
+    if (hs.diff == 0) hs.diff = 1;
     for (int i = 0; i < SS; ++i) 
          hs.addElement(a[i]);
     hs.freePtr = 0;
@@ -122,109 +125,5 @@ template<> void hash_sort(vector<const char*> &a) {
              j = hs.hashData[j].next;
          }
     }
-}
-
-template<class T> struct HashBTSort {
-    typedef std::multiset<T> HashElement;
-    vector<HashElement> hashData;
-    T minElem, maxElem;
-    HashBTSort() : hashData(SS) {}
-    void addElement(T d) {
-        hashData[hash_func(d, minElem, maxElem)].insert(d);
-    }
-};
-
-template<> struct HashBTSort<const char*> {
-    typedef std::multiset<const char*, pchar_less> HashElement;
-    vector<HashElement> hashData;
-    const char *minElem, *maxElem;
-    HashBTSort() : hashData(SS) {}
-    void addElement(const char *d) {
-        hashData[hash_func(d, minElem, maxElem)].insert(d);
-    }
-};
-
-template<class T> void hashbt_sort_std(vector<T> &a) {
-    HashBTSort<T> hs;
-    hs.maxElem = hs.minElem = a[0];
-    for (int i = 1; i < SS; ++i) {
-        if (hs.maxElem < a[i]) hs.maxElem = a[i];
-        if (hs.minElem > a[i]) hs.minElem = a[i];
-    }
-    if (hs.maxElem == hs.minElem) return;
-    for (int i = 0; i < SS; ++i) 
-         hs.addElement(a[i]);
-    int n = 0;
-    for (int i = 0; i < SS; ++i)
-        for (auto it: hs.hashData[i])
-             a[n++] = it;
-}
-
-template<> void hashbt_sort_std(vector<const char*> &a) {
-    HashBTSort<const char*> hs;
-    hs.maxElem = hs.minElem = a[0];
-    for (int i = 1; i < SS; ++i) {
-        if (strcmp(hs.maxElem, a[i]) < 0) hs.maxElem = a[i];
-        if (strcmp(hs.minElem, a[i]) > 0) hs.minElem = a[i];
-    }
-    if (hs.maxElem == hs.minElem) return;
-    for (int i = 0; i < SS; ++i) 
-         hs.addElement(a[i]);
-    int n = 0;
-    for (int i = 0; i < SS; ++i)
-        for (auto it: hs.hashData[i])
-             a[n++] = it;
-}
-
-template<class T> struct HashBTSort_boost {
-    typedef boost::container::multiset<T> HashElement;
-    vector<HashElement> hashData;
-    T minElem, maxElem;
-    HashBTSort_boost() : hashData(SS) {}
-    void addElement(T d) {
-        hashData[hash_func(d, minElem, maxElem)].insert(d);
-    }
-};
-
-template<> struct HashBTSort_boost<const char*> {
-    typedef boost::container::multiset<const char*, pchar_less> HashElement;
-    vector<HashElement> hashData;
-    const char *minElem, *maxElem;
-    HashBTSort_boost() : hashData(SS) {}
-    void addElement(const char *d) {
-        hashData[hash_func(d, minElem, maxElem)].insert(d);
-    }
-};
-
-template<class T> void hashbt_sort_boost(vector<T> &a) {
-    HashBTSort_boost<T> hs;
-    hs.maxElem = hs.minElem = a[0];
-    for (int i = 1; i < SS; ++i) {
-        if (hs.maxElem < a[i]) hs.maxElem = a[i];
-        if (hs.minElem > a[i]) hs.minElem = a[i];
-    }
-    if (hs.maxElem == hs.minElem) return;
-    for (int i = 0; i < SS; ++i) 
-         hs.addElement(a[i]);
-    int n = 0;
-    for (int i = 0; i < SS; ++i)
-        for (auto it: hs.hashData[i])
-             a[n++] = it;
-}
-
-template<> void hashbt_sort_boost(vector<const char*> &a) {
-    HashBTSort_boost<const char*> hs;
-    hs.maxElem = hs.minElem = a[0];
-    for (int i = 1; i < SS; ++i) {
-        if (strcmp(hs.maxElem, a[i]) < 0) hs.maxElem = a[i];
-        if (strcmp(hs.minElem, a[i]) > 0) hs.minElem = a[i];
-    }
-    if (hs.maxElem == hs.minElem) return;
-    for (int i = 0; i < SS; ++i) 
-         hs.addElement(a[i]);
-    int n = 0;
-    for (int i = 0; i < SS; ++i)
-        for (auto it: hs.hashData[i])
-             a[n++] = it;
 }
 

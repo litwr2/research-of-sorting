@@ -13,15 +13,23 @@ template<class T> T cnv(int n) {
 }
 
 template<> string cnv(int n) {
-    return to_string(n + STRING_BASE).c_str() + string(rand()%SL + 1, 'A');
+    if (LOW_VARIATION_CONST == 0)
+        return to_string(n + STRING_BASE) + string(rand()%SL + 1, 'A');
+    return to_string(n + STRING_BASE);
 }
 
 template<> const char *cnv(int n) {
     unsigned r = rand()%SL + 1;
     unsigned l = to_string(n + STRING_BASE).length() + r + 1;
-    char *s = new char [l];
-    strcpy(s, to_string(n + STRING_BASE).c_str());
-    strcat(s, string(r, 'A').c_str());
+    char *s;
+    if (LOW_VARIATION_CONST != 0) {
+        s = new char [l];
+        strcpy(s, to_string(n + STRING_BASE).c_str());
+        strcat(s, string(r, 'A').c_str());
+    } else {
+        s = new char [l - r];
+        strcpy(s, to_string(n + STRING_BASE).c_str());
+    }
     return s;
 }
 

@@ -1,16 +1,16 @@
 template<class T>
-int array_index(const T &a, T minElem, T maxElem, int c1) {
-    return double(a - minElem)*c1/(maxElem - minElem);
+int array_index(const T &a, T minElem, double diff, unsigned c1) {
+    return (long double)(a - minElem)*c1/diff;
 }
 
 template<>
-int array_index(const int64_t &a, int64_t minElem, int64_t maxElem, int c1) {
-    return (long double)(a - minElem)*c1/(maxElem - minElem);
+int array_index(const int64_t &a, int64_t minElem, double diff, unsigned c1) {
+    return (long double)(a - minElem)*c1/diff;
 }
 
 template<>
-int array_index(const __int128 &a, __int128 minElem, __int128 maxElem, int c1) {
-    return (long double)(a - minElem)*c1/(maxElem - minElem);
+int array_index(const __int128 &a, __int128 minElem, double diff, unsigned c1) {
+    return (long double)(a - minElem)*c1/diff;
 }
 
 template<class T> void array_sort(vector<T> &a, const int f) {
@@ -22,13 +22,14 @@ template<class T> void array_sort(vector<T> &a, const int f) {
     }
     if (maxElem == minElem) return;
     unsigned c1 = f*SS - 1;
-    auto c2 = maxElem - minElem;
+    double c2 = maxElem - minElem;
+    if (c2 == 0) c2 = 1;
     //if (sizeof(int)*f - f >> 3 > sizeof(T)*(f - 1)) {
     if (sizeof(T) <= sizeof(int)) {
 	    vector<T> auxArray(f*SS);
 	    vector<bool> used(f*SS);
 	    for (i = 0; i < SS; ++i) {
-		j = array_index(a[i], minElem, maxElem, c1);
+		j = array_index(a[i], minElem, c2, c1);
 		if (!used[j])
 		    auxArray[j] = a[i], used[j] = true;
 		else {
@@ -70,7 +71,7 @@ template<class T> void array_sort(vector<T> &a, const int f) {
     } else {
 	    vector<int> auxArray(f*SS, -1);
 	    for (i = 0; i < SS; ++i) {
-		j = array_index(a[i], minElem, maxElem, f);
+		j = array_index(a[i], minElem, c2, c1);
 		if (auxArray[j] < 0)
 		    auxArray[j] = i;
 		else {
@@ -126,7 +127,7 @@ template<> void array_sort(vector<const char*> &a, const int f) {
     auto c2 = convert(maxElem) - convert(minElem);
     if (c2 == 0) c2 = 1;
     for (i = 0; i < SS; ++i) {
-        j = double(convert(a[i]) - convert(minElem))*c1/c2;
+        j = (long double)(convert(a[i]) - convert(minElem))*c1/c2;
         if (!used[j])
             auxArray[j] = a[i], used[j] = true;
         else {

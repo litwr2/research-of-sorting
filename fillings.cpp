@@ -1,11 +1,11 @@
-#define STRING_BASE 1'000'000'000
+#define STRING_BASE 1'000'000'000    //10 digits
 
 #if defined(STRINGS_SHORT) || defined(CSTRINGS_SHORT)
 #define SL 6
 #elif defined(STRINGS) || defined(CSTRINGS)
-#define SL 250
+#define SL 246
 #else
-#define SL 506
+#define SL 502
 #endif
 
 template<class T> T cnv(int n) {
@@ -22,7 +22,7 @@ template<> const char *cnv(int n) {
     unsigned r = rand()%SL + 1;
     unsigned l = to_string(n + STRING_BASE).length() + r + 1;
     char *s;
-    if (LOW_VARIATION_CONST != 0) {
+    if (LOW_VARIATION_CONST == 0) {
         s = new char [l];
         strcpy(s, to_string(n + STRING_BASE).c_str());
         strcat(s, string(r, 'A').c_str());

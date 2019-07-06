@@ -72,7 +72,7 @@ BEGIN {
                    excl = ""
                    for (i3 in ss) {
                        z = "bubble"
-                       if (i3 == z && SS >= 100*1000 && i2 != "ASCENDED" && i2 != "ASCENDED_RANDOM" && i2 != "LOW_VARIATION1")
+                       if (i3 == z && SS >= 100*1000 && i2 != "ASCENDED" && i2 != "ASCENDED_RANDOM" && i2 != "LOW_VARIATION1" && i2 != "LOW_VARIATION2")
                            excl = excl "echo " z ";"
                        z = "selection"
                        if (i3 == z && SS >= 1000*100)

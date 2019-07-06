@@ -1,3 +1,5 @@
+var M = 3 //max index
+
 function precRound(n) {
     if (precision == 0)
         return n
@@ -7,10 +9,10 @@ function precRound(n) {
 function drawTable1() {
     var n = 0
     var text = "<tr><th rowspan=2>Ранг<th rowspan=2>Алгоритм<th colspan=5>Размер данных"
-    text += "<tr><th align=center>1'000'000'000<th>100'000'000<th>10'000'000<th>1'000'000<th>100'000"
+    text += "<tr><th align=center>1000<th>10'000<th>100'000<th>1'000'000<th>10'000'000"
     for (var sortm in Data1[order[0]][type[0]]) {
         text += "<tr><td align=center>" + (++n).toString() + "<td>" + sortm
-        for (var i = 0; i < 5; ++i)
+        for (var i = 0; i < M; ++i)
             text += "<td align=right>" + Data1[order[0]][type[0]][sortm][i].toString()
     }
     return text;
@@ -20,7 +22,7 @@ function DataAvg() {
     var sum = 0
     var cnt = 0
     for (var sortm in Data1[order[0]][type[0]])
-        for (var i = 0; i < 5; ++i) {
+        for (var i = 0; i < M; ++i) {
             sum += Data[order[0]][type[0]][sortm][i]
             cnt++
         }
@@ -30,7 +32,7 @@ function DataAvg() {
 function DataMedian() {
     var vector = []
     for (var sortm in Data1[order[0]][type[0]])
-        for (i = 0; i < 5; ++i)
+        for (i = 0; i < M; ++i)
             vector.push(Data[order[0]][type[0]][sortm][i])
     vector.sort(function(a, b){ return a - b })
     return vector[vector.length/2]
@@ -39,7 +41,7 @@ function DataMedian() {
 function DataMin() {
     var min = 1 << 30
     for (var sortm in Data1[order[0]][type[0]])
-        for (i = 0; i < 5; ++i)
+        for (i = 0; i < M; ++i)
             if (Data[order[0]][type[0]][sortm][i] < min)
                 min = Data[order[0]][type[0]][sortm][i]
     return min
@@ -48,7 +50,7 @@ function DataMin() {
 function DataMax() {
     var max = 0
     for (var sortm in Data1[order[0]][type[0]])
-        for (i = 0; i < 5; ++i)
+        for (i = 0; i < M; ++i)
             if (Data[order[0]][type[0]][sortm][i] > max)
                 max = Data[order[0]][type[0]][sortm][i]
     return max
@@ -67,7 +69,7 @@ function changeOpt1() {
         pivot = DataMax();
     
     for (var sortm in Data1[order[0]][type[0]])
-        for (var i = 0; i < 5; ++i)
+        for (var i = 0; i < M; ++i)
              Data1[order[0]][type[0]][sortm][i] = precRound(Data[order[0]][type[0]][sortm][i]/pivot)
     document.getElementById("tab1").innerHTML = drawTable1()
 }
@@ -135,11 +137,11 @@ function drawActionTable1() {
 function changeOptAll() {
     if (duoMode[0] > 0) {
         for (var sortm in Data1[order[0]][type[0]])
-            for (var i = 0; i < 5; ++i)
+            for (var i = 0; i < M; ++i)
                 Data1[order[0]][type[0]][sortm][i] = precRound(Data[order[0]][type[0]][sortm][i]/Data[order[1]][type[0]][sortm][i])
     } else if (duoMode[1] > 0) {
         for (var sortm in Data1[order[0]][type[0]])
-            for (var i = 0; i < 5; ++i)
+            for (var i = 0; i < M; ++i)
                 Data1[order[0]][type[0]][sortm][i] = precRound(Data[order[0]][type[0]][sortm][i]/Data[order[0]][type[1]][sortm][i])
     } else
         changeOpt1()

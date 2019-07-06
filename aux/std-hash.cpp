@@ -13,7 +13,7 @@ struct hashkey {
 struct hashequal {
     bool operator()(const int &a, const int &b) const {
         return a == b;
-    } 
+    }
 };
 
 //template<class T>

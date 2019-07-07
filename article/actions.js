@@ -8,14 +8,17 @@ function precRound(n) {
 
 function drawTable1() {
     var n = 0
-    var text = "<tr><th rowspan=2>Ранг<th rowspan=2>Алгоритм<th colspan=5>Размер данных"
-    text += "<tr><th align=center>1000<th>10'000<th>100'000<th>1'000'000<th>10'000'000"
+    var text = "<tr><th rowspan=2>#<th rowspan=2>Алгоритм<button style='padding:0px 0px;margin:0px 5px'>&#xb7;</button><th colspan=5>Размер данных"
+    text += "<tr>"
+    for (var i = 0; i < M; ++i)
+        text += "<th align=center>10<sup>" + (i + 3).toString()
+            + "</sup><button style='padding:0px 0px;margin:0px 5px'>&#xb7;</button>"
     for (var sortm in Data1[order[0]][type[0]]) {
-        text += "<tr><td align=center>" + (++n).toString() + "<td>" + sortm
+        text += "<tr><td align=center>" + (++n).toString() + "<input type=checkbox></input><td>" + sortm
         for (var i = 0; i < M; ++i)
             text += "<td align=right>" + Data1[order[0]][type[0]][sortm][i].toString()
     }
-    return text;
+    document.getElementById("tab1").innerHTML = text
 }
 
 function DataAvg() {
@@ -58,7 +61,7 @@ function DataMax() {
 
 function changeOpt1() {
     var pivot = 1  //absolute
-    option1 = document.getElementById("options1").value
+    option1 = document.getElementById("optionRel").value
     if (option1 == 1)  //average
         pivot = DataAvg();
     else if (option1 == 2)  //median
@@ -67,16 +70,15 @@ function changeOpt1() {
         pivot = DataMin();
     else if (option1 == 4)  //maximum
         pivot = DataMax();
-    
-    for (var sortm in Data1[order[0]][type[0]])
+    for (var sortm in Data[order[0]][type[0]])
         for (var i = 0; i < M; ++i)
-             Data1[order[0]][type[0]][sortm][i] = precRound(Data[order[0]][type[0]][sortm][i]/pivot)
-    document.getElementById("tab1").innerHTML = drawTable1()
+            Data1[order[0]][type[0]][sortm][i] = precRound(Data[order[0]][type[0]][sortm][i]/pivot)
+    drawTable1()
 }
 
 function changeOpt2() {
-    if (document.getElementById("options2").value > 0)
-        precision = Math.pow(10, document.getElementById("options2").value);
+    if (document.getElementById("optionsPrec").value > 0)
+        precision = Math.pow(10, document.getElementById("optionsPrec").value);
     else
         precision = 0
     changeOpt1()
@@ -109,7 +111,7 @@ function drawActionTable1() {
         text += "</select>" 
 
         if (duoMode[i] == 1) {
-            text += " vs "
+            text += " / "
             text += "<select id=select" + iv + "1 onchange=changeAction(" + iv + ",1)>";
             for (sv in indexValues[i]) {
                 text += "<option value=" + sv
@@ -122,7 +124,7 @@ function drawActionTable1() {
     }
     var cmpType = ["absolute", "average", "median", "minimum", "maximum"]
     if (duoMode[0] + duoMode[1] == 0) { 
-        text += "<select id=options1 onchange=changeOpt1()>"
+        text += "<select id=optionRel onchange=changeOpt1()>"
         for (var i = 0; i < cmpType.length; ++i) {
             text += "<option value=" + i.toString()
             if (i == option1)
@@ -131,7 +133,7 @@ function drawActionTable1() {
         }
         text += "</select>"
     }
-    return text
+    document.getElementById("tab1a").innerHTML = text
 }
 
 function changeOptAll() {
@@ -141,8 +143,17 @@ function changeOptAll() {
                 Data1[order[0]][type[0]][sortm][i] = precRound(Data[order[0]][type[0]][sortm][i]/Data[order[1]][type[0]][sortm][i])
     } else if (duoMode[1] > 0) {
         for (var sortm in Data1[order[0]][type[0]])
-            for (var i = 0; i < M; ++i)
-                Data1[order[0]][type[0]][sortm][i] = precRound(Data[order[0]][type[0]][sortm][i]/Data[order[0]][type[1]][sortm][i])
+            for (var i = 0; i < M; ++i) {
+                var b
+                if (sortm in Data[order[0]][type[1]])
+                    b = Data[order[0]][type[1]][sortm][i]
+                else
+                    b = 0
+                if (a != 0 && b != 0)
+                    Data1[order[0]][type[0]][sortm][i] = precRound(Data[order[0]][type[0]][sortm][i]/b)
+                else
+                    Data1[order[0]][type[0]][sortm][i] = "n/a"
+            }
     } else
         changeOpt1()
 }
@@ -155,9 +166,9 @@ function changeRow(n) {
     for (var i = 0; i < 2; ++i)
         if (i != n)
             duoMode[i] = 0
-    document.getElementById("tab1a").innerHTML = drawActionTable1()
+    drawActionTable1()
     changeOptAll()
-    document.getElementById("tab1").innerHTML = drawTable1()
+    drawTable1()
 }
 
 function changeAction(n, m) {
@@ -167,6 +178,6 @@ function changeAction(n, m) {
     else
         order[m] = document.getElementById(nms).value
     changeOptAll()
-    document.getElementById("tab1").innerHTML = drawTable1()
+    drawTable1()
 }
 

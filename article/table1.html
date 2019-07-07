@@ -14,18 +14,24 @@ table, th, td {
 var order = ["RANDOM", "RANDOM"]
 var type = ["PLAININT", "PLAININT"]
 var precision = 10
-var option1 = 0
-var option2 = 0
+var optionRel = 0
 </script>
 
 <p align=left id=tab1a>
 
-<p>precision:
-<select id=optionsPrec onchange=changeOpt2()>
+<p>relation:
+<span id=rel></span>
+precision:
+<select id=optionsPrec onchange=changeOptPrec()>
 <option value=1>1</option>
 <option value=2>2</option>
 <option value=3>3</option>
 <option value=0>unlimited</option>
+</select>
+select:
+<select id=optionSel onchange=changeOptSel()>
+<option value=0>all</option>
+<option value=1>marked</option>
 </select>
 
 <p>

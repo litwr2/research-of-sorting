@@ -68,7 +68,7 @@ LOOP:
 }
 
 template <class T>
-void qsort3(vector<T> &a, int LBound, int UBound) { //Hoare, varian 2
+void qsort3(vector<T> &a, int LBound, int UBound) { //Hoare, variant 2
     if (LBound >= UBound) return;
     int i = LBound - 1, j = UBound + 1;
     T x = a[(i + j)/2];
@@ -83,7 +83,7 @@ void qsort3(vector<T> &a, int LBound, int UBound) { //Hoare, varian 2
 }
 
 template <>
-void qsort3(vector<const char*> &a, int LBound, int UBound) { //Hoare, varian 2
+void qsort3(vector<const char*> &a, int LBound, int UBound) { //Hoare, variant 2
     if (LBound >= UBound) return;
     int i = LBound - 1, j = UBound + 1;
     const char *x = a[(i + j)/2];

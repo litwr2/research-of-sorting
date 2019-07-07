@@ -8,15 +8,26 @@ function precRound(n) {
 
 function drawTable1() {
     var n = 0
+    var i = 0
+    var sortm
+    var ta = []
+    for (sortm in Data1[order[0]][type[0]]) {
+        var el = [ sortm ]
+        for (var k = 0; k < M; ++k)
+            el.push(Data1[order[0]][type[0]][sortm][k])
+        ta.push(el)
+    }
+    //ta.sort(function(a, b){ if (a[0] > b[0]) return 1; if (a[0] < b[0]) return -1; return 0 })
+    ta.sort(function(a, b){ return a[M - 1] - b[M - 1] })
     var text = "<tr><th rowspan=2>#<th rowspan=2>Алгоритм<button style='padding:0px 0px;margin:0px 5px'>&#xb7;</button><th colspan=5>Размер данных"
     text += "<tr>"
-    for (var i = 0; i < M; ++i)
+    for (i = 0; i < M; ++i)
         text += "<th align=center>10<sup>" + (i + 3).toString()
             + "</sup><button style='padding:0px 0px;margin:0px 5px'>&#xb7;</button>"
-    for (var sortm in Data1[order[0]][type[0]]) {
-        text += "<tr><td align=center>" + (++n).toString() + "<input type=checkbox></input><td>" + sortm
-        for (var i = 0; i < M; ++i)
-            text += "<td align=right>" + Data1[order[0]][type[0]][sortm][i].toString()
+    for (i = 0; i < ta.length; i++) {
+        text += "<tr><td align=center>" + (++n).toString() + "<input type=checkbox></input><td>" + ta[i][0]
+        for (var k = 0; k < M; ++k)
+            text += "<td align=right>" + ta[i][k + 1]
     }
     document.getElementById("tab1").innerHTML = text
 }
@@ -59,16 +70,16 @@ function DataMax() {
     return max
 }
 
-function changeOpt1() {
+function changeOptRel() {
     var pivot = 1  //absolute
-    option1 = document.getElementById("optionRel").value
-    if (option1 == 1)  //average
+    optionRel = document.getElementById("optionRel").value
+    if (optionRel == 1)  //average
         pivot = DataAvg();
-    else if (option1 == 2)  //median
+    else if (optionRel == 2)  //median
         pivot = DataMedian();
-    else if (option1 == 3)  //minimum
+    else if (optionRel == 3)  //minimum
         pivot = DataMin();
-    else if (option1 == 4)  //maximum
+    else if (optionRel == 4)  //maximum
         pivot = DataMax();
     for (var sortm in Data[order[0]][type[0]])
         for (var i = 0; i < M; ++i)
@@ -76,12 +87,12 @@ function changeOpt1() {
     drawTable1()
 }
 
-function changeOpt2() {
+function changeOptPrec() {
     if (document.getElementById("optionsPrec").value > 0)
         precision = Math.pow(10, document.getElementById("optionsPrec").value);
     else
         precision = 0
-    changeOpt1()
+    changeOptRel()
 }
 
 var duoMode = [0, 0]
@@ -122,18 +133,19 @@ function drawActionTable1() {
             text += "</select>"
         }
     }
+    document.getElementById("tab1a").innerHTML = text
     var cmpType = ["absolute", "average", "median", "minimum", "maximum"]
     if (duoMode[0] + duoMode[1] == 0) { 
-        text += "<select id=optionRel onchange=changeOpt1()>"
+        text = "<select id=optionRel onchange=changeOptRel()>"
         for (var i = 0; i < cmpType.length; ++i) {
             text += "<option value=" + i.toString()
-            if (i == option1)
+            if (i == optionRel)
                 text += " selected"
             text += ">" + cmpType[i] + "</option>"
         }
         text += "</select>"
+        document.getElementById("rel").innerHTML = text
     }
-    document.getElementById("tab1a").innerHTML = text
 }
 
 function changeOptAll() {
@@ -149,13 +161,13 @@ function changeOptAll() {
                     b = Data[order[0]][type[1]][sortm][i]
                 else
                     b = 0
-                if (a != 0 && b != 0)
+                if (b != 0)
                     Data1[order[0]][type[0]][sortm][i] = precRound(Data[order[0]][type[0]][sortm][i]/b)
                 else
                     Data1[order[0]][type[0]][sortm][i] = "n/a"
             }
     } else
-        changeOpt1()
+        changeOptRel()
 }
 
 function changeRow(n) {

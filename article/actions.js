@@ -49,7 +49,7 @@ function DataMedian() {
         for (i = 0; i < M; ++i)
             vector.push(Data[order[0]][type[0]][sortm][i])
     vector.sort(function(a, b){ return a - b })
-    return vector[vector.length/2]
+    return vector[Math.round(vector.length/2)]
 }
 
 function DataMin() {

@@ -6,6 +6,15 @@ function precRound(n) {
     return Math.round(n*precision)/precision
 }
 
+function changeCheck(s) {
+    document.getElementById(s).checked = !document.getElementById(s).checked
+    if (document.getElementById(s).checked){console.log("delete");
+       delete marked[s]}
+    else
+       marked[s] = 1
+    drawTable1()
+}
+
 function drawTable1() {
     var n = 0
     var i = 0
@@ -24,11 +33,14 @@ function drawTable1() {
     for (i = 0; i < M; ++i)
         text += "<th align=center>10<sup>" + (i + 3).toString()
             + "</sup><button style='padding:0px 0px;margin:0px 5px'>&#xb7;</button>"
-    for (i = 0; i < ta.length; i++) {
-        text += "<tr><td align=center>" + (++n).toString() + "<input type=checkbox></input><td>" + ta[i][0]
-        for (var k = 0; k < M; ++k)
-            text += "<td align=right>" + ta[i][k + 1]
-    }
+    for (i = 0; i < ta.length; i++) 
+        if (document.getElementById("optionSel").value == 0 || ta[i][0] in marked) {
+            text += "<tr><td align=center>" + (++n).toString() + "<input id=" + ta[i][0] + " type=checkbox "
+            if (ta[i][0] in marked) text += "checked "
+            text += "onclick=changeCheck(\"" + ta[i][0] + "\")><td>" + ta[i][0]
+            for (var k = 0; k < M; ++k)
+                text += "<td align=right>" + ta[i][k + 1]
+        }
     document.getElementById("tab1").innerHTML = text
 }
 
@@ -136,7 +148,7 @@ function drawActionTable1() {
     document.getElementById("tab1a").innerHTML = text
     var cmpType = ["absolute", "average", "median", "minimum", "maximum"]
     if (duoMode[0] + duoMode[1] == 0) { 
-        text = "<select id=optionRel onchange=changeOptRel()>"
+        text = "relation: <select id=optionRel onchange=changeOptRel()>"
         for (var i = 0; i < cmpType.length; ++i) {
             text += "<option value=" + i.toString()
             if (i == optionRel)
@@ -144,8 +156,9 @@ function drawActionTable1() {
             text += ">" + cmpType[i] + "</option>"
         }
         text += "</select>"
-        document.getElementById("rel").innerHTML = text
-    }
+    } else
+        text = ""
+    document.getElementById("rel").innerHTML = text
 }
 
 function changeOptAll() {

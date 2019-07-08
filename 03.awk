@@ -65,21 +65,35 @@ BEGIN {
 	ft["LOW_VARIATION100"] = 0
 	ft["SLOW_QSORT_HOARE"] = 0
 
-	for (SS = 1000; SS <= 1000*1000; SS *= 10) {
+	for (SS = 1000*100; SS <= 1000*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {
                    excl = ""
                    for (i3 in ss) {
-                       z = "bubble"
-                       if (i3 == z && SS >= 100*1000 && i2 != "ASCENDED" && i2 != "ASCENDED_RANDOM" && i2 != "LOW_VARIATION1" && i2 != "LOW_VARIATION2")
-                           excl = excl "echo " z ";"
-                       z = "selection"
-                       if (i3 == z && SS >= 1000*100)
-                           excl = excl "echo " z ";"
-                       z = "array*1"
-                       if (i3 == z && SS >= 1000*100)
-                           excl = excl "echo '" z "';"
+                       lim = 1000*1000
+                       if (i3 == "bubble" && SS >= lim && i2 != "ASCENDED" && i2 != "ASCENDED_RANDOM" && i2 != "LOW_VARIATION1" && i2 != "LOW_VARIATION2")
+                           excl = excl "echo " i3 ";"
+                       if (i3 == "selection" && SS >= lim)
+                           excl = excl "echo " i3 ";"
+                       if (i3 == "array*1" && SS >= lim)
+                           excl = excl "echo '" i3 "';"
+                       if (i3 == "array*2" && SS >= lim && i2 == "LOW_VARIATION1")
+                           excl = excl "echo '" i3 "';"
+                       if (i3 == "array*3" && SS >= lim && i2 == "LOW_VARIATION1")
+                           excl = excl "echo '" i3 "';"
+                       if (i3 == "array*5" && SS >= lim && i2 == "LOW_VARIATION1")
+                           excl = excl "echo '" i3 "';"
+                       if (i3 == "array*7" && SS >= lim && i2 == "LOW_VARIATION1")
+                           excl = excl "echo '" i3 "';"
+                       if (i3 == "qsort_hoare" && SS >= lim && i2 == "SLOW_QSORT_HOARE")
+                           excl = excl "echo '" i3 "';"
+                       if (i3 == "qsort_hoare2" && SS >= lim && i2 == "SLOW_QSORT_HOARE")
+                           excl = excl "echo '" i3 "';"
+                       if (i3 == "qsort_no_pivot" && SS >= lim && (i2 == "ASCENDED" || i2 == "DESCENDED" || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2"))
+                           excl = excl "echo '" i3 "';"
+                       if (i3 == "qsort_lomuto" && SS >= lim && (i2 == "ASCENDED" || i2 == "DESCENDED" || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "DESCENDED_RANDOM" || i2 == "ASCENDED_RANDOM"))
+                           excl = excl "echo '" i3 "';"
                    }
                    if (excl != "")
                        excl = "(" excl ")|grep -vFf -"

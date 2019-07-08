@@ -11,11 +11,18 @@ table, th, td {
 }
 </style>
 <script>
+var Data = JSON.parse(json)
+var Data1 = JSON.parse(json)
 var order = ["RANDOM", "RANDOM"]
 var type = ["PLAININT", "PLAININT"]
 var marked = {}
 var precision = 10
 var optionRel = 0
+var sortOrder = [0, 0, 1, 0]
+var trans = [1, 1, -1]
+var orderArrows = ["&#x2193;", "&#xb7;", "&#x2191;"]
+var duoMode = [0, 0]
+var sbuttc = ["1 &#8594; 2", "2 &#8594; 1"]
 </script>
 
 <p align=left id=tab1a>

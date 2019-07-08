@@ -3,7 +3,7 @@
   a[$5][$4][$1][n] = $2
 }
 END {
-  printf "{"
+  printf "var json = '{"
   for (i in a) {
     if (iflag) printf ","
     iflag = 1
@@ -25,7 +25,7 @@ END {
           if (l in a[i][j][k]) 
             printf "%d", a[i][j][k][l]
           else
-            printf "0"
+            printf "\"n/a\""
         }
         printf "]"
       }
@@ -33,5 +33,5 @@ END {
     }
     printf "}"
   }
-  print "}"
+  print "}'"
 }

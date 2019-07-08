@@ -8,16 +8,23 @@ function precRound(n) {
 
 function changeCheck(s) {
     document.getElementById(s).checked = !document.getElementById(s).checked
-    if (document.getElementById(s).checked){console.log("delete");
-       delete marked[s]}
+    if (document.getElementById(s).checked)
+       delete marked[s]
     else
        marked[s] = 1
     drawTable1()
 }
 
+function changeOrd(n) {
+    sortOrder[n] = trans[sortOrder[n] + 1]
+    for (var i = 0; i <= M; ++i)
+        if (i != n)
+            sortOrder[i] = 0
+    drawTable1()
+}
+
 function drawTable1() {
-    var n = 0
-    var i = 0
+    var i
     var sortm
     var ta = []
     for (sortm in Data1[order[0]][type[0]]) {
@@ -26,13 +33,18 @@ function drawTable1() {
             el.push(Data1[order[0]][type[0]][sortm][k])
         ta.push(el)
     }
-    //ta.sort(function(a, b){ if (a[0] > b[0]) return 1; if (a[0] < b[0]) return -1; return 0 })
-    ta.sort(function(a, b){ return a[M - 1] - b[M - 1] })
-    var text = "<tr><th rowspan=2>#<th rowspan=2>Алгоритм<button style='padding:0px 0px;margin:0px 5px'>&#xb7;</button><th colspan=5>Размер данных"
+    if (sortOrder[0] != 0)
+        ta.sort(function(a, b){ if (a[0] > b[0]) return sortOrder[0]; if (a[0] < b[0]) return -sortOrder[0]; return 0 })
+    for (i = 1; i < M; ++i)
+        if (sortOrder[i] != 0)
+            ta.sort(function(a, b){ return (a[i] - b[i])*sortOrder[i] })
+    var text = "<tr><th rowspan=2>#<th rowspan=2>Алгоритм<button onclick=changeOrd(0) style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[0] + 1] + "</button><th colspan=5>Размер данных"
     text += "<tr>"
     for (i = 0; i < M; ++i)
         text += "<th align=center>10<sup>" + (i + 3).toString()
-            + "</sup><button style='padding:0px 0px;margin:0px 5px'>&#xb7;</button>"
+            + "</sup><button onclick=changeOrd(" + (i + 1).toString()
+            + ") style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[i + 1] + 1] + "</button>"
+    var n = 0
     for (i = 0; i < ta.length; i++) 
         if (document.getElementById("optionSel").value == 0 || ta[i][0] in marked) {
             text += "<tr><td align=center>" + (++n).toString() + "<input id=" + ta[i][0] + " type=checkbox "
@@ -106,9 +118,6 @@ function changeOptPrec() {
         precision = 0
     changeOptRel()
 }
-
-var duoMode = [0, 0]
-var sbuttc = ["1 &#8594; 2", "2 &#8594; 1"]
 
 function types(n, m) {
     if (n == 1) return type[m]

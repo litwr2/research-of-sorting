@@ -23,6 +23,16 @@ function changeOrd(n) {
     drawTable1()
 }
 
+function sortCompare(a, b, i) {
+    var k = i
+    while (typeof(a[i]) == "string" && i > 0) --i
+    if (i == 0 && typeof(b[1]) == "string") return 0
+    if (i == 0) return -sortOrder[k]
+    while (typeof(b[i]) == "string" && i > 0) --i
+    if (i == 0) return sortOrder[k]
+    return (a[i] - b[i])*sortOrder[k]
+}
+
 function drawTable1() {
     var i
     var sortm
@@ -35,9 +45,9 @@ function drawTable1() {
     }
     if (sortOrder[0] != 0)
         ta.sort(function(a, b){ if (a[0] > b[0]) return sortOrder[0]; if (a[0] < b[0]) return -sortOrder[0]; return 0 })
-    for (i = 1; i < M; ++i)
+    for (i = 1; i <= M; ++i)
         if (sortOrder[i] != 0)
-            ta.sort(function(a, b){ return (a[i] - b[i])*sortOrder[i] })
+            ta.sort(function(a, b){ return sortCompare(a, b, i) })
     var text = "<tr><th rowspan=2>#<th rowspan=2>Алгоритм<button onclick=changeOrd(0) style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[0] + 1] + "</button><th colspan=5>Размер данных"
     text += "<tr>"
     for (i = 0; i < M; ++i)
@@ -61,8 +71,10 @@ function DataAvg() {
     var cnt = 0
     for (var sortm in Data1[order[0]][type[0]])
         for (var i = 0; i < M; ++i) {
-            sum += Data[order[0]][type[0]][sortm][i]
-            cnt++
+            if (typeof(Data[order[0]][type[0]][sortm][i]) == "number") {
+                sum += Data[order[0]][type[0]][sortm][i]
+                cnt++
+            }
         }
     return sum/cnt
 }
@@ -72,7 +84,7 @@ function DataMedian() {
     for (var sortm in Data1[order[0]][type[0]])
         for (i = 0; i < M; ++i)
             vector.push(Data[order[0]][type[0]][sortm][i])
-    vector.sort(function(a, b){ return a - b })
+    vector.sort(function(a, b){ if (typeof(a) == "string") return 1; if (typeof(b) == "string") return -1; return a - b })
     return vector[Math.round(vector.length/2)]
 }
 
@@ -107,7 +119,8 @@ function changeOptRel() {
         pivot = DataMax();
     for (var sortm in Data[order[0]][type[0]])
         for (var i = 0; i < M; ++i)
-            Data1[order[0]][type[0]][sortm][i] = precRound(Data[order[0]][type[0]][sortm][i]/pivot)
+            if (typeof(Data[order[0]][type[0]][sortm][i]) == "number")
+               Data1[order[0]][type[0]][sortm][i] = precRound(Data[order[0]][type[0]][sortm][i]/pivot)
     drawTable1()
 }
 
@@ -133,7 +146,7 @@ function drawActionTable1() {
         var iv = i.toString()
         text += "<br><button id=sbutt" + iv + " onclick=changeRow(" + iv + ")>" + sbuttc[duoMode[i]] + "</button>:"
 
-        text += "<select id=select" + iv + "0 onchange=changeAction(" + iv + ",0)>"
+        text += "<select id=select" + iv + "0 onchange=changeAction(" + iv + ",0) style=width:14em>"
         for (sv in indexValues[i]) {
             text += "<option value=" + sv
             if (sv == types(i, 0))
@@ -144,7 +157,7 @@ function drawActionTable1() {
 
         if (duoMode[i] == 1) {
             text += " / "
-            text += "<select id=select" + iv + "1 onchange=changeAction(" + iv + ",1)>";
+            text += "<select id=select" + iv + "1 onchange=changeAction(" + iv + ",1) style=width:14em>";
             for (sv in indexValues[i]) {
                 text += "<option value=" + sv
                 if (sv == types(i, 1))

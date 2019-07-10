@@ -175,73 +175,73 @@ int main() {
     for (int i = 0; i < SS; ++i) fio << v[i] << endl;
 #endif
 
-    size_t eps, itv, tv = test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell3<X>, placeholders::_1)), "Z"); //train gc & cache, it is just a delay
+    size_t eps, itv, tv = test<X>(fio, v, bind(shell3<X>, placeholders::_1), "Z"); //train gc & cache, it is just a delay
     do {
-        itv = test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell3<X>, placeholders::_1)), "Z");
+        itv = test<X>(fio, v, bind(shell3<X>, placeholders::_1), "Z");
         eps = abs(int((double(itv)/tv - 1)*100));
         tv = itv;
     } while (eps > 2);
 
     int passes = PASSES;
 L:
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell1<X>, placeholders::_1)), "shell_a3n");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell3<X>, placeholders::_1)), "shell_10/3");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell2<X>, placeholders::_1, 0)), "shell_prime_e");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell2<X>, placeholders::_1, 1)), "shell_a102549");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell2<X>, placeholders::_1, 2)), "shell_exp_tab");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(shell2<X>, placeholders::_1, 4)), "shell_prime_10/3");
+    test<X>(fio, v, bind(shell1<X>, placeholders::_1), "shell_a3n");
+    test<X>(fio, v, bind(shell3<X>, placeholders::_1), "shell_10/3");
+    test<X>(fio, v, bind(shell2<X>, placeholders::_1, 0), "shell_prime_e");
+    test<X>(fio, v, bind(shell2<X>, placeholders::_1, 1), "shell_a102549");
+    test<X>(fio, v, bind(shell2<X>, placeholders::_1, 2), "shell_exp_tab");
+    test<X>(fio, v, bind(shell2<X>, placeholders::_1, 4), "shell_prime_10/3");
 
 #if !defined(STRINGS) && !defined(CSTRINGS) && !defined(STRINGS_SHORT) && !defined(CSTRINGS_SHORT) && !defined(STRINGS_LONG) && !defined(CSTRINGS_LONG) && !defined(FLOAT)
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radixsort<X>, placeholders::_1, 8)), "radix8");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radixsort<X>, placeholders::_1, 11)), "radix11");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radixsort<X>, placeholders::_1, 16)), "radix16");
+    test<X>(fio, v, bind(radixsort<X>, placeholders::_1, 8), "radix8");
+    test<X>(fio, v, bind(radixsort<X>, placeholders::_1, 11), "radix11");
+    test<X>(fio, v, bind(radixsort<X>, placeholders::_1, 16), "radix16");
 #endif
 #ifdef PLAININT
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(oms7_helper<X>, placeholders::_1, 5)), "shell_10/3_oms7");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(oms7_helper<X>, placeholders::_1, 7)), "radix8_oms7");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(oms7_helper<X>, placeholders::_1, 8)), "msd8_oms7");
+    test<X>(fio, v, bind(oms7_helper<X>, placeholders::_1, 5), "shell_10/3_oms7");
+    test<X>(fio, v, bind(oms7_helper<X>, placeholders::_1, 7), "radix8_oms7");
+    test<X>(fio, v, bind(oms7_helper<X>, placeholders::_1, 8), "msd8_oms7");
 #endif
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hsortstl<X>, placeholders::_1)), "heapsort_stl");
+    test<X>(fio, v, bind(hsortstl<X>, placeholders::_1), "heapsort_stl");
 #if defined(CSTRINGS) || defined(CSTRINGS_SHORT) || defined(CSTRINGS_LONG)
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(radix_bsd<X>, placeholders::_1)), "radix_bsd");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(sradix_bsd<X>, placeholders::_1)), "sradix_bsd");
+    test<X>(fio, v, bind(radix_bsd<X>, placeholders::_1), "radix_bsd");
+    test<X>(fio, v, bind(sradix_bsd<X>, placeholders::_1), "sradix_bsd");
 #endif
 #if !defined(STRINGS) && !defined(STRINGS_SHORT) && !defined(STRINGS_LONG)
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort0<X>, placeholders::_1)), "clib_qsort");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hsort_bsd<X>, placeholders::_1)), "heapsort_bsd");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(mergesort_bsd<X>, placeholders::_1)), "mergesort_bsd");
+    test<X>(fio, v, bind(qsort0<X>, placeholders::_1), "clib_qsort");
+    test<X>(fio, v, bind(hsort_bsd<X>, placeholders::_1), "heapsort_bsd");
+    test<X>(fio, v, bind(mergesort_bsd<X>, placeholders::_1), "mergesort_bsd");
 #endif
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort1<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare");
-    //test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort1tc<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare_tco"); //not tested with all data types 
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort2<X>, placeholders::_1, 0, SS - 1)), "qsort_no_pivot");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort3<X>, placeholders::_1, 0, SS - 1)), "qsort_hoare2");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(qsort4<X>, placeholders::_1, 0, SS - 1)), "qsort_lomuto");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(stl_sort<X>, placeholders::_1)), "stlsort");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(stl_stable_sort<X>, placeholders::_1)), "stlstable");
+    test<X>(fio, v, bind(qsort1<X>, placeholders::_1, 0, SS - 1), "qsort_hoare");
+    //test<X>(fio, v, bind(qsort1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco"); //not tested with all data types 
+    test<X>(fio, v, bind(qsort2<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
+    test<X>(fio, v, bind(qsort3<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
+    test<X>(fio, v, bind(qsort4<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");
+    test<X>(fio, v, bind(stl_sort<X>, placeholders::_1), "stlsort");
+    test<X>(fio, v, bind(stl_stable_sort<X>, placeholders::_1), "stlstable");
 
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(timsort<X>, placeholders::_1)), "timsort");
+    test<X>(fio, v, bind(timsort<X>, placeholders::_1), "timsort");
 
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(spreadsort<X>, placeholders::_1)), "spread");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(pdqsort<X>, placeholders::_1)), "pdq");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(spinsort<X>, placeholders::_1)), "spin");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(flat_stable_sort<X>, placeholders::_1)), "flat_stable");
+    test<X>(fio, v, bind(spreadsort<X>, placeholders::_1), "spread");
+    test<X>(fio, v, bind(pdqsort<X>, placeholders::_1), "pdq");
+    test<X>(fio, v, bind(spinsort<X>, placeholders::_1), "spin");
+    test<X>(fio, v, bind(flat_stable_sort<X>, placeholders::_1), "flat_stable");
 
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(bubble_sort<X>, placeholders::_1)), "bubble");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(selection_sort<X>, placeholders::_1)), "selection");
+    test<X>(fio, v, bind(bubble_sort<X>, placeholders::_1), "bubble");
+    test<X>(fio, v, bind(selection_sort<X>, placeholders::_1), "selection");
 
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(tree_sort_stl<X>, placeholders::_1)), "tree_stl");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(tree_sort_boost<X>, placeholders::_1)), "tree_boost");
+    test<X>(fio, v, bind(tree_sort_stl<X>, placeholders::_1), "tree_stl");
+    test<X>(fio, v, bind(tree_sort_boost<X>, placeholders::_1), "tree_boost");
 
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 1)), "array*1");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 2)), "array*2");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 3)), "array*3");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 5)), "array*5");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(array_sort<X>, placeholders::_1, 7)), "array*7");
+    test<X>(fio, v, bind(array_sort<X>, placeholders::_1, 1), "array*1");
+    test<X>(fio, v, bind(array_sort<X>, placeholders::_1, 2), "array*2");
+    test<X>(fio, v, bind(array_sort<X>, placeholders::_1, 3), "array*3");
+    test<X>(fio, v, bind(array_sort<X>, placeholders::_1, 5), "array*5");
+    test<X>(fio, v, bind(array_sort<X>, placeholders::_1, 7), "array*7");
 
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hash_sort<X>, placeholders::_1)), "hash");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hashbt_sort_std<X>, placeholders::_1)), "hashbt_std");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hashbt_sort2<X>, placeholders::_1)), "hashbt");
-    test(fio, v, static_cast<function<void(vector<X>&)>>(bind(hashbt_sort_boost<X>, placeholders::_1)), "hashbt_boost");
+    test<X>(fio, v, bind(hash_sort<X>, placeholders::_1), "hash");
+    test<X>(fio, v, bind(hashbt_sort_std<X>, placeholders::_1), "hashbt_std");
+    test<X>(fio, v, bind(hashbt_sort2<X>, placeholders::_1), "hashbt");
+    test<X>(fio, v, bind(hashbt_sort_boost<X>, placeholders::_1), "hashbt_boost");
 
     if (--passes) goto L;
     fio.close();

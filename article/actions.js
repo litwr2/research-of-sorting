@@ -56,7 +56,7 @@ function drawTable1() {
             + ") style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[i + 1] + 1] + "</button>"
     var n = 0
     for (i = 0; i < ta.length; i++) 
-        if (document.getElementById("optionSel").value == 0 || ta[i][0] in marked) {
+        if (typeof(ta[i][1]) == "number" && (document.getElementById("optionSel").value == 0 || ta[i][0] in marked)) {
             text += "<tr><td align=center>" + (++n) + "<input id=" + ta[i][0] + " type=checkbox "
             if (ta[i][0] in marked) text += "checked "
             text += "onclick=changeCheck(\"" + ta[i][0] + "\")><td>" + ta[i][0]
@@ -194,6 +194,8 @@ function changeOptAll() {
             for (var i = 0; i < M; ++i)
                 if (typeof(Data[order[0]][type[0]][sortm][i]) == "number" && typeof(Data[order[1]][type[0]][sortm][i]) == "number")
                     Data1[order[0]][type[0]][sortm][i] = Data[order[0]][type[0]][sortm][i]/Data[order[1]][type[0]][sortm][i]
+                else
+                    Data1[order[0]][type[0]][sortm][i] = "n/a"
     } else if (duoMode[1] > 0) {
         for (var sortm in Data1[order[0]][type[0]])
             for (var i = 0; i < M; ++i) {

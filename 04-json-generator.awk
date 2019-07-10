@@ -1,4 +1,5 @@
 {
+  M = 4
   n = substr($3, 3) - 3
   a[$5][$4][$1][n] = $2
 }
@@ -19,7 +20,7 @@ END {
         kflag = 1
         lflag = 0
         printf "\"%s\":[", k
-        for (l = 0; l < 3; ++l) {
+        for (l = 0; l < M; ++l) {
           if (lflag) printf ","
           lflag = 1
           if (l in a[i][j][k]) 

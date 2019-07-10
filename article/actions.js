@@ -1,4 +1,4 @@
-var M = 3 //max index
+var M = 4 //max index
 
 function precRound(n) {
     if (precision == 0)
@@ -51,17 +51,23 @@ function drawTable1() {
     var text = "<tr><th rowspan=2>#<th rowspan=2>Алгоритм<button onclick=changeOrd(0) style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[0] + 1] + "</button><th colspan=5>Размер данных"
     text += "<tr>"
     for (i = 0; i < M; ++i)
-        text += "<th align=center>10<sup>" + (i + 3).toString()
-            + "</sup><button onclick=changeOrd(" + (i + 1).toString()
+        text += "<th align=center>10<sup>" + (i + 3)
+            + "</sup><button onclick=changeOrd(" + (i + 1)
             + ") style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[i + 1] + 1] + "</button>"
     var n = 0
     for (i = 0; i < ta.length; i++) 
         if (document.getElementById("optionSel").value == 0 || ta[i][0] in marked) {
-            text += "<tr><td align=center>" + (++n).toString() + "<input id=" + ta[i][0] + " type=checkbox "
+            text += "<tr><td align=center>" + (++n) + "<input id=" + ta[i][0] + " type=checkbox "
             if (ta[i][0] in marked) text += "checked "
             text += "onclick=changeCheck(\"" + ta[i][0] + "\")><td>" + ta[i][0]
-            for (var k = 0; k < M; ++k)
-                text += "<td align=right>" + ta[i][k + 1]
+            for (var k = 0; k < M; ++k) {
+                text += "<td align=right>"
+                var a = ta[i][k + 1]
+                if (typeof(a) == "number")
+                    text += precRound(a)
+                else
+                    text += a
+            }
         }
     document.getElementById("tab1").innerHTML = text
 }
@@ -120,7 +126,7 @@ function changeOptRel() {
     for (var sortm in Data[order[0]][type[0]])
         for (var i = 0; i < M; ++i)
             if (typeof(Data[order[0]][type[0]][sortm][i]) == "number")
-               Data1[order[0]][type[0]][sortm][i] = precRound(Data[order[0]][type[0]][sortm][i]/pivot)
+               Data1[order[0]][type[0]][sortm][i] = Data[order[0]][type[0]][sortm][i]/pivot
     drawTable1()
 }
 
@@ -129,7 +135,7 @@ function changeOptPrec() {
         precision = Math.pow(10, document.getElementById("optionsPrec").value);
     else
         precision = 0
-    changeOptRel()
+    drawTable1()
 }
 
 function types(n, m) {
@@ -143,10 +149,9 @@ function drawActionTable1() {
     var text = ""
 
     for (var i = 0; i < 2; i++) {
-        var iv = i.toString()
-        text += "<br><button id=sbutt" + iv + " onclick=changeRow(" + iv + ")>" + sbuttc[duoMode[i]] + "</button>:"
+        text += "<br><button id=sbutt" + i + " onclick=changeRow(" + i + ")>" + sbuttc[duoMode[i]] + "</button>:"
 
-        text += "<select id=select" + iv + "0 onchange=changeAction(" + iv + ",0) style=width:14em>"
+        text += "<select id=select" + i + "0 onchange=changeAction(" + i + ",0) style=width:14em>"
         for (sv in indexValues[i]) {
             text += "<option value=" + sv
             if (sv == types(i, 0))
@@ -157,7 +162,7 @@ function drawActionTable1() {
 
         if (duoMode[i] == 1) {
             text += " / "
-            text += "<select id=select" + iv + "1 onchange=changeAction(" + iv + ",1) style=width:14em>";
+            text += "<select id=select" + i + "1 onchange=changeAction(" + i + ",1) style=width:14em>";
             for (sv in indexValues[i]) {
                 text += "<option value=" + sv
                 if (sv == types(i, 1))
@@ -172,7 +177,7 @@ function drawActionTable1() {
     if (duoMode[0] + duoMode[1] == 0) { 
         text = "relation: <select id=optionRel onchange=changeOptRel()>"
         for (var i = 0; i < cmpType.length; ++i) {
-            text += "<option value=" + i.toString()
+            text += "<option value=" + i
             if (i == optionRel)
                 text += " selected"
             text += ">" + cmpType[i] + "</option>"
@@ -187,7 +192,8 @@ function changeOptAll() {
     if (duoMode[0] > 0) {
         for (var sortm in Data1[order[0]][type[0]])
             for (var i = 0; i < M; ++i)
-                Data1[order[0]][type[0]][sortm][i] = precRound(Data[order[0]][type[0]][sortm][i]/Data[order[1]][type[0]][sortm][i])
+                if (typeof(Data[order[0]][type[0]][sortm][i]) == "number" && typeof(Data[order[1]][type[0]][sortm][i]) == "number")
+                    Data1[order[0]][type[0]][sortm][i] = Data[order[0]][type[0]][sortm][i]/Data[order[1]][type[0]][sortm][i]
     } else if (duoMode[1] > 0) {
         for (var sortm in Data1[order[0]][type[0]])
             for (var i = 0; i < M; ++i) {
@@ -197,7 +203,7 @@ function changeOptAll() {
                 else
                     b = 0
                 if (b != 0)
-                    Data1[order[0]][type[0]][sortm][i] = precRound(Data[order[0]][type[0]][sortm][i]/b)
+                    Data1[order[0]][type[0]][sortm][i] = Data[order[0]][type[0]][sortm][i]/b
                 else
                     Data1[order[0]][type[0]][sortm][i] = "n/a"
             }
@@ -219,7 +225,7 @@ function changeRow(n) {
 }
 
 function changeAction(n, m) {
-    var nms = "select" + n.toString() + m.toString()
+    var nms = "select" + n + m.toString()
     if (n == 1)
         type[m] = document.getElementById(nms).value
     else

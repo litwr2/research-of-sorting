@@ -103,7 +103,7 @@ BEGIN {
                    passes = 1
                    if (SS <= 1000) passes = 10
                    else if (SS <= 10000) passes = 4
-                   else if (SS <= 1000000) passes = 2
+                   else if (SS <= 100000) passes = 2
                    print excl "touch always.cpp;EXTRA=\"-D" i1 " -D" i2 " -DSS=" SS " -DPASSES=" passes "\" make && nsort2 >>results/" nSS "-" i1 "-" i2 " || echo ERROR!!!!!"
                }
         }

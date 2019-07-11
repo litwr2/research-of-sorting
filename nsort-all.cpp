@@ -32,13 +32,13 @@ using namespace std;
 //#define CSTRINGS
 //#define CSTRINGS_LONG
 
-#define SS 8
+#define SS 9
 #define LOW_VARIATION_CONST 0
 //#define CALCULATE_CPU_DEPENDENT_ADJUSTMENT
 #define RANDOM  //fake definition for the filling module 
 
 #ifndef REPEATS
-#define REPEATS 5
+#define REPEATS 2
 #endif
 
 uint64_t rdtsc(){
@@ -114,44 +114,43 @@ void check(vector<const char*>& v) {
         if (strcmp(v[i - 1], v[i]) > 0) exit(2);
 }
 
+double adjustment;
+
 template<class T>
-void test(vector<T> &v, function<void(vector<T>&)> f, const char *title) {
+double test(vector<T> &v, function<void(vector<T>&)> f, const char *title) {
     size_t total = 0, counter = 0;
     auto vs = v;
     do {
         counter++;
         auto ts = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        for (unsigned n = 0; n < REPEATS; ++n)
-#ifdef CALCULATE_CPU_DEPENDENT_ADJUSTMENT
-            f(v);
-#else
-            f(v = vs);
-#endif
+        if (title[0] == 'Z')
+            for (unsigned n = 0; n < REPEATS; ++n)
+                f(v);
+        else
+            for (unsigned n = 0; n < REPEATS; ++n)
+                f(v = vs);
         total += std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - ts;
-#ifndef CALCULATE_CPU_DEPENDENT_ADJUSTMENT
-        check(v);
-#endif
+        if (title[0] != 'Z')
+            check(v);
     }
     while (next_permutation(vs.begin(), vs.end()));
     v = vs;
-    if (title[0] == 'Z') return;
-    cout << setw(16) << left << title << setw(11) << right << (long double)total/counter/REPEATS << endl;
+    if (title[0] == 'Z') return (long double)total/counter/REPEATS;
+    cout << setw(16) << left << title << right << setw(11) << fixed << setprecision(2) << (long double)total/counter/REPEATS - adjustment << endl;
 }
 
 int main() {
     srand(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
     vector<X> v(SS);
     for (int i = 0; i < SS; ++i) v[i] = cnv<X>(i);
-//for (int i = 0; i < SS; ++i) cout << v[i] << '\n';
+    double adjustment_sum = 0;
+    for (int i = 0; i < 10; ++i)
+        adjustment_sum += test<X>(v, bind(sort_stub<X>, placeholders::_1), "Zstub");
+    adjustment = adjustment_sum/10;
+cout << adjustment << endl;
+
     int passes = PASSES;
 L:
-#ifdef CALCULATE_CPU_DEPENDENT_ADJUSTMENT
-    test<X>(v, bind(sort_stub<X>, placeholders::_1), "stub");
-    test<X>(v, bind(sort_stub<X>, placeholders::_1), "stub");
-    test<X>(v, bind(sort_stub<X>, placeholders::_1), "stub");
-    test<X>(v, bind(sort_stub<X>, placeholders::_1), "stub");
-    test<X>(v, bind(sort_stub<X>, placeholders::_1), "stub");
-#else
     test<X>(v, bind(shell1<X>, placeholders::_1), "shell_a3n");
     test<X>(v, bind(shell3<X>, placeholders::_1), "shell_10/3");
     test<X>(v, bind(shell2<X>, placeholders::_1, 0), "shell_prime_e");
@@ -210,7 +209,7 @@ L:
     test<X>(v, bind(hashbt_sort_std<X>, placeholders::_1), "hashbt_std");
     test<X>(v, bind(hashbt_sort2<X>, placeholders::_1), "hashbt");
     test<X>(v, bind(hashbt_sort_boost<X>, placeholders::_1), "hashbt_boost");
-#endif
+
     if (--passes) goto L;
 
     cerr << "zok\t" << SS << ' ' <<  typeid(X).name() << "\n";

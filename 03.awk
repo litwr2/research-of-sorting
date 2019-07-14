@@ -5,6 +5,8 @@ BEGIN {
     ss["shell_a102549"] = 1
     ss["shell_exp_tab"] = 1
     ss["shell_prime_10/3"] = 1
+    ss["shell_a102549m"] = 1
+    ss["shell_2.25"] = 1
     ss["radix8"] = 1
     ss["radix11"] = 1
     ss["radix16"] = 1
@@ -42,6 +44,7 @@ BEGIN {
     ss["hashbt_std"] = 1
     ss["hashbt"] = 1
     ss["hashbt_boost"] = 1
+    ss["qsort_dualpivot"] = 1
 
 	t["PLAININT"] = 0
     t["INT1P4"] = 0
@@ -65,7 +68,7 @@ BEGIN {
 	ft["LOW_VARIATION100"] = 0
 	ft["SLOW_QSORT_HOARE"] = 0
 
-	for (SS = 1000*1000; SS <= 1000*1000; SS *= 10) {
+	for (SS = 1000; SS <= 100*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {

@@ -19,7 +19,7 @@ void radixsort(vector<T> &a, int N) {
 		for (int j = a.size() - 1; j >= 0; j--)
 			b[--c[digit(a[j], i, N, M)]] = a[j];
 		a = b;
-                //if (i + 2 == k) M = 1 << N + s*8 - k*N;
+        //if (i + 2 == k) M = 1 << N + s*8 - k*N;
 	}
 }
 

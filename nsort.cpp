@@ -107,6 +107,7 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "bsd.cpp"
 #include "radix.cpp"
 #include "qsort.cpp"
+#include "dp-quick.cpp"
 #include "shell.cpp"
 #include "tree.cpp"
 #include "hash.cpp"
@@ -190,6 +191,8 @@ L:
     test<X>(fio, v, bind(shell2<X>, placeholders::_1, 1), "shell_a102549");
     test<X>(fio, v, bind(shell2<X>, placeholders::_1, 2), "shell_exp_tab");
     test<X>(fio, v, bind(shell2<X>, placeholders::_1, 4), "shell_prime_10/3");
+    test<X>(fio, v, bind(shell2<X>, placeholders::_1, 5), "shell_a102549m");
+    test<X>(fio, v, bind(shell2<X>, placeholders::_1, 5), "shell_2.25");
 
 #if !defined(STRINGS) && !defined(CSTRINGS) && !defined(STRINGS_SHORT) && !defined(CSTRINGS_SHORT) && !defined(STRINGS_LONG) && !defined(CSTRINGS_LONG) && !defined(FLOAT)
     test<X>(fio, v, bind(radixsort<X>, placeholders::_1, 8), "radix8");
@@ -216,6 +219,7 @@ L:
     test<X>(fio, v, bind(qsort2<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
     test<X>(fio, v, bind(qsort3<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
     test<X>(fio, v, bind(qsort4<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");
+    test<X>(fio, v, bind(dualPivotQuicksort<X>, placeholders::_1), "qsort_dualpivot");
     test<X>(fio, v, bind(stl_sort<X>, placeholders::_1), "stlsort");
     test<X>(fio, v, bind(stl_stable_sort<X>, placeholders::_1), "stlstable");
 

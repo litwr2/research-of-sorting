@@ -32,20 +32,16 @@ using namespace std;
 //#define CSTRINGS
 //#define CSTRINGS_LONG
 
-#define SS 9
-#define LOW_VARIATION_CONST 0
-//#define CALCULATE_CPU_DEPENDENT_ADJUSTMENT
-#define RANDOM  //fake definition for the filling module 
-
-#ifndef REPEATS
-#define REPEATS 2
+#ifndef SS
+#define SS 11
 #endif
 
-uint64_t rdtsc(){
-    unsigned int lo, hi;
-    __asm__ __volatile__ ("rdtsc" : "=a" (lo), "=d" (hi));
-    return ((uint64_t)hi << 32) | lo;
-}
+#define LOW_VARIATION_CONST 0 //fake definition for the filling module
+#define RANDOM  //fake definition for the filling module
+
+#ifndef REPEATS
+#define REPEATS 1
+#endif
 
 #if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS) + defined(CSTRINGS_SHORT) + defined(CSTRINGS_LONG) + defined(STRINGS_SHORT) + defined(STRINGS_LONG) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) > 1
 #error AMBIGUOUS TYPE
@@ -54,6 +50,12 @@ uint64_t rdtsc(){
 #if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS_SHORT) + defined(CSTRINGS_LONG) + defined(STRINGS_SHORT) + defined(STRINGS_LONG) + defined(CSTRINGS) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) == 0
 #define PLAININT
 #endif
+
+uint64_t rdtsc(){
+    unsigned int lo, hi;
+    __asm__ __volatile__ ("rdtsc" : "=a" (lo), "=d" (hi));
+    return ((uint64_t)hi << 32) | lo;
+}
 
 #ifdef PLAININT
 typedef int X;
@@ -161,7 +163,7 @@ L:
 #if !defined(STRINGS) && !defined(CSTRINGS) && !defined(STRINGS_SHORT) && !defined(CSTRINGS_SHORT) && !defined(STRINGS_LONG) && !defined(CSTRINGS_LONG) && !defined(FLOAT)
     test<X>(v, bind(radixsort<X>, placeholders::_1, 8), "radix8");
     test<X>(v, bind(radixsort<X>, placeholders::_1, 11), "radix11");
-    test<X>(v, bind(radixsort<X>, placeholders::_1, 16), "radix16");
+    //test<X>(v, bind(radixsort<X>, placeholders::_1, 16), "radix16");
 #endif
 #ifdef PLAININT
     test<X>(v, bind(oms7_helper<X>, placeholders::_1, 5), "shell_10/3_oms7");

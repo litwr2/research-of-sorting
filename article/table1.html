@@ -13,6 +13,10 @@ table, th, td {
 <script>
 var Data = JSON.parse(json)
 var Data1 = JSON.parse(json)
+var stdlibSorts = ["heapsort_stl", "radix_bsd", "sradix_bsd", "clib_qsort", "heapsort_bsd", "mergesort_bsd", "stlsort", 
+"stlstable", "spread", "pdq", "spin", "flat_stable"]
+var fastSteadySorts = stdlibSorts.concat(["shell_10/3", "shell_prime_e", "shell_a102549", "shell_prime_10/3", "radix8", "radix11", "radix16", "shell_10/3_oms7", "radix8_oms7", "msd8_oms7", "timsort"])
+var fastSorts = fastSteadySorts.concat(["qsort_hoare", "qsort_no_pivot", "qsort_hoare2"])
 var order = ["RANDOM", "RANDOM"]
 var type = ["PLAININT", "PLAININT"]
 var marked = {}
@@ -40,6 +44,9 @@ select:
 <select id=optionSel onchange=drawTable1()>
 <option value=0>all</option>
 <option value=1>marked</option>
+<option value=2>from known libraries</option>
+<option value=3>always fast</option>
+<option value=4>reliable and fast</option>
 </select>
 
 <p>

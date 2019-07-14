@@ -44,7 +44,7 @@ BEGIN {
     ss["hashbt_boost"] = 1
 
 	t["PLAININT"] = 0
-        t["INT1P4"] = 0
+    t["INT1P4"] = 0
 	t["INT64"] = 0
 	t["INT128"] = 0
 	t["FLOAT"] = 0
@@ -59,40 +59,46 @@ BEGIN {
 	ft["ASCENDED"] = 0
 	ft["DESCENDED"] = 0
 	ft["ASCENDED_RANDOM"] = 0
-        ft["DESCENDED_RANDOM"] = 0
+    ft["DESCENDED_RANDOM"] = 0
 	ft["LOW_VARIATION1"] = 0
 	ft["LOW_VARIATION2"] = 0
 	ft["LOW_VARIATION100"] = 0
 	ft["SLOW_QSORT_HOARE"] = 0
 
-	for (SS = 1000*100; SS <= 1000*1000; SS *= 10) {
+	for (SS = 1000*1000; SS <= 1000*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {
                    excl = ""
                    for (i3 in ss) {
                        lim = 1000*1000
-                       if (i3 == "bubble" && SS >= lim && i2 != "ASCENDED" && i2 != "ASCENDED_RANDOM" && i2 != "LOW_VARIATION1" && i2 != "LOW_VARIATION2")
+                       if (i3 == "bubble" && SS >= lim && i2 != "ASCENDED" && i2 != "ASCENDED_RANDOM" && i2 != "LOW_VARIATION1")
                            excl = excl "echo " i3 ";"
                        if (i3 == "selection" && SS >= lim)
                            excl = excl "echo " i3 ";"
                        if (i3 == "array*1" && SS >= lim)
                            excl = excl "echo '" i3 "';"
-                       if (i3 == "array*2" && SS >= lim && i2 == "LOW_VARIATION1")
+                       if (i3 == "array*2" && SS >= lim && (i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || index(i2, "SCENDED_RANDOM") || i2 == "LOW_VARIATION100" && index(i1, "STRINGS")))
                            excl = excl "echo '" i3 "';"
-                       if (i3 == "array*3" && SS >= lim && i2 == "LOW_VARIATION1")
+                       if (i3 == "array*3" && SS >= lim && (i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2"|| index(i2, "SCENDED_RANDOM") || i2 == "LOW_VARIATION100" && index(i1, "STRINGS")))
                            excl = excl "echo '" i3 "';"
-                       if (i3 == "array*5" && SS >= lim && i2 == "LOW_VARIATION1")
+                       if (i3 == "array*5" && SS >= lim && (i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2"|| index(i2,  "SCENDED_RANDOM") || i2 == "LOW_VARIATION100" && index(i1, "STRINGS")))
                            excl = excl "echo '" i3 "';"
-                       if (i3 == "array*7" && SS >= lim && i2 == "LOW_VARIATION1")
+                       if (i3 == "array*7" && SS >= lim && (i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2"|| index(i2,  "SCENDED_RANDOM") || i2 == "LOW_VARIATION100" && index(i1, "STRINGS")))
+                           excl = excl "echo '" i3 "';"
+                       if (i3 == "hashbt" && SS >= lim && (i2 == "LOW_VARIATION1" || index(i2, "SCENDED_RANDOM")))
                            excl = excl "echo '" i3 "';"
                        if (i3 == "qsort_hoare" && SS >= lim && i2 == "SLOW_QSORT_HOARE")
                            excl = excl "echo '" i3 "';"
                        if (i3 == "qsort_hoare2" && SS >= lim && i2 == "SLOW_QSORT_HOARE")
                            excl = excl "echo '" i3 "';"
-                       if (i3 == "qsort_no_pivot" && SS >= lim && (i2 == "ASCENDED" || i2 == "DESCENDED" || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2"))
+                       if (i3 == "qsort_no_pivot" && SS >= lim && (i2 == "ASCENDED" || i2 == "DESCENDED" || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "SLOW_QSORT_HOARE" && index(i1, "STRINGS")))
                            excl = excl "echo '" i3 "';"
-                       if (i3 == "qsort_lomuto" && SS >= lim && (i2 == "ASCENDED" || i2 == "DESCENDED" || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "DESCENDED_RANDOM" || i2 == "ASCENDED_RANDOM"))
+                       if (i3 == "qsort_lomuto" && SS >= lim && (index(i2, "SCENDED") || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "SLOW_QSORT_HOARE" && index(i1, "STRINGS")))
+                           excl = excl "echo '" i3 "';"
+                       if (i3 == "shell_a3n" && SS >= lim && index(i1, "STRINGS") && (i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2"))
+                           excl = excl "echo '" i3 "';"
+                       if (i3 == "hash" && SS >= lim && index(i1, "STRINGS") && (i2 == "LOW_VARIATION100" || i2 == "LOW_VARIATION2"))
                            excl = excl "echo '" i3 "';"
                    }
                    if (excl != "")

@@ -55,8 +55,9 @@ function drawTable1() {
             + "</sup><button onclick=changeOrd(" + (i + 1)
             + ") style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[i + 1] + 1] + "</button>"
     var n = 0
-    for (i = 0; i < ta.length; i++) 
-        if (typeof(ta[i][1]) == "number" && (document.getElementById("optionSel").value == 0 || ta[i][0] in marked)) {
+    for (i = 0; i < ta.length; i++) {
+        var os = document.getElementById("optionSel").value
+        if (typeof(ta[i][1]) == "number" && (os == 0 || os == 1 && ta[i][0] in marked || os > 1 && indexSorted[os - 2].indexOf(ta[i][0]) != -1)) {
             text += "<tr><td align=center>" + (++n) + "<input id=" + ta[i][0] + " type=checkbox "
             if (ta[i][0] in marked) text += "checked "
             text += "onclick=changeCheck(\"" + ta[i][0] + "\")><td>" + ta[i][0]
@@ -69,6 +70,7 @@ function drawTable1() {
                     text += a
             }
         }
+    }
     document.getElementById("tab1").innerHTML = text
 }
 
@@ -77,7 +79,8 @@ function DataAvg() {
     var cnt = 0
     for (var sortm in Data1[order[0]][type[0]])
         for (var i = 0; i < M; ++i) {
-            if (typeof(Data[order[0]][type[0]][sortm][i]) == "number") {
+            var os = document.getElementById("optionSel").value
+            if (typeof(Data[order[0]][type[0]][sortm][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os > 1 && indexSorted[os - 2].indexOf(sortm) != -1)) {
                 sum += Data[order[0]][type[0]][sortm][i]
                 cnt++
             }
@@ -88,8 +91,11 @@ function DataAvg() {
 function DataMedian() {
     var vector = []
     for (var sortm in Data1[order[0]][type[0]])
-        for (i = 0; i < M; ++i)
-            vector.push(Data[order[0]][type[0]][sortm][i])
+        for (i = 0; i < M; ++i) {
+            var os = document.getElementById("optionSel").value
+            if (typeof(Data[order[0]][type[0]][sortm][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os > 1 && indexSorted[os - 2].indexOf(sortm) != -1))
+                vector.push(Data[order[0]][type[0]][sortm][i])
+        }
     vector.sort(function(a, b){ if (typeof(a) == "string") return 1; if (typeof(b) == "string") return -1; return a - b })
     return vector[Math.round(vector.length/2)]
 }
@@ -97,18 +103,22 @@ function DataMedian() {
 function DataMin() {
     var min = 1 << 30
     for (var sortm in Data1[order[0]][type[0]])
-        for (i = 0; i < M; ++i)
-            if (Data[order[0]][type[0]][sortm][i] < min)
+        for (i = 0; i < M; ++i) {
+            var os = document.getElementById("optionSel").value
+            if (typeof(Data[order[0]][type[0]][sortm][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os > 1 && indexSorted[os - 2].indexOf(sortm) != -1) && Data[order[0]][type[0]][sortm][i] < min)
                 min = Data[order[0]][type[0]][sortm][i]
+        }
     return min
 }
 
 function DataMax() {
     var max = 0
     for (var sortm in Data1[order[0]][type[0]])
-        for (i = 0; i < M; ++i)
-            if (Data[order[0]][type[0]][sortm][i] > max)
+        for (i = 0; i < M; ++i) {
+            var os = document.getElementById("optionSel").value
+            if (typeof(Data[order[0]][type[0]][sortm][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os > 1 && indexSorted[os - 2].indexOf(sortm) != -1) && Data[order[0]][type[0]][sortm][i] > max)
                 max = Data[order[0]][type[0]][sortm][i]
+        }
     return max
 }
 

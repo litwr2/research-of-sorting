@@ -103,9 +103,13 @@ BEGIN {
                            excl = excl "echo '" i3 "';"
                        if (i3 == "hash" && SS >= lim && index(i1, "STRINGS") && (i2 == "LOW_VARIATION100" || i2 == "LOW_VARIATION2"))
                            excl = excl "echo '" i3 "';"
+
+                       lim = 1000*10000
+                       if (i3 == "bubble" && SS >= lim && i2 != "ASCENDED" && i2 != "LOW_VARIATION1")
+                           excl = excl "echo " i3 ";"
                    }
                    if (excl != "")
-                       excl = "(" excl ")|grep -vFf -"
+                       excl = "(" excl ")|grep -vwFf -"
                    else
                        excl = "cat"
                    excl = excl " nsort.cpp >nsort2.cpp;"

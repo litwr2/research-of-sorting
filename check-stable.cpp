@@ -46,7 +46,7 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "bsd.cpp"
 #include "radix.cpp"
 #include "qsort.cpp"
-#include "dp_quick.cpp"
+#include "dp-quick.cpp"
 #include "shell.cpp"
 #include "tree.cpp"
 #include "hash.cpp"
@@ -54,6 +54,8 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "array.cpp"
 #include "bubble.cpp"
 #include "selection.cpp"
+#include "insertion.cpp"
+#include "radix-msb.cpp"
 
 bool stable;
 
@@ -101,6 +103,9 @@ L:
     test<X>(v, bind(radixsort<X>, placeholders::_1, 8), "radix8");
     test<X>(v, bind(radixsort<X>, placeholders::_1, 11), "radix11");
     test<X>(v, bind(radixsort<X>, placeholders::_1, 16), "radix16");
+    test<X>(v, bind(radixsortmsb<X>, placeholders::_1, 8), "radixmsb8");
+    test<X>(v, bind(radixsortmsb<X>, placeholders::_1, 11), "radixmsb11");
+    test<X>(v, bind(radixsortmsb<X>, placeholders::_1, 16), "radixmsb16");
 #endif
 #ifdef PLAININT
     test<X>(v, bind(oms7_helper<X>, placeholders::_1, 5), "shell_10/3_oms7");
@@ -135,6 +140,7 @@ L:
 
     test<X>(v, bind(bubble_sort<X>, placeholders::_1), "bubble");
     test<X>(v, bind(selection_sort<X>, placeholders::_1), "selection");
+    test<X>(v, bind(insertion_sort<X>, placeholders::_1), "insertion");
 
     test<X>(v, bind(tree_sort_stl<X>, placeholders::_1), "tree_stl");
     test<X>(v, bind(tree_sort_boost<X>, placeholders::_1), "tree_boost");

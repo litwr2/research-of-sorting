@@ -1,7 +1,7 @@
-template<class T> void _radixsortmsd(T *l, T *r, int N, int d, vector<T> &temp) {
+template<class T> void _radixsortmsb(T *l, T *r, int N, int d, vector<T> &temp) {
 	if (d == -1) return;
 	if (r - l <= 32) {
-		_insertionsort(l, r);
+		_insertion_sort(l, r);
 		return;
 	}
 	int M = 1 << N;
@@ -30,17 +30,17 @@ template<class T> void _radixsortmsd(T *l, T *r, int N, int d, vector<T> &temp) 
 	for (int i = 0; i < sz; i++) {
 		int r = run[i];
 		if (r != 0)
-            _radixsortmsd(l + cnt[r - 1], l + cnt[r], N, d - 1, temp);
+            _radixsortmsb(l + cnt[r - 1], l + cnt[r], N, d - 1, temp);
 		else
-            _radixsortmsd(l, l + cnt[r], N, d - 1, temp);
+            _radixsortmsb(l, l + cnt[r], N, d - 1, temp);
 	}
 }
 
-template<class T> void radixsortmsd(vector<T> &a, int N) {
+template<class T> void radixsortmsb(vector<T> &a, int N) {
     vector<T> temp(a);
     int s = sizeof(T);
     if (s == sizeof(int(a[0]))) s = 4; //for X type
     int d = (s*8 + N - 1) / N - 1;
-	_radixsortmsd(&a[0], &a[0] + a.size(), N, d, temp);
+	_radixsortmsb(&a[0], &a[0] + a.size(), N, d, temp);
 }
 

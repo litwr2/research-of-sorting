@@ -81,15 +81,15 @@ BEGIN {
                            excl = excl "echo " i3 ";"
                        if (i3 == "array*1" && SS >= lim)
                            excl = excl "echo '" i3 "';"
-                       if (i3 == "array*2" && SS >= lim && (i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || index(i2, "SCENDED_RANDOM") || i2 == "LOW_VARIATION100" && index(i1, "STRINGS")))
+                       if (i3 == "array*2" && SS >= lim && (i2 == "LOW_VARIATION2" || index(i2, "SCENDED_RANDOM") || i2 == "LOW_VARIATION100" && index(i1, "STRINGS")))
                            excl = excl "echo '" i3 "';"
-                       if (i3 == "array*3" && SS >= lim && (i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2"|| index(i2, "SCENDED_RANDOM") || i2 == "LOW_VARIATION100" && index(i1, "STRINGS")))
+                       if (i3 == "array*3" && SS >= lim && (i2 == "LOW_VARIATION2"|| index(i2, "SCENDED_RANDOM") || i2 == "LOW_VARIATION100" && index(i1, "STRINGS")))
                            excl = excl "echo '" i3 "';"
-                       if (i3 == "array*5" && SS >= lim && (i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2"|| index(i2,  "SCENDED_RANDOM") || i2 == "LOW_VARIATION100" && index(i1, "STRINGS")))
+                       if (i3 == "array*5" && SS >= lim && (i2 == "LOW_VARIATION2"|| index(i2,  "SCENDED_RANDOM") || i2 == "LOW_VARIATION100" && index(i1, "STRINGS")))
                            excl = excl "echo '" i3 "';"
-                       if (i3 == "array*7" && SS >= lim && (i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2"|| index(i2,  "SCENDED_RANDOM") || i2 == "LOW_VARIATION100" && index(i1, "STRINGS")))
+                       if (i3 == "array*7" && SS >= lim && (i2 == "LOW_VARIATION2"|| index(i2,  "SCENDED_RANDOM") || i2 == "LOW_VARIATION100" && index(i1, "STRINGS")))
                            excl = excl "echo '" i3 "';"
-                       if (i3 == "hashbt" && SS >= lim && (i2 == "LOW_VARIATION1" || index(i2, "SCENDED_RANDOM")))
+                       if (i3 == "hashbt" && SS >= lim && (index(i2, "SCENDED_RANDOM")))
                            excl = excl "echo '" i3 "';"
                        if (i3 == "qsort_hoare" && SS >= lim && i2 == "SLOW_QSORT_HOARE")
                            excl = excl "echo '" i3 "';"
@@ -98,8 +98,6 @@ BEGIN {
                        if (i3 == "qsort_no_pivot" && SS >= lim && (i2 == "ASCENDED" || i2 == "DESCENDED" || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "SLOW_QSORT_HOARE" && index(i1, "STRINGS")))
                            excl = excl "echo '" i3 "';"
                        if (i3 == "qsort_lomuto" && SS >= lim && (index(i2, "SCENDED") || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "SLOW_QSORT_HOARE" && index(i1, "STRINGS")))
-                           excl = excl "echo '" i3 "';"
-                       if (i3 == "shell_a3n" && SS >= lim && index(i1, "STRINGS") && (i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2"))
                            excl = excl "echo '" i3 "';"
                        if (i3 == "hash" && SS >= lim && index(i1, "STRINGS") && (i2 == "LOW_VARIATION100" || i2 == "LOW_VARIATION2"))
                            excl = excl "echo '" i3 "';"

@@ -12,7 +12,7 @@ void shell1(vector<T> &a) {
      v = a[i];
      for(;;) {
         j -= h;
-        while (j >= 0 && v <= a[j]) {
+        while (j >= 0 && v < a[j]) {
            a[j + h] = a[j];
            j -= h;
         }
@@ -39,7 +39,7 @@ void shell1(vector<const char*> &a) {
      v = a[i];
      while (i < a.size()) {
         j -= h;
-        while (j >= 0 && strcmp(v, a[j]) <= 0) {
+        while (j >= 0 && strcmp(v, a[j]) < 0) {
            a[j + h] = a[j];
            j -= h;
         }

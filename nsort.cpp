@@ -135,8 +135,7 @@ size_t test(fstream &fio, vector<T> &v, function<void(vector<T>&)> f, const char
     auto te = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     check(v);
     if (title[0] == 'Z') goto L;
-    cout << setw(16) << left << title << setw(11) << right << te - ts
-        << endl;
+    cout << setw(16) << left << title << setw(11) << right << te - ts << endl;
 L:
     fio.seekg(0);
 #if !defined(STRINGS) && !defined(STRINGS_SHORT) && !defined(STRINGS_LONG)
@@ -154,8 +153,7 @@ size_t test(fstream &fio, vector<const char*> &v, function<void(vector<const cha
     auto te = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     check(v);
     if (title[0] == 'Z') goto L;
-    cout << setw(16) << left << title << setw(11) << right << te - ts
-        << endl;
+    cout << setw(16) << left << title << setw(11) << right << te - ts << endl;
 L:
     fio.seekg(0);
     fio.read(reinterpret_cast<char*>(&v[0]), SS*sizeof(char*));
@@ -167,9 +165,7 @@ int main() {
     srand(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
     vector<X> v;
     fstream fio(FN, fio.binary | fio.trunc | fio.in | fio.out);
-
     fill(v);
-
 #if !defined(STRINGS) && !defined(STRINGS_SHORT) && !defined(STRINGS_LONG)
     fio.write(reinterpret_cast<char*>(&v[0]), SS*sizeof(X));
 #else
@@ -182,7 +178,6 @@ int main() {
         eps = abs(int((double(itv)/tv - 1)*100));
         tv = itv;
     } while (eps > 2);
-
     int passes = PASSES;
 L:
     test<X>(fio, v, bind(shell1<X>, placeholders::_1), "shell_a3n");

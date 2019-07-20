@@ -43,23 +43,16 @@ void radixsort(vector<const char*> &a, int N) { //N must be = 8
     for (int i = 0; i < a.size(); ++i)
         if (strlen(a[i]) > s) s = strlen(a[i]);
     int M = 1 << N;
-    vector<char*> b(a.size());
+    vector<const char*> b(a.size());
     for (int i = s - 1; i >= 0; --i) {
         int c[M] = {};
         for (int j = 0; j < a.size(); j++)
             c[i >= strlen(a[j]) ? 0 : (unsigned char)a[j][i]]++;
         for (int j = 1; j < M; j++)
             c[j] += c[j - 1];
-        for (int j = a.size() - 1; j >= 0; j--) {
-            int d = i >= strlen(a[j]) ? 0 : (unsigned char)a[j][i];
-            //b[--c[d]] = new char [strlen(a[j]) + 1];
-            //strcpy(b[c[d]], a[j]);
-            (const char*&)b[--c[d]] = a[j];
-        }
-        for (int j = 0; j < a.size(); ++j) {
-            //delete [] a[j];
-            a[j] = b[j];
-        }
+        for (int j = a.size() - 1; j >= 0; j--)
+            b[--c[i >= strlen(a[j]) ? 0 : (unsigned char)a[j][i]]] = a[j];
+        a = b;
     }
 }
 

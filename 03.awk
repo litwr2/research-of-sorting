@@ -83,7 +83,7 @@ BEGIN {
                            excl = excl "echo " i3 ";"
                        if (i3 == "selection" && SS >= lim)
                            excl = excl "echo " i3 ";"
-                       if (i3 == "array*1" && SS >= lim)
+                       if (i3 == "array*1" && SS >= lim && i2 != "LOW_VARIATION1")
                            excl = excl "echo '" i3 "';"
                        if (i3 == "array*2" && SS >= lim && (i2 == "LOW_VARIATION2" || (index(i2, "SCENDED_RANDOM") || index(i2,  "DESCENDED") || i2 == "LOW_VARIATION100") && index(i1, "STRINGS")))
                            excl = excl "echo '" i3 "';"

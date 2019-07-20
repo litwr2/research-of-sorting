@@ -88,7 +88,7 @@ void fill_for_quadratic_qsort1(vector<T> &v) {
 		insert2(v, l);
 	if (SS%2)
 		insert2(v, l, 1);
-	v.insert(v.end(), l.begin(), l.end());     
+	v.insert(v.end(), l.begin(), l.end());
 }
 
 template<class T> void fill(vector<T> &v) {

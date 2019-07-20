@@ -27,7 +27,7 @@ using namespace std;
 #define LOW_VARIATION_CONST 2
 
 #ifndef SS
-#define SS 1000 //limits due to int types of indice are slightly above 2'000'000'000
+#define SS 10000 //limits due to int types of indice are slightly above 2'000'000'000
 #endif
 
 struct X {
@@ -38,6 +38,7 @@ struct X {
 int operator-(const X &a, const X &b) { return a.k - b.k; }
 
 #include "oms7.cpp"
+#include "insertion.cpp"
 #include "baseop.cpp"
 #include "fillings.cpp"
 #include "tim.cpp"
@@ -45,6 +46,7 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "boost.cpp"
 #include "bsd.cpp"
 #include "radix.cpp"
+#include "radix-msb.cpp"
 #include "qsort.cpp"
 #include "dp-quick.cpp"
 #include "shell.cpp"
@@ -54,8 +56,6 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "array.cpp"
 #include "bubble.cpp"
 #include "selection.cpp"
-#include "insertion.cpp"
-#include "radix-msb.cpp"
 
 bool stable;
 
@@ -99,29 +99,25 @@ L:
     test<X>(v, bind(shell2<X>, placeholders::_1, 5), "shell_a102549m");
     test<X>(v, bind(shell2<X>, placeholders::_1, 5), "shell_2.25");
 
-#if !defined(STRINGS) && !defined(CSTRINGS) && !defined(STRINGS_SHORT) && !defined(CSTRINGS_SHORT) && !defined(STRINGS_LONG) && !defined(CSTRINGS_LONG) && !defined(FLOAT)
     test<X>(v, bind(radixsort<X>, placeholders::_1, 8), "radix8");
+    test<X>(v, bind(radix_msb<X>, placeholders::_1, 8), "radix8_msb");
     test<X>(v, bind(radixsort<X>, placeholders::_1, 11), "radix11");
     test<X>(v, bind(radixsort<X>, placeholders::_1, 16), "radix16");
-    test<X>(v, bind(radixsortmsb<X>, placeholders::_1, 8), "radixmsb8");
-    test<X>(v, bind(radixsortmsb<X>, placeholders::_1, 11), "radixmsb11");
-    test<X>(v, bind(radixsortmsb<X>, placeholders::_1, 16), "radixmsb16");
-#endif
+    test<X>(v, bind(radix_msb<X>, placeholders::_1, 11), "radix11_msb");
+    test<X>(v, bind(radix_msb<X>, placeholders::_1, 16), "radix16_msb");
 #ifdef PLAININT
     test<X>(v, bind(oms7_helper<X>, placeholders::_1, 5), "shell_10/3_oms7");
     test<X>(v, bind(oms7_helper<X>, placeholders::_1, 7), "radix8_oms7");
-    test<X>(v, bind(oms7_helper<X>, placeholders::_1, 8), "msd8_oms7");
+    test<X>(v, bind(oms7_helper<X>, placeholders::_1, 8), "radix8_msb_oms7");
 #endif
     test<X>(v, bind(hsortstl<X>, placeholders::_1), "heapsort_stl");
 #if defined(CSTRINGS) || defined(CSTRINGS_SHORT) || defined(CSTRINGS_LONG)
     test<X>(v, bind(radix_bsd<X>, placeholders::_1), "radix_bsd");
     test<X>(v, bind(sradix_bsd<X>, placeholders::_1), "sradix_bsd");
 #endif
-#if !defined(STRINGS) && !defined(STRINGS_SHORT) && !defined(STRINGS_LONG)
     test<X>(v, bind(qsort0<X>, placeholders::_1), "clib_qsort");
     test<X>(v, bind(hsort_bsd<X>, placeholders::_1), "heapsort_bsd");
     test<X>(v, bind(mergesort_bsd<X>, placeholders::_1), "mergesort_bsd");
-#endif
     test<X>(v, bind(qsort1<X>, placeholders::_1, 0, SS - 1), "qsort_hoare");
     //test<X>(v, bind(qsort1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco"); //not tested with all data types 
     test<X>(v, bind(qsort2<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");

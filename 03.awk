@@ -10,9 +10,12 @@ BEGIN {
     ss["radix8"] = 1
     ss["radix11"] = 1
     ss["radix16"] = 1
+    ss["radix8_msb"] = 1
+    ss["radix11_msb"] = 1
+    ss["radix16_msb"] = 1
     ss["shell_10/3_oms7"] = 1
     ss["radix8_oms7"] = 1
-    ss["msd8_oms7"] = 1
+    ss["radix8_msb_oms7"] = 1
     ss["heapsort_stl"] = 1
     ss["radix_bsd"] = 1
     ss["sradix_bsd"] = 1
@@ -24,6 +27,7 @@ BEGIN {
     ss["qsort_no_pivot"] = 1
     ss["qsort_hoare2"] = 1
     ss["qsort_lomuto"] = 1
+    ss["qsort_dualpivot"] = 1
     ss["stlsort"] = 1
     ss["stlstable"] = 1
     ss["timsort"] = 1
@@ -44,7 +48,7 @@ BEGIN {
     ss["hashbt_std"] = 1
     ss["hashbt"] = 1
     ss["hashbt_boost"] = 1
-    ss["qsort_dualpivot"] = 1
+    ss["insertion"] = 1
 
 	t["PLAININT"] = 0
     t["INT1P4"] = 0
@@ -75,19 +79,19 @@ BEGIN {
                    excl = ""
                    for (i3 in ss) {
                        lim = 1000*1000
-                       if (i3 == "bubble" && SS >= lim && i2 != "ASCENDED" && i2 != "ASCENDED_RANDOM" && i2 != "LOW_VARIATION1")
+                       if (i3 == "bubble" && SS >= lim && i2 != "ASCENDED" && (i2 != "ASCENDED_RANDOM" || index(i1, "STRINGS")) && i2 != "LOW_VARIATION1")
                            excl = excl "echo " i3 ";"
                        if (i3 == "selection" && SS >= lim)
                            excl = excl "echo " i3 ";"
                        if (i3 == "array*1" && SS >= lim)
                            excl = excl "echo '" i3 "';"
-                       if (i3 == "array*2" && SS >= lim && (i2 == "LOW_VARIATION2" || index(i2, "SCENDED_RANDOM") || i2 == "LOW_VARIATION100" && index(i1, "STRINGS")))
+                       if (i3 == "array*2" && SS >= lim && (i2 == "LOW_VARIATION2" || (index(i2, "SCENDED_RANDOM") || index(i2,  "DESCENDED") || i2 == "LOW_VARIATION100") && index(i1, "STRINGS")))
                            excl = excl "echo '" i3 "';"
-                       if (i3 == "array*3" && SS >= lim && (i2 == "LOW_VARIATION2"|| index(i2, "SCENDED_RANDOM") || i2 == "LOW_VARIATION100" && index(i1, "STRINGS")))
+                       if (i3 == "array*3" && SS >= lim && (i2 == "LOW_VARIATION2"|| (index(i2, "SCENDED_RANDOM") || index(i2,  "DESCENDED") || i2 == "LOW_VARIATION100") && index(i1, "STRINGS")))
                            excl = excl "echo '" i3 "';"
-                       if (i3 == "array*5" && SS >= lim && (i2 == "LOW_VARIATION2"|| index(i2,  "SCENDED_RANDOM") || i2 == "LOW_VARIATION100" && index(i1, "STRINGS")))
+                       if (i3 == "array*5" && SS >= lim && (i2 == "LOW_VARIATION2"|| (index(i2,  "SCENDED_RANDOM") || index(i2,  "DESCENDED") || i2 == "LOW_VARIATION100") && index(i1, "STRINGS")))
                            excl = excl "echo '" i3 "';"
-                       if (i3 == "array*7" && SS >= lim && (i2 == "LOW_VARIATION2"|| index(i2,  "SCENDED_RANDOM") || i2 == "LOW_VARIATION100" && index(i1, "STRINGS")))
+                       if (i3 == "array*7" && SS >= lim && (i2 == "LOW_VARIATION2"|| (index(i2,  "SCENDED_RANDOM") || index(i2,  "DESCENDED") || i2 == "LOW_VARIATION100") && index(i1, "STRINGS")))
                            excl = excl "echo '" i3 "';"
                        if (i3 == "hashbt" && SS >= lim && (index(i2, "SCENDED_RANDOM")))
                            excl = excl "echo '" i3 "';"
@@ -99,7 +103,7 @@ BEGIN {
                            excl = excl "echo '" i3 "';"
                        if (i3 == "qsort_lomuto" && SS >= lim && (index(i2, "SCENDED") || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "SLOW_QSORT_HOARE" && index(i1, "STRINGS")))
                            excl = excl "echo '" i3 "';"
-                       if (i3 == "hash" && SS >= lim && index(i1, "STRINGS") && (i2 == "LOW_VARIATION100" || i2 == "LOW_VARIATION2"))
+                       if (i3 == "hash" && SS >= lim && index(i1, "STRINGS") && (i2 == "ASCENDED_RANDOM" || i2 == "LOW_VARIATION100" || i2 == "LOW_VARIATION2"))
                            excl = excl "echo '" i3 "';"
 
                        lim = 1000*10000

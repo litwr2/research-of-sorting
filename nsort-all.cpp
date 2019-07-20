@@ -89,7 +89,9 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "boost.cpp"
 #include "bsd.cpp"
 #include "radix.cpp"
+#include "radix-msb.cpp"
 #include "qsort.cpp"
+#include "dp-quick.cpp"
 #include "shell.cpp"
 #include "tree.cpp"
 #include "hash.cpp"
@@ -97,6 +99,7 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "array.cpp"
 #include "bubble.cpp"
 #include "selection.cpp"
+#include "insertion.cpp"
 
 X v;
 
@@ -160,15 +163,20 @@ L:
     test<X>(v, bind(shell2<X>, placeholders::_1, 2), "shell_exp_tab");
     test<X>(v, bind(shell2<X>, placeholders::_1, 4), "shell_prime_10/3");
 
-#if !defined(STRINGS) && !defined(CSTRINGS) && !defined(STRINGS_SHORT) && !defined(CSTRINGS_SHORT) && !defined(STRINGS_LONG) && !defined(CSTRINGS_LONG) && !defined(FLOAT)
+#if !defined(FLOAT)
     test<X>(v, bind(radixsort<X>, placeholders::_1, 8), "radix8");
     test<X>(v, bind(radixsort<X>, placeholders::_1, 11), "radix11");
-    //test<X>(v, bind(radixsort<X>, placeholders::_1, 16), "radix16");
+    test<X>(v, bind(radixsort<X>, placeholders::_1, 16), "radix16");
+    test<X>(v, bind(radix_msb<X>, placeholders::_1, 8), "radix8_msb");
+#if !defined(STRINGS) && !defined(STRINGS_SHORT) && !defined(STRINGS_LONG) && !defined(CSTRINGS) && !defined(CSTRINGS_SHORT) && !defined(CSTRINGS_LONG)
+    test<X>(v, bind(radix_msb<X>, placeholders::_1, 11), "radix11_msb");
+    test<X>(v, bind(radix_msb<X>, placeholders::_1, 16), "radix16_msb");
+#endif
 #endif
 #ifdef PLAININT
     test<X>(v, bind(oms7_helper<X>, placeholders::_1, 5), "shell_10/3_oms7");
     test<X>(v, bind(oms7_helper<X>, placeholders::_1, 7), "radix8_oms7");
-    test<X>(v, bind(oms7_helper<X>, placeholders::_1, 8), "msd8_oms7");
+    test<X>(v, bind(oms7_helper<X>, placeholders::_1, 8), "radix8_msb_oms7");
 #endif
     test<X>(v, bind(hsortstl<X>, placeholders::_1), "heapsort_stl");
 #if defined(CSTRINGS) || defined(CSTRINGS_SHORT) || defined(CSTRINGS_LONG)
@@ -185,6 +193,7 @@ L:
     test<X>(v, bind(qsort2<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
     test<X>(v, bind(qsort3<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
     test<X>(v, bind(qsort4<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");
+    test<X>(fio, v, bind(dualPivotQuicksort<X>, placeholders::_1), "qsort_dualpivot");
     test<X>(v, bind(stl_sort<X>, placeholders::_1), "stlsort");
     test<X>(v, bind(stl_stable_sort<X>, placeholders::_1), "stlstable");
 
@@ -197,6 +206,7 @@ L:
 
     test<X>(v, bind(bubble_sort<X>, placeholders::_1), "bubble");
     test<X>(v, bind(selection_sort<X>, placeholders::_1), "selection");
+    test<X>(v, bind(insertion_sort<X>, placeholders::_1), "insertion");
 
     test<X>(v, bind(tree_sort_stl<X>, placeholders::_1), "tree_stl");
     test<X>(v, bind(tree_sort_boost<X>, placeholders::_1), "tree_boost");

@@ -26,15 +26,10 @@ static void rangeCheck(int length, int fromIndex, int toIndex) {
 }
 static void dualPivotQuicksort(vector<T> &a, int left, int right) {
     int len = right - left;
-    T x;
     if (len < TINY_SIZE) { // insertion sort on tiny array
-        for (int i = left + 1; i <= right; i++) {
-            for (int j = i; j > left && a[j] < a[j - 1]; j--) {
-                x = a[j - 1];
-                a[j - 1] = a[j];
-                a[j] = x;
-            }
-        }
+        for (int i = left + 1; i <= right; i++)
+            for (int j = i; j > left && a[j] < a[j - 1]; j--)
+                swap(a[j - 1], a[j]);
         return;
     }
     // median indexes
@@ -45,15 +40,15 @@ static void dualPivotQuicksort(vector<T> &a, int left, int right) {
     int m4 = m3 + sixth;
     int m5 = m4 + sixth;
     // 5-element sorting network
-    if (a[m1] > a[m2]) { x = a[m1]; a[m1] = a[m2]; a[m2] = x; }
-    if (a[m4] > a[m5]) { x = a[m4]; a[m4] = a[m5]; a[m5] = x; }
-    if (a[m1] > a[m3]) { x = a[m1]; a[m1] = a[m3]; a[m3] = x; }
-    if (a[m2] > a[m3]) { x = a[m2]; a[m2] = a[m3]; a[m3] = x; }
-    if (a[m1] > a[m4]) { x = a[m1]; a[m1] = a[m4]; a[m4] = x; }
-    if (a[m3] > a[m4]) { x = a[m3]; a[m3] = a[m4]; a[m4] = x; }
-    if (a[m2] > a[m5]) { x = a[m2]; a[m2] = a[m5]; a[m5] = x; }
-    if (a[m2] > a[m3]) { x = a[m2]; a[m2] = a[m3]; a[m3] = x; }
-    if (a[m4] > a[m5]) { x = a[m4]; a[m4] = a[m5]; a[m5] = x; }
+    if (a[m1] > a[m2]) swap(a[m1], a[m2]);
+    if (a[m4] > a[m5]) swap(a[m4], a[m5]);
+    if (a[m1] > a[m3]) swap(a[m1], a[m3]);
+    if (a[m2] > a[m3]) swap(a[m2], a[m3]);
+    if (a[m1] > a[m4]) swap(a[m1], a[m4]);
+    if (a[m3] > a[m4]) swap(a[m3], a[m4]);
+    if (a[m2] > a[m5]) swap(a[m2], a[m5]);
+    if (a[m2] > a[m3]) swap(a[m2], a[m3]);
+    if (a[m4] > a[m5]) swap(a[m4], a[m5]);
     // pivots: [ < pivot1 | pivot1 <= && <= pivot2 | > pivot2 ]
     T pivot1 = a[m2];
     T pivot2 = a[m4];
@@ -64,45 +59,31 @@ static void dualPivotQuicksort(vector<T> &a, int left, int right) {
     int less = left + 1;
     int great = right - 1;
     // sorting
-    if (diffPivots) {
+    if (diffPivots)
         for (int k = less; k <= great; k++) {
-            x = a[k];
-            if (x < pivot1) {
-                a[k] = a[less];
-                a[less++] = x;
-            } else if (x > pivot2) {
+            if (a[k] < pivot1)
+                swap(a[k], a[less++]);
+            else if (a[k] > pivot2) {
                 while (a[great] > pivot2 && k < great)
                     great--;
-                a[k] = a[great];
-                a[great--] = x;
-                x = a[k];
-                if (x < pivot1) {
-                    a[k] = a[less];
-                    a[less++] = x;
-                }
+                swap(a[k], a[great--]);
+                if (a[k] < pivot1)
+                    swap(a[k], a[less++]);
             }
         }
-    } else {
-        for (int k = less; k <= great; k++) {
-            x = a[k];
-            if (x == pivot1)
+    else
+        for (int k = less; k <= great; k++)
+            if (a[k] == pivot1)
                 continue;
-            if (x < pivot1) {
-                a[k] = a[less];
-                a[less++] = x;
-            } else {
+            else if (a[k] < pivot1)
+                swap(a[k], a[less++]);
+            else {
                 while (a[great] > pivot2 && k < great)
                     great--;
-                a[k] = a[great];
-                a[great--] = x;
-                x = a[k];
-                if (x < pivot1) {
-                    a[k] = a[less];
-                    a[less++] = x;
-                }
+                swap(a[k], a[great--]);
+                if (a[k] < pivot1)
+                    swap(a[k], a[less++]);
             }
-        }
-    }
     // swap
     a[left] = a[less - 1];
     a[less - 1] = pivot1;
@@ -112,23 +93,15 @@ static void dualPivotQuicksort(vector<T> &a, int left, int right) {
     dualPivotQuicksort(a, left, less - 2);
     dualPivotQuicksort(a, great + 2, right);
     // equal elements
-    if (great - less > len - DIST_SIZE && diffPivots) {
-        for (int k = less; k <= great; k++) {
-            x = a[k];
-            if (x == pivot1) {
-                a[k] = a[less];
-                a[less++] = x;
-            } else if (x == pivot2) {
-                a[k] = a[great];
-                a[great--] = x;
-                x = a[k];
-                if (x == pivot1) {
-                    a[k] = a[less];
-                    a[less++] = x;
-                }
+    if (great - less > len - DIST_SIZE && diffPivots)
+        for (int k = less; k <= great; k++)
+            if (a[k] == pivot1)
+                swap(a[k], a[less++]);
+            else if (a[k] == pivot2) {
+                swap(a[k], a[great--]);
+                if (a[k] == pivot1)
+                    swap(a[k],  a[less++]);
             }
-        }
-    }
     // center part
     if (diffPivots)
         dualPivotQuicksort(a, less, great);
@@ -157,15 +130,10 @@ static void rangeCheck(int length, int fromIndex, int toIndex) {
 }
 static void dualPivotQuicksort(vector<const char*> &a, int left, int right) {
     int len = right - left;
-    const char* x;
     if (len < TINY_SIZE) { // insertion sort on tiny array
-        for (int i = left + 1; i <= right; i++) {
-            for (int j = i; j > left && strcmp(a[j], a[j - 1]) < 0; j--) {
-                x = a[j - 1];
-                a[j - 1] = a[j];
-                a[j] = x;
-            }
-        }
+        for (int i = left + 1; i <= right; i++)
+            for (int j = i; j > left && strcmp(a[j], a[j - 1]) < 0; j--)
+                swap(a[j - 1], a[j]);
         return;
     }
     // median indexes
@@ -176,15 +144,15 @@ static void dualPivotQuicksort(vector<const char*> &a, int left, int right) {
     int m4 = m3 + sixth;
     int m5 = m4 + sixth;
     // 5-element sorting network
-    if (strcmp(a[m1], a[m2]) > 0) { x = a[m1]; a[m1] = a[m2]; a[m2] = x; }
-    if (strcmp(a[m4], a[m5]) > 0) { x = a[m4]; a[m4] = a[m5]; a[m5] = x; }
-    if (strcmp(a[m1], a[m3]) > 0) { x = a[m1]; a[m1] = a[m3]; a[m3] = x; }
-    if (strcmp(a[m2], a[m3]) > 0) { x = a[m2]; a[m2] = a[m3]; a[m3] = x; }
-    if (strcmp(a[m1], a[m4]) > 0) { x = a[m1]; a[m1] = a[m4]; a[m4] = x; }
-    if (strcmp(a[m3], a[m4]) > 0) { x = a[m3]; a[m3] = a[m4]; a[m4] = x; }
-    if (strcmp(a[m2], a[m5]) > 0) { x = a[m2]; a[m2] = a[m5]; a[m5] = x; }
-    if (strcmp(a[m2], a[m3]) > 0) { x = a[m2]; a[m2] = a[m3]; a[m3] = x; }
-    if (strcmp(a[m4], a[m5]) > 0) { x = a[m4]; a[m4] = a[m5]; a[m5] = x; }
+    if (strcmp(a[m1], a[m2]) > 0) swap(a[m1], a[m2]);
+    if (strcmp(a[m4], a[m5]) > 0) swap(a[m4], a[m5]);
+    if (strcmp(a[m1], a[m3]) > 0) swap(a[m1], a[m3]);
+    if (strcmp(a[m2], a[m3]) > 0) swap(a[m3], a[m2]);
+    if (strcmp(a[m1], a[m4]) > 0) swap(a[m1], a[m4]);
+    if (strcmp(a[m3], a[m4]) > 0) swap(a[m3], a[m4]);
+    if (strcmp(a[m2], a[m5]) > 0) swap(a[m5], a[m2]);
+    if (strcmp(a[m2], a[m3]) > 0) swap(a[m3], a[m2]);
+    if (strcmp(a[m4], a[m5]) > 0) swap(a[m4], a[m5]);
     // pivots: [ < pivot1 | pivot1 <= && <= pivot2 | > pivot2 ]
     const char* pivot1 = a[m2];
     const char* pivot2 = a[m4];
@@ -195,45 +163,31 @@ static void dualPivotQuicksort(vector<const char*> &a, int left, int right) {
     int less = left + 1;
     int great = right - 1;
     // sorting
-    if (diffPivots) {
+    if (diffPivots)
         for (int k = less; k <= great; k++) {
-            x = a[k];
-            if (strcmp(x, pivot1) < 0) {
-                a[k] = a[less];
-                a[less++] = x;
-            } else if (strcmp(x, pivot2) > 0) {
+            if (strcmp(a[k], pivot1) < 0)
+                swap(a[k], a[less++]);
+            else if (strcmp(a[k], pivot2) > 0) {
                 while (strcmp(a[great], pivot2) > 0 && k < great)
                     great--;
-                a[k] = a[great];
-                a[great--] = x;
-                x = a[k];
-                if (strcmp(x, pivot1) < 0) {
-                    a[k] = a[less];
-                    a[less++] = x;
-                }
+                swap(a[k], a[great--]);
+                if (strcmp(a[k], pivot1) < 0)
+                    swap(a[k], a[less++]);
             }
         }
-    } else {
-        for (int k = less; k <= great; k++) {
-            x = a[k];
-            if (strcmp(x, pivot1) == 0)
+    else
+        for (int k = less; k <= great; k++)
+            if (strcmp(a[k], pivot1) == 0)
                 continue;
-            if (strcmp(x, pivot1) < 0) {
-                a[k] = a[less];
-                a[less++] = x;
-            } else {
+            else if (strcmp(a[k], pivot1) < 0)
+                swap(a[k], a[less++]);
+            else {
                 while (strcmp(a[great], pivot2) > 0 && k < great)
                     great--;
-                a[k] = a[great];
-                a[great--] = x;
-                x = a[k];
-                if (strcmp(x, pivot1) < 0) {
-                    a[k] = a[less];
-                    a[less++] = x;
-                }
+                swap(a[k], a[great--]);
+                if (strcmp(a[k], pivot1) < 0)
+                    swap(a[k], a[less++]);
             }
-        }
-    }
     // swap
     a[left] = a[less - 1];
     a[less - 1] = pivot1;
@@ -243,23 +197,15 @@ static void dualPivotQuicksort(vector<const char*> &a, int left, int right) {
     dualPivotQuicksort(a, left, less - 2);
     dualPivotQuicksort(a, great + 2, right);
     // equal elements
-    if (great - less > len - DIST_SIZE && diffPivots) {
-        for (int k = less; k <= great; k++) {
-            x = a[k];
-            if (strcmp(x, pivot1) == 0) {
-                a[k] = a[less];
-                a[less++] = x;
-            } else if (strcmp(x, pivot2) == 0) {
-                a[k] = a[great];
-                a[great--] = x;
-                x = a[k];
-                if (strcmp(x, pivot1) == 0) {
-                    a[k] = a[less];
-                    a[less++] = x;
-                }
+    if (great - less > len - DIST_SIZE && diffPivots)
+        for (int k = less; k <= great; k++)
+            if (strcmp(a[k], pivot1) == 0)
+                swap(a[k], a[less++]);
+            else if (strcmp(a[k], pivot2) == 0) {
+                swap(a[k], a[great--]);
+                if (strcmp(a[k], pivot1) == 0)
+                    swap(a[k], a[less++]);
             }
-        }
-    }
     // center part
     if (diffPivots)
         dualPivotQuicksort(a, less, great);

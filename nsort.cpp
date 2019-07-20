@@ -99,6 +99,7 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #endif
 
 #include "oms7.cpp"
+#include "insertion.cpp"
 #include "baseop.cpp"
 #include "fillings.cpp"
 #include "tim.cpp"
@@ -106,6 +107,7 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "boost.cpp"
 #include "bsd.cpp"
 #include "radix.cpp"
+#include "radix-msb.cpp"
 #include "qsort.cpp"
 #include "dp-quick.cpp"
 #include "shell.cpp"
@@ -135,7 +137,7 @@ size_t test(fstream &fio, vector<T> &v, function<void(vector<T>&)> f, const char
     auto te = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     check(v);
     if (title[0] == 'Z') goto L;
-    cout << setw(16) << left << title << setw(11) << right << te - ts << endl;
+    cout << setw(16) << left << title << setw(12) << right << te - ts << endl;
 L:
     fio.seekg(0);
 #if !defined(STRINGS) && !defined(STRINGS_SHORT) && !defined(STRINGS_LONG)
@@ -153,7 +155,7 @@ size_t test(fstream &fio, vector<const char*> &v, function<void(vector<const cha
     auto te = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     check(v);
     if (title[0] == 'Z') goto L;
-    cout << setw(16) << left << title << setw(11) << right << te - ts << endl;
+    cout << setw(16) << left << title << setw(12) << right << te - ts << endl;
 L:
     fio.seekg(0);
     fio.read(reinterpret_cast<char*>(&v[0]), SS*sizeof(char*));
@@ -161,7 +163,6 @@ L:
 }
 
 int main() {
-    //cerr << sizeof(X) << endl;
     srand(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
     vector<X> v;
     fstream fio(FN, fio.binary | fio.trunc | fio.in | fio.out);
@@ -189,15 +190,20 @@ L:
     test<X>(fio, v, bind(shell2<X>, placeholders::_1, 5), "shell_a102549m");
     test<X>(fio, v, bind(shell2<X>, placeholders::_1, 5), "shell_2.25");
 
-#if !defined(STRINGS) && !defined(CSTRINGS) && !defined(STRINGS_SHORT) && !defined(CSTRINGS_SHORT) && !defined(STRINGS_LONG) && !defined(CSTRINGS_LONG) && !defined(FLOAT)
+#if !defined(FLOAT)
     test<X>(fio, v, bind(radixsort<X>, placeholders::_1, 8), "radix8");
+    test<X>(fio, v, bind(radix_msb<X>, placeholders::_1, 8), "radix8_msb");
+#if !defined(STRINGS) && !defined(STRINGS_SHORT) && !defined(STRINGS_LONG) && !defined(CSTRINGS) && !defined(CSTRINGS_SHORT) && !defined(CSTRINGS_LONG)
     test<X>(fio, v, bind(radixsort<X>, placeholders::_1, 11), "radix11");
     test<X>(fio, v, bind(radixsort<X>, placeholders::_1, 16), "radix16");
+    test<X>(fio, v, bind(radix_msb<X>, placeholders::_1, 11), "radix11_msb");
+    test<X>(fio, v, bind(radix_msb<X>, placeholders::_1, 16), "radix16_msb");
+#endif
 #endif
 #ifdef PLAININT
     test<X>(fio, v, bind(oms7_helper<X>, placeholders::_1, 5), "shell_10/3_oms7");
     test<X>(fio, v, bind(oms7_helper<X>, placeholders::_1, 7), "radix8_oms7");
-    test<X>(fio, v, bind(oms7_helper<X>, placeholders::_1, 8), "msd8_oms7");
+    test<X>(fio, v, bind(oms7_helper<X>, placeholders::_1, 8), "radix8_msb_oms7");
 #endif
     test<X>(fio, v, bind(hsortstl<X>, placeholders::_1), "heapsort_stl");
 #if defined(CSTRINGS) || defined(CSTRINGS_SHORT) || defined(CSTRINGS_LONG)
@@ -227,6 +233,7 @@ L:
 
     test<X>(fio, v, bind(bubble_sort<X>, placeholders::_1), "bubble");
     test<X>(fio, v, bind(selection_sort<X>, placeholders::_1), "selection");
+    test<X>(fio, v, bind(insertion_sort<X>, placeholders::_1), "insertion");
 
     test<X>(fio, v, bind(tree_sort_stl<X>, placeholders::_1), "tree_stl");
     test<X>(fio, v, bind(tree_sort_boost<X>, placeholders::_1), "tree_boost");

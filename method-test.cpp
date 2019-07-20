@@ -49,9 +49,9 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #endif
 
 #include "oms7.cpp"
-#include "insertion.cpp"
 #include "baseop.cpp"
 #include "fillings.cpp"
+#include "insertion.cpp"
 #include "tim.cpp"
 #include "std.cpp"
 #include "boost.cpp"
@@ -75,7 +75,6 @@ int main() {
 //    for (int i = 0; i < SS; ++i) cout << a[i] << ' '; cout << endl;
 //    radixsortmsd(a, 4);
 //    insertion_sort(a);
-     radixsort(a, 8);
     //MsbRadix<X>(a, 16)();
 //    radix_msb(a, 8);
 //    dualPivotQuicksort(a);
@@ -88,4 +87,3 @@ int main() {
     cerr << "zok\t" << SS << ' ' <<  typeid(X).name() << "\n";
     return 0;
 }
-

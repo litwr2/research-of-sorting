@@ -84,6 +84,7 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "oms7.cpp"
 #include "baseop.cpp"
 #include "fillings.cpp"
+#include "insertion.cpp"
 #include "tim.cpp"
 #include "std.cpp"
 #include "boost.cpp"
@@ -99,7 +100,6 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "array.cpp"
 #include "bubble.cpp"
 #include "selection.cpp"
-#include "insertion.cpp"
 
 X v;
 

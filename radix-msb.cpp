@@ -53,6 +53,7 @@ template<class T> struct MsbRadix {
 };
 
 template<> MsbRadix<string>::MsbRadix(vector<string> &a, int N) : a(a), N(N), temp(a.size()) {
+    if (N != 8) throw "radix-msb supports only N = 8 for strings";
     maxd = 0;
     for (int i = 0; i < a.size(); ++i)
         if (a[i].length() > maxd) maxd = a[i].length();
@@ -102,6 +103,7 @@ template<> void MsbRadix<string>::operator()() {
 }
 
 template<> MsbRadix<const char*>::MsbRadix(vector<const char*> &a, int N) : a(a), N(N), temp(a.size()) {
+    if (N != 8) throw "radix-msb supports only N = 8 for strings";
     maxd = 0;
     for (int i = 0; i < a.size(); ++i)
         if (strlen(a[i]) > maxd) maxd = strlen(a[i]);

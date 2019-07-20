@@ -50,11 +50,11 @@ BEGIN {
     ss["hashbt_boost"] = 1
     ss["insertion"] = 1
 
-	t["PLAININT"] = 0
-    t["INT1P4"] = 0
-	t["INT64"] = 0
-	t["INT128"] = 0
-	t["FLOAT"] = 0
+	t["PLAININT"] = 1
+    t["INT1P4"] = 1
+	t["INT64"] = 1
+	t["INT128"] = 1
+	t["FLOAT"] = 1
 	t["STRINGS"] = 1
 	t["CSTRINGS"] = 1
 	t["STRINGS_SHORT"] = 1
@@ -63,53 +63,60 @@ BEGIN {
 	t["CSTRINGS_LONG"] = 1
 
 	ft["RANDOM"] = 1
-	ft["ASCENDED"] = 0
-	ft["DESCENDED"] = 0
-	ft["ASCENDED_RANDOM"] = 0
-    ft["DESCENDED_RANDOM"] = 0
-	ft["LOW_VARIATION1"] = 0
-	ft["LOW_VARIATION2"] = 0
-	ft["LOW_VARIATION100"] = 0
-	ft["SLOW_QSORT_HOARE"] = 0
+	ft["ASCENDED"] = 1
+	ft["DESCENDED"] = 1
+	ft["ASCENDED_RANDOM"] = 1
+    ft["DESCENDED_RANDOM"] = 1
+	ft["LOW_VARIATION1"] = 1
+	ft["LOW_VARIATION2"] = 1
+	ft["LOW_VARIATION100"] = 1
+	ft["SLOW_QSORT_HOARE"] = 1
 
 	for (SS = 1000; SS <= 100*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {
                    excl = ""
+                   delete zoo
                    for (i3 in ss) {
+                       if (ss[i3] == 0 || t[i1] == 0 || ft[i2] == 0) zoo[i3] = 1
                        lim = 1000*1000
                        if (i3 == "bubble" && SS >= lim && i2 != "ASCENDED" && (i2 != "ASCENDED_RANDOM" || index(i1, "STRINGS")) && i2 != "LOW_VARIATION1")
-                           excl = excl "echo " i3 ";"
+                           zoo[i3] = 1
                        if (i3 == "selection" && SS >= lim)
-                           excl = excl "echo " i3 ";"
+                           zoo[i3] = 1
                        if (i3 == "array*1" && SS >= lim && i2 != "LOW_VARIATION1")
-                           excl = excl "echo '" i3 "';"
+                           zoo[i3] = 1
                        if (i3 == "array*2" && SS >= lim && (i2 == "LOW_VARIATION2" || (index(i2, "SCENDED_RANDOM") || index(i2,  "DESCENDED") || i2 == "LOW_VARIATION100") && index(i1, "STRINGS")))
-                           excl = excl "echo '" i3 "';"
+                           zoo[i3] = 1
                        if (i3 == "array*3" && SS >= lim && (i2 == "LOW_VARIATION2"|| (index(i2, "SCENDED_RANDOM") || index(i2,  "DESCENDED") || i2 == "LOW_VARIATION100") && index(i1, "STRINGS")))
-                           excl = excl "echo '" i3 "';"
+                           zoo[i3] = 1
                        if (i3 == "array*5" && SS >= lim && (i2 == "LOW_VARIATION2"|| (index(i2,  "SCENDED_RANDOM") || index(i2,  "DESCENDED") || i2 == "LOW_VARIATION100") && index(i1, "STRINGS")))
-                           excl = excl "echo '" i3 "';"
+                           zoo[i3] = 1
                        if (i3 == "array*7" && SS >= lim && (i2 == "LOW_VARIATION2"|| (index(i2,  "SCENDED_RANDOM") || index(i2,  "DESCENDED") || i2 == "LOW_VARIATION100") && index(i1, "STRINGS")))
-                           excl = excl "echo '" i3 "';"
+                           zoo[i3] = 1
                        if (i3 == "hashbt" && SS >= lim && (index(i2, "SCENDED_RANDOM")))
-                           excl = excl "echo '" i3 "';"
+                           zoo[i3] = 1
                        if (i3 == "qsort_hoare" && SS >= lim && i2 == "SLOW_QSORT_HOARE")
-                           excl = excl "echo '" i3 "';"
+                           zoo[i3] = 1
                        if (i3 == "qsort_hoare2" && SS >= lim && i2 == "SLOW_QSORT_HOARE")
-                           excl = excl "echo '" i3 "';"
+                           zoo[i3] = 1
                        if (i3 == "qsort_no_pivot" && SS >= lim && (i2 == "ASCENDED" || i2 == "DESCENDED" || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "SLOW_QSORT_HOARE" && index(i1, "STRINGS")))
-                           excl = excl "echo '" i3 "';"
+                           zoo[i3] = 1
                        if (i3 == "qsort_lomuto" && SS >= lim && (index(i2, "SCENDED") || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "SLOW_QSORT_HOARE" && index(i1, "STRINGS")))
-                           excl = excl "echo '" i3 "';"
+                           zoo[i3] = 1
                        if (i3 == "hash" && SS >= lim && index(i1, "STRINGS") && (i2 == "ASCENDED_RANDOM" || i2 == "LOW_VARIATION100" || i2 == "LOW_VARIATION2"))
-                           excl = excl "echo '" i3 "';"
+                           zoo[i3] = 1
+                       if (i3 == "radix8" && SS >= lim && index(i1, "_LONG"))
+                           zoo[i3] = 1
 
                        lim = 1000*10000
                        if (i3 == "bubble" && SS >= lim && i2 != "ASCENDED" && i2 != "LOW_VARIATION1")
-                           excl = excl "echo " i3 ";"
+                           zoo[i3] = 1
+                       for (x in zoo)
+                           excl = excl "echo " x ";"
                    }
+                   if (length(zoo) == length(ss)) continue
                    if (excl != "")
                        excl = "(" excl ")|grep -vwFf -"
                    else

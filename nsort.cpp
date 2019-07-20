@@ -99,9 +99,9 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #endif
 
 #include "oms7.cpp"
-#include "insertion.cpp"
 #include "baseop.cpp"
 #include "fillings.cpp"
+#include "insertion.cpp"
 #include "tim.cpp"
 #include "std.cpp"
 #include "boost.cpp"

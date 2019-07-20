@@ -17,10 +17,7 @@
 
 using namespace std;
 
-#ifndef PASSES
 #define PASSES 1
-#endif
-
 #define INT1P4
 
 #define LOW_VARIATION2
@@ -88,8 +85,6 @@ int main() {
     fill(v);
     for (int i = 0; i < SS; ++i) v[i].v[0] = i;
 
-    int passes = PASSES;
-L:
     test<X>(v, bind(shell1<X>, placeholders::_1), "shell_a3n");
     test<X>(v, bind(shell3<X>, placeholders::_1), "shell_10/3");
     test<X>(v, bind(shell2<X>, placeholders::_1, 0), "shell_prime_e");
@@ -152,10 +147,7 @@ L:
     test<X>(v, bind(hashbt_sort2<X>, placeholders::_1), "hashbt");
     test<X>(v, bind(hashbt_sort_boost<X>, placeholders::_1), "hashbt_boost");
 
-    if (--passes) goto L;
-
     cerr << "zok\t" << SS << ' ' <<  typeid(X).name() << "\n";
-    //for (int i = 0; i < SS; ++i) cout << v[i] << '\n';
     return 0;
 }
 

@@ -80,6 +80,10 @@ BEGIN {
                    delete zoo
                    for (i3 in ss) {
                        if (ss[i3] == 0 || t[i1] == 0 || ft[i2] == 0) zoo[i3] = 1
+                       lim = 100*1000
+                       if (i3 == "radix8" && SS >= lim && index(i1, "_LONG") && i2 == "RANDOM")
+                           zoo[i3] = 1
+
                        lim = 1000*1000
                        if (i3 == "bubble" && SS >= lim && i2 != "ASCENDED" && (i2 != "ASCENDED_RANDOM" || index(i1, "STRINGS")) && i2 != "LOW_VARIATION1")
                            zoo[i3] = 1
@@ -107,16 +111,16 @@ BEGIN {
                            zoo[i3] = 1
                        if (i3 == "hash" && SS >= lim && index(i1, "STRINGS") && (i2 == "ASCENDED_RANDOM" || i2 == "LOW_VARIATION100" || i2 == "LOW_VARIATION2"))
                            zoo[i3] = 1
-                       if (i3 == "radix8" && SS >= lim && index(i1, "_LONG"))
+                       if (i3 == "radix8_msb" && SS >= lim && index(i1, "_LONG") && i2 == "RANDOM")
                            zoo[i3] = 1
 
                        lim = 1000*10000
                        if (i3 == "bubble" && SS >= lim && i2 != "ASCENDED" && i2 != "LOW_VARIATION1")
                            zoo[i3] = 1
-                       for (x in zoo)
-                           excl = excl "echo " x ";"
                    }
                    if (length(zoo) == length(ss)) continue
+                   for (x in zoo)
+                       excl = excl "echo " x ";"
                    if (excl != "")
                        excl = "(" excl ")|grep -vwFf -"
                    else
@@ -126,7 +130,7 @@ BEGIN {
                    if (SS <= 1000) passes = 10
                    else if (SS <= 10000) passes = 4
                    else if (SS <= 100000) passes = 2
-                   print excl "touch always.cpp;EXTRA=\"-D" i1 " -D" i2 " -DSS=" SS " -DPASSES=" passes "\" make && nsort2 >>results/" nSS "-" i1 "-" i2 " || echo ERROR!!!!!"
+                   print excl "touch always.cpp;EXTRA=\"-D" i1 " -D" i2 " -DSS=" SS " -DPASSES=" passes " FNP=nsort2 make && nsort2 >>results/" nSS "-" i1 "-" i2 " || echo ERROR!!!!!"
                }
         }
         print "echo ok"

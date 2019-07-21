@@ -1,10 +1,9 @@
 CXXFLAGS = -O3 $(EXTRA)
 LDFLAGS = -lstdc++ -lbsd
-FN = nsort2
 
-$(FN): $(FN).o
+$(FNP): $(FNP).o
 
-$(FN).o: $(FN).cpp $(wildcard [^z]*.cpp)
+$(FNP).o: $(FNP).cpp $(wildcard [^z]*.cpp)
 
 clean:
-	rm -f *.o $(FN) always.cpp
+	rm -f *.o $(FNP) always.cpp

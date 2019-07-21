@@ -193,7 +193,7 @@ L:
     test<X>(v, bind(qsort2<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
     test<X>(v, bind(qsort3<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
     test<X>(v, bind(qsort4<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");
-    test<X>(fio, v, bind(dualPivotQuicksort<X>, placeholders::_1), "qsort_dualpivot");
+    test<X>(v, bind(dualPivotQuicksort<X>, placeholders::_1), "qsort_dualpivot");
     test<X>(v, bind(stl_sort<X>, placeholders::_1), "stlsort");
     test<X>(v, bind(stl_stable_sort<X>, placeholders::_1), "stlstable");
 

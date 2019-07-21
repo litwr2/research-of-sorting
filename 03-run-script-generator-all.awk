@@ -82,7 +82,7 @@ BEGIN {
            else if (SS <= 10) passes = 5
            else if (SS <= 11) passes = 3
            else if (SS <= 12) passes = 2
-           print excl "touch always.cpp;EXTRA=\"-D" i1 " -DSS=" SS " -DPASSES=" passes " FNP=nsort2-all make && nsort-all2 >>results/" SS "-" i1 " || echo ERROR!!!!!"
+           print excl "touch always.cpp;EXTRA=\"-D" i1 " -DSS=" SS " -DPASSES=" passes "\" FNP=nsort-all2 make && nsort-all2 >>results-all/" SS "-" i1 " || echo ERROR!!!!!"
            }
         print "echo ok"
 }

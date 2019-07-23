@@ -8,6 +8,6 @@
 
 END {
     split(FILENAME, a, "-")
-    for (i in b) printf "%16s %12.1f %s %s %s %d %d %.2f\n", i, b[i]/c[i], a[1], a[2], a[3], c[i], max[i] - min[i], (max[i] - min[i])*100./b[i]*c[i]
+    for (i in b) printf "%16s %14.1f %s %s %s %d %d %.2f\n", i, b[i]/c[i], a[1], a[2], a[3], c[i], max[i] - min[i], (max[i] - min[i])*100./b[i]*c[i]
 }
 

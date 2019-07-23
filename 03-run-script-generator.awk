@@ -72,7 +72,7 @@ BEGIN {
 	ft["LOW_VARIATION100"] = 1
 	ft["SLOW_QSORT_HOARE"] = 1
 
-	for (SS = 1000; SS <= 100*1000; SS *= 10) {
+	for (SS = 1000*1000; SS <= 1000*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {
@@ -88,6 +88,8 @@ BEGIN {
                        if (i3 == "bubble" && SS >= lim && i2 != "ASCENDED" && (i2 != "ASCENDED_RANDOM" || index(i1, "STRINGS")) && i2 != "LOW_VARIATION1")
                            zoo[i3] = 1
                        if (i3 == "selection" && SS >= lim)
+                           zoo[i3] = 1
+                       if (i3 == "insertion" && SS >= lim)
                            zoo[i3] = 1
                        if (i3 == "array*1" && SS >= lim && i2 != "LOW_VARIATION1")
                            zoo[i3] = 1
@@ -120,9 +122,9 @@ BEGIN {
                    }
                    if (length(zoo) == length(ss)) continue
                    for (x in zoo)
-                       excl = excl "echo " x ";"
+                       excl = excl "echo '\"" x "\"';"
                    if (excl != "")
-                       excl = "(" excl ")|grep -vwFf -"
+                       excl = "(" excl ")|grep -vFf -"
                    else
                        excl = "cat"
                    excl = excl " nsort.cpp >nsort2.cpp;"

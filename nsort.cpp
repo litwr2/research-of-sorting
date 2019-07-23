@@ -12,7 +12,7 @@
 #include <chrono>
 #include <string>
 #include <functional>
-#include <climits>
+#include <limits>
 #include <cstring>
 
 using namespace std;
@@ -155,7 +155,7 @@ size_t test(fstream &fio, vector<const char*> &v, function<void(vector<const cha
     auto te = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     check(v);
     if (title[0] == 'Z') goto L;
-    cout << setw(16) << left << title << setw(12) << right << te - ts << endl;
+    cout << setw(16) << left << title << setw(14) << right << te - ts << endl;
 L:
     fio.seekg(0);
     fio.read(reinterpret_cast<char*>(&v[0]), SS*sizeof(char*));

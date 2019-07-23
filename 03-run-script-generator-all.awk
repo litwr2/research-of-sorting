@@ -7,14 +7,14 @@ BEGIN {
     ss["shell_prime_10/3"] = 1
     ss["shell_a102549m"] = 1
     ss["shell_2.25"] = 1
-    ss["radix8"] = 0
-    ss["radix11"] = 0
-    ss["radix16"] = 0
+    ss["radix8"] = 1
+    ss["radix11"] = 1
+    ss["radix16"] = 1
     ss["radix8_msb"] = 1
     ss["radix11_msb"] = 1
     ss["radix16_msb"] = 1
     ss["shell_10/3_oms7"] = 1
-    ss["radix8_oms7"] = 0
+    ss["radix8_oms7"] = 1
     ss["radix8_msb_oms7"] = 1
     ss["heapsort_stl"] = 1
     ss["radix_bsd"] = 1
@@ -41,9 +41,9 @@ BEGIN {
     ss["tree_boost"] = 1
     ss["array*1"] = 1
     ss["array*2"] = 1
-    ss["array*3"] = 1
-    ss["array*5"] = 1
-    ss["array*7"] = 1
+    ss["array*3"] = 0
+    ss["array*5"] = 0
+    ss["array*7"] = 0
     ss["hash"] = 1
     ss["hashbt_std"] = 1
     ss["hashbt"] = 1
@@ -55,19 +55,24 @@ BEGIN {
 	t["INT64"] = 1
 	t["INT128"] = 1
 	t["FLOAT"] = 1
-	t["STRINGS"] = 1
-	t["CSTRINGS"] = 1
+	t["STRINGS"] = 0
+	t["CSTRINGS"] = 0
 	t["STRINGS_SHORT"] = 1
 	t["CSTRINGS_SHORT"] = 1
-	t["STRINGS_LONG"] = 1
-	t["CSTRINGS_LONG"] = 1
+	t["STRINGS_LONG"] = 0
+	t["CSTRINGS_LONG"] = 0
 
-	for (SS = 7; SS <= 12; ++SS)
+	for (SS = 7; SS <= 11; ++SS)
        for (i1 in t) {
            excl = ""
            delete zoo
            for (i3 in ss) {
                if (ss[i3] == 0 || t[i1] == 0) zoo[i3] = 1
+               if (SS > 7 && i3 == "radix16") zoo[i3] = 1
+               if (SS > 8 && i3 == "radix11") zoo[i3] = 1
+               if (SS > 8 && i3 == "flat_stable") zoo[i3] = 1
+               if (SS > 9 && i3 == "radix8") zoo[i3] = 1
+               if (SS > 9 && i3 == "radix8_oms7") zoo[i3] = 1
            }
            for (x in zoo)
                excl = excl "echo " x ";"
@@ -78,11 +83,12 @@ BEGIN {
                excl = "cat"
            excl = excl " nsort-all.cpp >nsort-all2.cpp;"
            passes = 1
-           if (SS <= 9) passes = 10
-           else if (SS <= 10) passes = 5
-           else if (SS <= 11) passes = 3
+           if (SS <= 9) passes = 2
+           else if (SS <= 10) passes = 2
+           else if (SS <= 11) passes = 2
            else if (SS <= 12) passes = 2
-           print excl "touch always.cpp;EXTRA=\"-D" i1 " -DSS=" SS " -DPASSES=" passes "\" FNP=nsort-all2 make && nsort-all2 >>results-all/" SS "-" i1 " || echo ERROR!!!!!"
+           repeats = 2
+           print excl "touch always.cpp;EXTRA=\"-DREPEATS=" repeats " -D" i1 " -DSS=" SS " -DPASSES=" passes "\" FNP=nsort-all2 make && nsort-all2 >>results-all/" SS "-" i1 " || echo ERROR!!!!!"
            }
         print "echo ok"
 }

@@ -13,6 +13,7 @@
 #include <string>
 #include <functional>
 #include <climits>
+#include <limits>
 #include <cstring>
 
 using namespace std;
@@ -33,14 +34,16 @@ using namespace std;
 //#define CSTRINGS_LONG
 
 #ifndef SS
-#define SS 11
+#define SS 8
 #endif
+
+#define RDTSC
 
 #define LOW_VARIATION_CONST 0 //fake definition for the filling module
 #define RANDOM  //fake definition for the filling module
 
 #ifndef REPEATS
-#define REPEATS 1
+#define REPEATS 2
 #endif
 
 #if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS) + defined(CSTRINGS_SHORT) + defined(CSTRINGS_LONG) + defined(STRINGS_SHORT) + defined(STRINGS_LONG) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) > 1
@@ -81,6 +84,11 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #error This type is not known
 #endif
 
+ostream& operator<<(ostream& os, const __int128 &v) {
+    os << (size_t)(v >> 96) << ':' << (size_t)((v >> 64) & 0xffff'ffff)  << ':' << (size_t)((v >> 32) & 0xffff'ffff) << ':' << (size_t)(v & 0xffff'ffff);
+    return os;
+}
+
 #include "oms7.cpp"
 #include "baseop.cpp"
 #include "fillings.cpp"
@@ -101,10 +109,9 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "bubble.cpp"
 #include "selection.cpp"
 
-X v;
-
-template<class T> void sort_stub(vector<T> &a) {
-    for (auto i: a) i = v;
+template<class T>
+void dummy(vector<T>& v) {
+    v[1] = v[0];
 }
 
 template<class T>
@@ -119,29 +126,55 @@ void check(vector<const char*>& v) {
         if (strcmp(v[i - 1], v[i]) > 0) exit(2);
 }
 
-double adjustment;
-
 template<class T>
-double test(vector<T> &v, function<void(vector<T>&)> f, const char *title) {
-    size_t total = 0, counter = 0;
-    auto vs = v;
+void test(vector<T> &v, function<void(vector<T>&)> f, const char *title) {
+    int MXD = 32/(1 << (v.size() - 7));
+    if (MXD == 0) ++MXD;
+    size_t total = 0, counter = 0, maxda[MXD] = {}, maxd = 0, mind = numeric_limits<size_t>::max();
+    auto vs = v, vx = v, maxv = v;
+    double adjustment = 0;
     do {
-        counter++;
-        auto ts = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-        if (title[0] == 'Z')
+        for (int cl = 0; cl < MXD; ++cl) {
+            counter++;
+#ifndef RDTSC
+            auto ts = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+#else
+            auto ts = rdtsc();
+#endif
+            for (unsigned n = 0; n < 10; ++n)
+                dummy(vx = vs);
+#ifndef RDTSC
+            adjustment += std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - ts;
+            ts = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+#else
+            adjustment += rdtsc() - ts;
+            ts = rdtsc();
+#endif
             for (unsigned n = 0; n < REPEATS; ++n)
-                f(v);
-        else
-            for (unsigned n = 0; n < REPEATS; ++n)
+                //f(vx);
                 f(v = vs);
-        total += std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - ts;
-        if (title[0] != 'Z')
+#ifndef RDTSC
+            auto d = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - ts;
+#else
+            auto d = rdtsc() - ts;
+#endif
+            total += d;
+            if (d < mind) mind = d;
+            if (d > maxda[cl]) maxda[cl] = d;
             check(v);
-    }
-    while (next_permutation(vs.begin(), vs.end()));
+        }
+        int z = maxda[0];
+        for (int i = 1; i < MXD; ++i)
+            if (z > maxda[i]) z = maxda[i];
+        if (maxd < z) maxd = z, maxv = vs;
+        maxda[0] = maxda[1] = 0;
+    } while (next_permutation(vs.begin(), vs.end()));
     v = vs;
-    if (title[0] == 'Z') return (long double)total/counter/REPEATS;
-    cout << setw(16) << left << title << right << setw(11) << fixed << setprecision(2) << (long double)total/counter/REPEATS - adjustment << endl;
+    if (title[0] != 'Z') {
+        cout << setw(16) << left << title << right << setw(11) << fixed << setprecision(2) << ((long double)total/REPEATS - adjustment/10.)/counter << ' ' << double(mind)/REPEATS  - adjustment/10./counter << ' ' << double(maxd)/REPEATS - adjustment/10./counter << ' ' << adjustment/10./counter;
+        for (int i = 0; i < SS - 1; ++i) cout << ' ' << maxv[i];
+        cout << ' ' << maxv[SS - 1] << endl;
+    }
 }
 
 int main() {
@@ -150,9 +183,7 @@ int main() {
     for (int i = 0; i < SS; ++i) v[i] = cnv<X>(i);
     double adjustment_sum = 0;
     for (int i = 0; i < 10; ++i)
-        adjustment_sum += test<X>(v, bind(sort_stub<X>, placeholders::_1), "Zstub");
-    adjustment = adjustment_sum/10;
-cout << adjustment << endl;
+        test<X>(v, bind(shell3<X>, placeholders::_1), "Z");
 
     int passes = PASSES;
 L:

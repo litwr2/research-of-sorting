@@ -72,7 +72,7 @@ BEGIN {
 	ft["LOW_VARIATION100"] = 1
 	ft["SLOW_QSORT_HOARE"] = 1
 
-	for (SS = 1000*1000; SS <= 1000*1000; SS *= 10) {
+	for (SS = 10000*1000; SS <= 10000*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {
@@ -118,6 +118,16 @@ BEGIN {
 
                        lim = 1000*10000
                        if (i3 == "bubble" && SS >= lim && i2 != "ASCENDED" && i2 != "LOW_VARIATION1")
+                           zoo[i3] = 1
+                       if (i3 == "array*2" && SS >= lim && index(i1, "STRINGS")  && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM"))
+                           zoo[i3] = 1
+                       if (i3 == "array*3" && SS >= lim index(i1, "STRINGS") && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM"))
+                           zoo[i3] = 1
+                       if (i3 == "array*5" && SS >= lim && index(i1, "STRINGS") && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM"))
+                           zoo[i3] = 1
+                       if (i3 == "array*7" && SS >= lim && index(i1, "STRINGS") && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM"))
+                           zoo[i3] = 1
+                       if (i3 == "hash" && SS >= lim && index(i1, "STRINGS") && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM"))
                            zoo[i3] = 1
                    }
                    if (length(zoo) == length(ss)) continue

@@ -111,7 +111,7 @@ template<> MsbRadix<const char*>::MsbRadix(vector<const char*> &a, int N) : a(a)
 }
 
 template<> void MsbRadix<const char*>::_radixsort_msb(const char **l, const char **r, int d) {
-    if (r - l <= 3) {
+    if (r - l <= 32) {
         _insertion_sort(l, r);
         return;
     }

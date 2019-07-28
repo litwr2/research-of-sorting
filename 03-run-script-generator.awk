@@ -106,18 +106,24 @@ BEGIN {
                        if (i3 == "radix8_msb" && SS >= lim && index(i1, "_LONG") && i2 == "RANDOM")
                            zoo[i3] = 1
 
-                       lim = 1000*10000
+                       lim = 10*1000*1000
                        if (i3 == "bubble" && SS >= lim && i2 != "ASCENDED" && i2 != "LOW_VARIATION1")
                            zoo[i3] = 1
-                       if ((i3 == "array*2" || i3 == "array*3" || i3 == "array*5" || i3 == "array*7") && SS >= lim && index(i1, "STRINGS")  && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM"))
+                       if ((i3 == "array*2" || i3 == "array*3" || i3 == "array*5" || i3 == "array*7") && SS >= lim && (index(i1, "STRINGS")  && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM") || index(i2, "SCENDED_RANDOM")))
                            zoo[i3] = 1
-                       if (i3 == "hash" && SS >= lim && index(i1, "STRINGS") && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM"))
+                       if (i3 == "hash" && SS >= lim && (index(i1, "STRINGS") && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM") || i2 == "LOW_VARIATION2" || i2 == "LOW_VARIATION100"))
                            zoo[i3] = 1
                        if ((i3 == "qsort_no_pivot" || i3 == "qsort_lomuto") && SS >= lim && (i2 == "LOW_VARIATION100" && index(i1, "STRINGS") || i2 == "SLOW_QSORT_HOARE"))
+                           zoo[i3] = 1
+                       if (index(i3, "LONG"))  // 8 MB RAM is not enough
                            zoo[i3] = 1
 
                        lim = 100*1000*1000
                        if ((i3 == "qsort_no_pivot" || i3 == "qsort_lomuto") && SS >= lim && i2 == "LOW_VARIATION100")
+                           zoo[i3] = 1
+                       if ((i3 == "array*2" || i3 == "array*3" || i3 == "array*5" || i3 == "array*7") && SS >= lim && i2 == "LOW_VARIATION100")
+                           zoo[i3] = 1
+                       if (index(i3, "STRING") && !index(i3, "SHORT"))  // 8 MB RAM is not enough
                            zoo[i3] = 1
                    }
                    if (length(zoo) == length(ss)) continue

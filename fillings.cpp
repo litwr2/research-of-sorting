@@ -106,7 +106,7 @@ template<class T> void fill(vector<T> &v) {
            static uint64_t sum = 0, cnt = 0;
            string s ="";
            int lim = rand()%(1 << 20) + 1;
-           if (cnt++ >= SS*256/((1 << 20) - 256) && sum + lim > 512*cnt)
+           if (cnt++ >= (size_t)SS*256/((1 << 20) - 256) && sum + lim > 512*cnt)
                lim = min(lim, rand()%256 + 1);
            sum += lim;
            for (int i = 0; i < lim; ++i)
@@ -120,7 +120,7 @@ template<class T> void fill(vector<T> &v) {
        v.push_back([]{
            static uint64_t sum = 0, cnt = 0;
            int lim = rand()%(1 << 20) + 1;
-           if (cnt++ >= SS*256/((1 << 20) - 256) && sum + lim > 512*cnt)
+           if (cnt++ >= (size_t)SS*256/((1 << 20) - 256) && sum + lim > 512*cnt)
                lim = min(lim, rand()%256 + 1);
            sum += lim;
            char *s = new char[lim + 1];

@@ -1,9 +1,37 @@
-var M = 4 //max index
+var M = 5 //max index
 
 function precRound(n) {
-    if (precision == 0)
-        return n
-    return Math.round(n*precision)/precision
+    var t = n
+    var s
+    if (precision)
+        t = Math.round(n*precision)/precision
+    var s = t.toString()
+    var dotp = s.indexOf('.')
+    var afterdot = ''
+    if (dotp != -1) {
+        afterdot = s.slice(dotp)
+        s = s.slice(0, dotp)
+        if (precision)
+            while (afterdot.length - 1 < Math.log10(precision))
+                afterdot += '0'
+    } else if (precision > 1) {
+        afterdot = '.'
+        while (afterdot.length - 1 < Math.log10(precision))
+            afterdot += '0'
+    }
+    var r = ''
+    while (s.length > 3) {
+        var n = s.length%3
+        if (n == 0) n = 3
+        r += s.slice(0, n)
+        s = s.slice(n)
+        if (s.length > 0)
+            r += "'"
+    }
+    r += s
+    if (r == '') r = '0'
+    return r + afterdot
+    //return t
 }
 
 function changeCheck(s) {
@@ -57,7 +85,7 @@ function drawTable1() {
     var n = 0
     for (i = 0; i < ta.length; i++) {
         var os = document.getElementById("optionSel").value
-        if (typeof(ta[i][1]) == "number" && (os == 0 || os == 1 && ta[i][0] in marked || os > 1 && indexSorted[os - 2].indexOf(ta[i][0]) != -1)) {
+        if (typeof(ta[i][1]) == "number" && (os == 0 || os == 1 && ta[i][0] in marked || os == 2 && i < 7 || os > 2 && indexSorted[os - 3].indexOf(ta[i][0]) != -1)) {
             text += "<tr><td align=center>" + (++n) + "<input id=" + ta[i][0] + " type=checkbox "
             if (ta[i][0] in marked) text += "checked "
             text += "onclick=changeCheck(\"" + ta[i][0] + "\")><td>" + ta[i][0]
@@ -77,48 +105,104 @@ function drawTable1() {
 function DataAvg() {
     var sum = 0
     var cnt = 0
-    for (var sortm in Data1[order[0]][type[0]])
-        for (var i = 0; i < M; ++i) {
-            var os = document.getElementById("optionSel").value
-            if (typeof(Data[order[0]][type[0]][sortm][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os > 1 && indexSorted[os - 2].indexOf(sortm) != -1)) {
-                sum += Data[order[0]][type[0]][sortm][i]
+    var ta = []
+    for (sortm in Data[order[0]][type[0]]) {
+        var el = [ sortm ]
+        for (var k = 0; k < M; ++k)
+            el.push(Data[order[0]][type[0]][sortm][k])
+        ta.push(el)
+    }
+    if (sortOrder[0] != 0)
+        ta.sort(function(a, b){ if (a[0] > b[0]) return sortOrder[0]; if (a[0] < b[0]) return -sortOrder[0]; return 0 })
+    for (i = 1; i <= M; ++i)
+        if (sortOrder[i] != 0)
+            ta.sort(function(a, b){ return sortCompare(a, b, i) })
+    var os = document.getElementById("optionSel").value
+    for (var k = 0; k < ta.length; k++) {
+        var sortm = ta[k][0]
+        for (var i = 1; i < M; ++i) {
+            if (typeof(ta[k][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os == 2 && k < 7 || os > 2 && indexSorted[os - 3].indexOf(sortm) != -1)) {
+                sum += ta[k][i]
                 cnt++
             }
         }
+    }
     return sum/cnt
 }
 
 function DataMedian() {
+    var ta = []
     var vector = []
-    for (var sortm in Data1[order[0]][type[0]])
-        for (i = 0; i < M; ++i) {
-            var os = document.getElementById("optionSel").value
-            if (typeof(Data[order[0]][type[0]][sortm][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os > 1 && indexSorted[os - 2].indexOf(sortm) != -1))
-                vector.push(Data[order[0]][type[0]][sortm][i])
+    for (sortm in Data[order[0]][type[0]]) {
+        var el = [ sortm ]
+        for (var k = 0; k < M; ++k)
+            el.push(Data[order[0]][type[0]][sortm][k])
+        ta.push(el)
+    }
+    if (sortOrder[0] != 0)
+        ta.sort(function(a, b){ if (a[0] > b[0]) return sortOrder[0]; if (a[0] < b[0]) return -sortOrder[0]; return 0 })
+    for (i = 1; i <= M; ++i)
+        if (sortOrder[i] != 0)
+            ta.sort(function(a, b){ return sortCompare(a, b, i) })
+    var os = document.getElementById("optionSel").value
+    for (var k = 0; k < ta.length; k++) {
+        var sortm = ta[k][0]
+        for (var i = 1; i < M; ++i) {
+            if (typeof(ta[k][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os == 2 && k < 7 || os > 2 && indexSorted[os - 3].indexOf(sortm) != -1))
+                vector.push(ta[k][i])
         }
+    }
     vector.sort(function(a, b){ if (typeof(a) == "string") return 1; if (typeof(b) == "string") return -1; return a - b })
     return vector[Math.round(vector.length/2)]
 }
 
 function DataMin() {
     var min = 1 << 30
-    for (var sortm in Data1[order[0]][type[0]])
-        for (i = 0; i < M; ++i) {
-            var os = document.getElementById("optionSel").value
-            if (typeof(Data[order[0]][type[0]][sortm][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os > 1 && indexSorted[os - 2].indexOf(sortm) != -1) && Data[order[0]][type[0]][sortm][i] < min)
-                min = Data[order[0]][type[0]][sortm][i]
+    var ta = []
+    for (sortm in Data[order[0]][type[0]]) {
+        var el = [ sortm ]
+        for (var k = 0; k < M; ++k)
+            el.push(Data[order[0]][type[0]][sortm][k])
+        ta.push(el)
+    }
+    if (sortOrder[0] != 0)
+        ta.sort(function(a, b){ if (a[0] > b[0]) return sortOrder[0]; if (a[0] < b[0]) return -sortOrder[0]; return 0 })
+    for (i = 1; i <= M; ++i)
+        if (sortOrder[i] != 0)
+            ta.sort(function(a, b){ return sortCompare(a, b, i) })
+    var os = document.getElementById("optionSel").value
+    for (var k = 0; k < ta.length; k++) {
+        var sortm = ta[k][0]
+        for (var i = 1; i < M; ++i) {
+            if (typeof(ta[k][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os == 2 && k < 7 || os > 2 && indexSorted[os - 3].indexOf(sortm) != -1) && ta[k][i] < min)
+                min = ta[k][i]
         }
+    }
     return min
 }
 
 function DataMax() {
     var max = 0
-    for (var sortm in Data1[order[0]][type[0]])
-        for (i = 0; i < M; ++i) {
-            var os = document.getElementById("optionSel").value
-            if (typeof(Data[order[0]][type[0]][sortm][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os > 1 && indexSorted[os - 2].indexOf(sortm) != -1) && Data[order[0]][type[0]][sortm][i] > max)
-                max = Data[order[0]][type[0]][sortm][i]
+    var ta = []
+    for (sortm in Data[order[0]][type[0]]) {
+        var el = [ sortm ]
+        for (var k = 0; k < M; ++k)
+            el.push(Data[order[0]][type[0]][sortm][k])
+        ta.push(el)
+    }
+    if (sortOrder[0] != 0)
+        ta.sort(function(a, b){ if (a[0] > b[0]) return sortOrder[0]; if (a[0] < b[0]) return -sortOrder[0]; return 0 })
+    for (i = 1; i <= M; ++i)
+        if (sortOrder[i] != 0)
+            ta.sort(function(a, b){ return sortCompare(a, b, i) })
+    var os = document.getElementById("optionSel").value
+    for (var k = 0; k < ta.length; k++) {
+        var sortm = ta[k][0]
+        for (var i = 1; i < M; ++i) {
+            if (typeof(ta[k][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os == 2 && k < 7 || os > 2 && indexSorted[os - 3].indexOf(sortm) != -1) && ta[k][i] > max)
+                max = ta[k][i]
         }
+    }
     return max
 }
 
@@ -141,7 +225,7 @@ function changeOptRel() {
 }
 
 function changeOptPrec() {
-    if (document.getElementById("optionsPrec").value > 0)
+    if (document.getElementById("optionsPrec").value < 4)
         precision = Math.pow(10, document.getElementById("optionsPrec").value);
     else
         precision = 0

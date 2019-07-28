@@ -143,6 +143,7 @@ L:
 #if !defined(STRINGS) && !defined(STRINGS_SHORT) && !defined(STRINGS_LONG)
     fio.read(reinterpret_cast<char*>(&v[0]), SS*sizeof(T));
 #else
+    for (int i = 0; i < SS; ++i) v[i].clear();
     for (int i = 0; i < SS; ++i) getline(fio, v[i]);
 #endif
     return te - ts;
@@ -172,13 +173,12 @@ int main() {
 #else
     for (int i = 0; i < SS; ++i) fio << v[i] << endl;
 #endif
-
     size_t eps, itv, tv = test<X>(fio, v, bind(shell3<X>, placeholders::_1), "Z"); //train gc & cache, it is just a delay
     do {
         itv = test<X>(fio, v, bind(shell3<X>, placeholders::_1), "Z");
-        eps = abs(int((double(itv)/tv - 1)*100));
+        eps = int(double(abs(itv - tv))/tv*100);
         tv = itv;
-    } while (eps > 2);
+    } while (eps > 10);
     int passes = PASSES;
 L:
     test<X>(fio, v, bind(shell1<X>, placeholders::_1), "shell_a3n");

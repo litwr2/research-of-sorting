@@ -19,7 +19,7 @@ void shell1(vector<T> &a) {
         swap(a[j + h], v);
         if (++i == a.size()) break;
         j = i;
-        v = a[i];
+        swap(v, a[i]);
      }
      h = (h - 1)/3;
   }

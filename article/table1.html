@@ -27,7 +27,7 @@ var indexSorted = [stdlibSorts, fastSteadySorts, shellSorts, quickSorts, arrayAn
 var order = ["RANDOM", "RANDOM"]
 var type = ["PLAININT", "PLAININT"]
 var marked = {}
-var precision = 10
+var precision = 1
 var optionRel = 0
 var sortOrder = [0, 0, 1, 0, 0, 0, 0, 0]
 var trans = [1, 1, -1]
@@ -42,23 +42,25 @@ var sbuttc = ["1 &#8594; 2", "2 &#8594; 1"]
 <span id=rel></span>
 precision:
 <select id=optionsPrec onchange=changeOptPrec()>
+<option value=0>0</option>
 <option value=1>1</option>
 <option value=2>2</option>
 <option value=3>3</option>
-<option value=0>unlimited</option>
+<option value=4>unlimited</option>
 </select>
 select:
 <select id=optionSel onchange=drawTable1()>
 <option value=0>all</option>
 <option value=1>marked</option>
-<option value=2>from known libraries</option>
-<option value=3>fast and steady</option>
-<option value=4>shell</option>
-<option value=5>quick</option>
-<option value=6>hash and array</option>
-<option value=7>radix</option>
-<option value=8>stable</option>
-<option value=9>slow</option>
+<option value=2>first 7</option>
+<option value=3>from known libraries</option>
+<option value=4>fast and steady</option>
+<option value=5>shell</option>
+<option value=6>quick</option>
+<option value=7>hash and array</option>
+<option value=8>radix</option>
+<option value=9>stable</option>
+<option value=10>slow</option>
 </select>
 
 <p>

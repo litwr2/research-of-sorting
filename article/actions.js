@@ -61,14 +61,13 @@ function sortCompare(a, b, i) {
     return (a[i] - b[i])*sortOrder[k]
 }
 
-function drawTable1() {
-    var i
-    var sortm
+function getTa(data) {
     var ta = []
-    for (sortm in Data1[order[0]][type[0]]) {
+    var sortm
+    for (sortm in data[order[0]][type[0]]) {
         var el = [ sortm ]
         for (var k = 0; k < M; ++k)
-            el.push(Data1[order[0]][type[0]][sortm][k])
+            el.push(data[order[0]][type[0]][sortm][k])
         ta.push(el)
     }
     if (sortOrder[0] != 0)
@@ -76,6 +75,11 @@ function drawTable1() {
     for (i = 1; i <= M; ++i)
         if (sortOrder[i] != 0)
             ta.sort(function(a, b){ return sortCompare(a, b, i) })
+    return ta
+}
+
+function drawTable1() {
+    var i
     var text = "<tr><th rowspan=2>#<th rowspan=2>Алгоритм<button onclick=changeOrd(0) style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[0] + 1] + "</button><th colspan=5>Размер данных"
     text += "<tr>"
     for (i = 0; i < M; ++i)
@@ -83,8 +87,9 @@ function drawTable1() {
             + "</sup><button onclick=changeOrd(" + (i + 1)
             + ") style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[i + 1] + 1] + "</button>"
     var n = 0
+    var ta = getTa(Data1)
+    var os = document.getElementById("optionSel").value
     for (i = 0; i < ta.length; i++) {
-        var os = document.getElementById("optionSel").value
         if (typeof(ta[i][1]) == "number" && (os == 0 || os == 1 && ta[i][0] in marked || os == 2 && i < 7 || os > 2 && indexSorted[os - 3].indexOf(ta[i][0]) != -1)) {
             text += "<tr><td align=center>" + (++n) + "<input id=" + ta[i][0] + " type=checkbox "
             if (ta[i][0] in marked) text += "checked "
@@ -105,18 +110,7 @@ function drawTable1() {
 function DataAvg() {
     var sum = 0
     var cnt = 0
-    var ta = []
-    for (sortm in Data[order[0]][type[0]]) {
-        var el = [ sortm ]
-        for (var k = 0; k < M; ++k)
-            el.push(Data[order[0]][type[0]][sortm][k])
-        ta.push(el)
-    }
-    if (sortOrder[0] != 0)
-        ta.sort(function(a, b){ if (a[0] > b[0]) return sortOrder[0]; if (a[0] < b[0]) return -sortOrder[0]; return 0 })
-    for (i = 1; i <= M; ++i)
-        if (sortOrder[i] != 0)
-            ta.sort(function(a, b){ return sortCompare(a, b, i) })
+    var ta = getTa(Data)
     var os = document.getElementById("optionSel").value
     for (var k = 0; k < ta.length; k++) {
         var sortm = ta[k][0]
@@ -131,26 +125,14 @@ function DataAvg() {
 }
 
 function DataMedian() {
-    var ta = []
+    var ta = getTa(Data)
     var vector = []
-    for (sortm in Data[order[0]][type[0]]) {
-        var el = [ sortm ]
-        for (var k = 0; k < M; ++k)
-            el.push(Data[order[0]][type[0]][sortm][k])
-        ta.push(el)
-    }
-    if (sortOrder[0] != 0)
-        ta.sort(function(a, b){ if (a[0] > b[0]) return sortOrder[0]; if (a[0] < b[0]) return -sortOrder[0]; return 0 })
-    for (i = 1; i <= M; ++i)
-        if (sortOrder[i] != 0)
-            ta.sort(function(a, b){ return sortCompare(a, b, i) })
     var os = document.getElementById("optionSel").value
     for (var k = 0; k < ta.length; k++) {
         var sortm = ta[k][0]
-        for (var i = 1; i < M; ++i) {
+        for (var i = 1; i < M; ++i)
             if (typeof(ta[k][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os == 2 && k < 7 || os > 2 && indexSorted[os - 3].indexOf(sortm) != -1))
                 vector.push(ta[k][i])
-        }
     }
     vector.sort(function(a, b){ if (typeof(a) == "string") return 1; if (typeof(b) == "string") return -1; return a - b })
     return vector[Math.round(vector.length/2)]
@@ -158,50 +140,26 @@ function DataMedian() {
 
 function DataMin() {
     var min = 1 << 30
-    var ta = []
-    for (sortm in Data[order[0]][type[0]]) {
-        var el = [ sortm ]
-        for (var k = 0; k < M; ++k)
-            el.push(Data[order[0]][type[0]][sortm][k])
-        ta.push(el)
-    }
-    if (sortOrder[0] != 0)
-        ta.sort(function(a, b){ if (a[0] > b[0]) return sortOrder[0]; if (a[0] < b[0]) return -sortOrder[0]; return 0 })
-    for (i = 1; i <= M; ++i)
-        if (sortOrder[i] != 0)
-            ta.sort(function(a, b){ return sortCompare(a, b, i) })
+    var ta = getTa(Data)
     var os = document.getElementById("optionSel").value
     for (var k = 0; k < ta.length; k++) {
         var sortm = ta[k][0]
-        for (var i = 1; i < M; ++i) {
+        for (var i = 1; i < M; ++i)
             if (typeof(ta[k][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os == 2 && k < 7 || os > 2 && indexSorted[os - 3].indexOf(sortm) != -1) && ta[k][i] < min)
                 min = ta[k][i]
-        }
     }
     return min
 }
 
 function DataMax() {
     var max = 0
-    var ta = []
-    for (sortm in Data[order[0]][type[0]]) {
-        var el = [ sortm ]
-        for (var k = 0; k < M; ++k)
-            el.push(Data[order[0]][type[0]][sortm][k])
-        ta.push(el)
-    }
-    if (sortOrder[0] != 0)
-        ta.sort(function(a, b){ if (a[0] > b[0]) return sortOrder[0]; if (a[0] < b[0]) return -sortOrder[0]; return 0 })
-    for (i = 1; i <= M; ++i)
-        if (sortOrder[i] != 0)
-            ta.sort(function(a, b){ return sortCompare(a, b, i) })
+    var ta = getTa(Data)
     var os = document.getElementById("optionSel").value
     for (var k = 0; k < ta.length; k++) {
         var sortm = ta[k][0]
-        for (var i = 1; i < M; ++i) {
+        for (var i = 1; i < M; ++i)
             if (typeof(ta[k][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os == 2 && k < 7 || os > 2 && indexSorted[os - 3].indexOf(sortm) != -1) && ta[k][i] > max)
                 max = ta[k][i]
-        }
     }
     return max
 }

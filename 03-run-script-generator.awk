@@ -72,7 +72,7 @@ BEGIN {
 	ft["LOW_VARIATION100"] = 1
 	ft["SLOW_QSORT_HOARE"] = 1
 
-	for (SS = 10000*1000; SS <= 10000*1000; SS *= 10) {
+	for (SS = 100*1000*1000; SS <= 100*1000*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {
@@ -109,24 +109,29 @@ BEGIN {
                        lim = 10*1000*1000
                        if (i3 == "bubble" && SS >= lim && i2 != "ASCENDED" && i2 != "LOW_VARIATION1")
                            zoo[i3] = 1
-                       if ((i3 == "array*2" || i3 == "array*3" || i3 == "array*5" || i3 == "array*7") && SS >= lim && (index(i1, "STRINGS")  && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM") || index(i2, "SCENDED_RANDOM")))
+                       if ((i3 == "array*2" || i3 == "array*3" || i3 == "array*5" || i3 == "array*7") && SS >= lim && (index(i1, "STRING")  && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM") || index(i2, "SCENDED_RANDOM")))
                            zoo[i3] = 1
-                       if (i3 == "hash" && SS >= lim && (index(i1, "STRINGS") && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM") || i2 == "LOW_VARIATION2" || i2 == "LOW_VARIATION100"))
+                       if (i3 == "hash" && SS >= lim && (index(i1, "STRING") && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM") || i2 == "LOW_VARIATION2" || i2 == "LOW_VARIATION100"))
                            zoo[i3] = 1
                        if ((i3 == "qsort_no_pivot" || i3 == "qsort_lomuto") && SS >= lim && (i2 == "LOW_VARIATION100" && index(i1, "STRINGS") || i2 == "SLOW_QSORT_HOARE"))
                            zoo[i3] = 1
-                       if (index(i3, "LONG"))  // 8 MB RAM is not enough
-                           zoo[i3] = 1
+                       if (SS >= lim && index(i1, "LONG"))
+                           zoo[i3] = 1  # 8 MB RAM is not enough
 
                        lim = 100*1000*1000
+                       if (SS >= lim && i1 == "STRINGS")
+                           zoo[i3] = 1  # 8 MB RAM is not enough
                        if ((i3 == "qsort_no_pivot" || i3 == "qsort_lomuto") && SS >= lim && i2 == "LOW_VARIATION100")
                            zoo[i3] = 1
                        if ((i3 == "array*2" || i3 == "array*3" || i3 == "array*5" || i3 == "array*7") && SS >= lim && i2 == "LOW_VARIATION100")
                            zoo[i3] = 1
-                       if (index(i3, "STRING") && !index(i3, "SHORT"))  // 8 MB RAM is not enough
-                           zoo[i3] = 1
+                       if (SS >= lim && index(i3, "hashbt"))
+                           zoo[i3] = 1  # 8 MB RAM is not enough
+                       if (SS >= lim && index(i1, "STRING") && !index(i1, "SHORT"))
+                           zoo[i3] = 1  # 8 MB RAM is not enough
                    }
                    if (length(zoo) == length(ss)) continue
+                   printf "\n# %s %s %s ", nSS, i1, i2; for(x in ss) dbg_ssc[x] = 1;for(x in zoo)delete dbg_ssc[x];delete dbg_sss;n=1;for(x in dbg_ssc)dbg_sss[n++]=x;asort(dbg_sss);for(x = 1; x < n; ++x) printf "%s ", dbg_sss[x]; printf "\n"
                    for (x in zoo)
                        excl = excl "echo '\"" x "\"';"
                    if (excl != "")

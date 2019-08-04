@@ -1,4 +1,4 @@
-var M = 5 //max index
+var M = 6 //max index
 
 function precRound(n) {
     var t = n
@@ -31,7 +31,6 @@ function precRound(n) {
     r += s
     if (r == '') r = '0'
     return r + afterdot
-    //return t
 }
 
 function changeCheck(s) {
@@ -210,7 +209,7 @@ function drawActionTable1() {
                 text += " selected"
             text += ">" + sv + "</option>"
         }
-        text += "</select>" 
+        text += "</select>"
 
         if (duoMode[i] == 1) {
             text += " / "
@@ -266,10 +265,7 @@ function changeOptAll() {
 }
 
 function changeRow(n) {
-    if (duoMode[n] == 0)
-        duoMode[n] = 1
-    else
-        duoMode[n] = 0
+    duoMode[n] = !duoMode[n]
     for (var i = 0; i < 2; ++i)
         if (i != n)
             duoMode[i] = 0

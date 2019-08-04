@@ -173,12 +173,13 @@ int main() {
 #else
     for (int i = 0; i < SS; ++i) fio << v[i] << endl;
 #endif
+    auto tp = chrono::steady_clock::now() + chrono::seconds(10);
     size_t eps, itv, tv = test<X>(fio, v, bind(shell3<X>, placeholders::_1), "Z"); //train gc & cache, it is just a delay
     do {
         itv = test<X>(fio, v, bind(shell3<X>, placeholders::_1), "Z");
         eps = int(double(abs(itv - tv))/tv*100);
         tv = itv;
-    } while (eps > 10);
+    } while (eps > 10 && chrono::steady_clock::now() < tp);
     int passes = PASSES;
 L:
     test<X>(fio, v, bind(shell1<X>, placeholders::_1), "shell_a3n");
@@ -189,6 +190,10 @@ L:
     test<X>(fio, v, bind(shell2<X>, placeholders::_1, 4), "shell_prime_10/3");
     test<X>(fio, v, bind(shell2<X>, placeholders::_1, 5), "shell_a102549m");
     test<X>(fio, v, bind(shell2<X>, placeholders::_1, 5), "shell_2.25");
+
+    test<X>(fio, v, bind(bubble_sort<X>, placeholders::_1), "bubble");
+    test<X>(fio, v, bind(selection_sort<X>, placeholders::_1), "selection");
+    test<X>(fio, v, bind(insertion_sort<X>, placeholders::_1), "insertion");
 
 #if !defined(FLOAT)
     test<X>(fio, v, bind(radixsort<X>, placeholders::_1, 8), "radix8");
@@ -231,13 +236,6 @@ L:
     test<X>(fio, v, bind(spinsort<X>, placeholders::_1), "spin");
     test<X>(fio, v, bind(flat_stable_sort<X>, placeholders::_1), "flat_stable");
 
-    test<X>(fio, v, bind(bubble_sort<X>, placeholders::_1), "bubble");
-    test<X>(fio, v, bind(selection_sort<X>, placeholders::_1), "selection");
-    test<X>(fio, v, bind(insertion_sort<X>, placeholders::_1), "insertion");
-
-    test<X>(fio, v, bind(tree_sort_stl<X>, placeholders::_1), "tree_stl");
-    test<X>(fio, v, bind(tree_sort_boost<X>, placeholders::_1), "tree_boost");
-
     test<X>(fio, v, bind(array_sort<X>, placeholders::_1, 1), "array*1");
     test<X>(fio, v, bind(array_sort<X>, placeholders::_1, 2), "array*2");
     test<X>(fio, v, bind(array_sort<X>, placeholders::_1, 3), "array*3");
@@ -245,8 +243,12 @@ L:
     test<X>(fio, v, bind(array_sort<X>, placeholders::_1, 7), "array*7");
 
     test<X>(fio, v, bind(hash_sort<X>, placeholders::_1), "hash");
-    test<X>(fio, v, bind(hashbt_sort_std<X>, placeholders::_1), "hashbt_std");
+
+    test<X>(fio, v, bind(tree_sort_stl<X>, placeholders::_1), "tree_stl");
+    test<X>(fio, v, bind(tree_sort_boost<X>, placeholders::_1), "tree_boost");
+
     test<X>(fio, v, bind(hashbt_sort2<X>, placeholders::_1), "hashbt");
+    test<X>(fio, v, bind(hashbt_sort_std<X>, placeholders::_1), "hashbt_std");
     test<X>(fio, v, bind(hashbt_sort_boost<X>, placeholders::_1), "hashbt_boost");
 
     if (--passes) goto L;

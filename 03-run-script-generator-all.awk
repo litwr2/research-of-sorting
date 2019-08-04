@@ -50,19 +50,19 @@ BEGIN {
     ss["hashbt_boost"] = 1
     ss["insertion"] = 1
 
-	t["PLAININT"] = 1
+    t["PLAININT"] = 1
     t["INT1P4"] = 1
-	t["INT64"] = 1
-	t["INT128"] = 1
-	t["FLOAT"] = 1
-	t["STRINGS"] = 0
-	t["CSTRINGS"] = 0
-	t["STRINGS_SHORT"] = 1
-	t["CSTRINGS_SHORT"] = 1
-	t["STRINGS_LONG"] = 0
-	t["CSTRINGS_LONG"] = 0
+    t["INT64"] = 1
+    t["INT128"] = 1
+    t["FLOAT"] = 1
+    t["STRINGS"] = 0
+    t["CSTRINGS"] = 0
+    t["STRINGS_SHORT"] = 1
+    t["CSTRINGS_SHORT"] = 1
+    t["STRINGS_LONG"] = 0
+    t["CSTRINGS_LONG"] = 0
 
-	for (SS = 7; SS <= 11; ++SS)
+    for (SS = 7; SS <= 11; ++SS)
        for (i1 in t) {
            excl = ""
            delete zoo
@@ -88,8 +88,7 @@ BEGIN {
            else if (SS <= 11) passes = 2
            else if (SS <= 12) passes = 2
            repeats = 2
-           print excl "touch always.cpp;EXTRA=\"-DREPEATS=" repeats " -D" i1 " -DSS=" SS " -DPASSES=" passes "\" FNP=nsort-all2 make && nsort-all2 >>results-all/" SS "-" i1 " || echo ERROR!!!!!"
+           print excl "touch always.cpp;EXTRA=\"-DREPEATS=" repeats " -D" i1 " -DSS=" SS " -DPASSES=" passes "\" FNP=nsort-all2 make && nsort-all2 >>results-all/" SS "-" i1 " || echo $? ERROR!!!!!"
            }
         print "echo ok"
 }
-

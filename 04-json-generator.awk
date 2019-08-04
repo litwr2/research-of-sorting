@@ -1,5 +1,5 @@
 {
-  M = 5
+  M = 6
   n = substr($3, 3) - 3
   a[$5][$4][$1][n] = $2
 }
@@ -23,7 +23,7 @@ END {
         for (l = 0; l < M; ++l) {
           if (lflag) printf ","
           lflag = 1
-          if (l in a[i][j][k]) 
+          if (l in a[i][j][k])
             printf "%d", a[i][j][k][l]
           else
             printf "\"n/a\""

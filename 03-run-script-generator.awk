@@ -50,29 +50,29 @@ BEGIN {
     ss["hashbt_boost"] = 1
     ss["insertion"] = 1
 
-	t["PLAININT"] = 1
+    t["PLAININT"] = 1
     t["INT1P4"] = 1
-	t["INT64"] = 1
-	t["INT128"] = 1
-	t["FLOAT"] = 1
-	t["STRINGS"] = 1
-	t["CSTRINGS"] = 1
-	t["STRINGS_SHORT"] = 1
-	t["CSTRINGS_SHORT"] = 1
-	t["STRINGS_LONG"] = 1
-	t["CSTRINGS_LONG"] = 1
+    t["INT64"] = 1
+    t["INT128"] = 1
+    t["FLOAT"] = 1
+    t["STRINGS"] = 1
+    t["CSTRINGS"] = 1
+    t["STRINGS_SHORT"] = 1
+    t["CSTRINGS_SHORT"] = 1
+    t["STRINGS_LONG"] = 1
+    t["CSTRINGS_LONG"] = 1
 
-	ft["RANDOM"] = 1
-	ft["ASCENDED"] = 1
-	ft["DESCENDED"] = 1
-	ft["ASCENDED_RANDOM"] = 1
+    ft["RANDOM"] = 1
+    ft["ASCENDED"] = 1
+    ft["DESCENDED"] = 1
+    ft["ASCENDED_RANDOM"] = 1
     ft["DESCENDED_RANDOM"] = 1
-	ft["LOW_VARIATION1"] = 1
-	ft["LOW_VARIATION2"] = 1
-	ft["LOW_VARIATION100"] = 1
-	ft["SLOW_QSORT_HOARE"] = 1
+    ft["LOW_VARIATION1"] = 1
+    ft["LOW_VARIATION2"] = 1
+    ft["LOW_VARIATION100"] = 1
+    ft["SLOW_QSORT_HOARE"] = 1
 
-	for (SS = 100*1000*1000; SS <= 100*1000*1000; SS *= 10) {
+    for (SS = 100*1000*1000; SS <= 100*1000*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {
@@ -143,7 +143,7 @@ BEGIN {
                    if (SS <= 1000) passes = 10
                    else if (SS <= 10000) passes = 4
                    else if (SS <= 100000) passes = 2
-                   print excl "touch always.cpp;EXTRA=\"-D" i1 " -D" i2 " -DSS=" SS " -DPASSES=" passes "\" FNP=nsort2 make && nsort2 >>results/" nSS "-" i1 "-" i2 " || echo ERROR!!!!!"
+                   print excl "touch always.cpp;EXTRA=\"-D" i1 " -D" i2 " -DSS=" SS " -DPASSES=" passes "\" FNP=nsort2 make && nsort2 >>results/" nSS "-" i1 "-" i2 " || echo $? ERROR!!!!!"
                }
         }
         print "echo ok"

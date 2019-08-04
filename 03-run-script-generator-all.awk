@@ -23,7 +23,7 @@ BEGIN {
     ss["heapsort_bsd"] = 1
     ss["mergesort_bsd"] = 1
     ss["qsort_hoare"] = 1
-    #ss["qsort_hoare_tco"] = 0
+    ss["qsort_hoare_tco"] = 0
     ss["qsort_no_pivot"] = 1
     ss["qsort_hoare2"] = 1
     ss["qsort_lomuto"] = 1

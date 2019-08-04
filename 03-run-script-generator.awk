@@ -23,7 +23,7 @@ BEGIN {
     ss["heapsort_bsd"] = 1
     ss["mergesort_bsd"] = 1
     ss["qsort_hoare"] = 1
-    #ss["qsort_hoare_tco"] = 0
+    ss["qsort_hoare_tco"] = 0
     ss["qsort_no_pivot"] = 1
     ss["qsort_hoare2"] = 1
     ss["qsort_lomuto"] = 1
@@ -63,10 +63,10 @@ BEGIN {
     t["CSTRINGS_LONG"] = 1
 
     ft["RANDOM"] = 1
-    ft["ASCENDED"] = 1
-    ft["DESCENDED"] = 1
-    ft["ASCENDED_RANDOM"] = 1
-    ft["DESCENDED_RANDOM"] = 1
+    ft["ORDERED"] = 1
+    ft["REVERSED"] = 1
+    ft["PARTIALLY_ORDERED"] = 1
+    ft["PARTIALLY_REVERSED"] = 1
     ft["LOW_VARIATION1"] = 1
     ft["LOW_VARIATION2"] = 1
     ft["LOW_VARIATION100"] = 1
@@ -85,29 +85,29 @@ BEGIN {
                            zoo[i3] = 1
 
                        lim = 1000*1000
-                       if (i3 == "bubble" && SS >= lim && i2 != "ASCENDED" && (i2 != "ASCENDED_RANDOM" || index(i1, "STRINGS")) && i2 != "LOW_VARIATION1")
+                       if (i3 == "bubble" && SS >= lim && i2 != "ORDERED" && (i2 != "PARTIALLY_ORDERED" || index(i1, "STRINGS")) && i2 != "LOW_VARIATION1")
                            zoo[i3] = 1
                        if ((i3 == "selection" || i3 == "insertion") && SS >= lim)
                            zoo[i3] = 1
                        if (i3 == "array*1" && SS >= lim && i2 != "LOW_VARIATION1")
                            zoo[i3] = 1
-                       if ((i3 == "array*2" || i3 == "array*3" || i3 == "array*5" || i3 == "array*7") && SS >= lim && (i2 == "LOW_VARIATION2" || (index(i2, "SCENDED_RANDOM") || index(i2,  "DESCENDED") || i2 == "LOW_VARIATION100") && index(i1, "STRINGS")))
+                       if ((i3 == "array*2" || i3 == "array*3" || i3 == "array*5" || i3 == "array*7") && SS >= lim && (i2 == "LOW_VARIATION2" || (index(i2, "SCENDED_RANDOM") || index(i2,  "REVERSED") || i2 == "LOW_VARIATION100") && index(i1, "STRINGS")))
                            zoo[i3] = 1
                        if (i3 == "hashbt" && SS >= lim && (index(i2, "SCENDED_RANDOM")))
                            zoo[i3] = 1
                        if ((i3 == "qsort_hoare" || i3 == "qsort_hoare2") && SS >= lim && i2 == "SLOW_QSORT_HOARE")
                            zoo[i3] = 1
-                       if (i3 == "qsort_no_pivot" && SS >= lim && (i2 == "ASCENDED" || i2 == "DESCENDED" || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "SLOW_QSORT_HOARE" && index(i1, "STRINGS")))
+                       if (i3 == "qsort_no_pivot" && SS >= lim && (i2 == "ORDERED" || i2 == "REVERSED" || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "SLOW_QSORT_HOARE" && index(i1, "STRINGS")))
                            zoo[i3] = 1
                        if (i3 == "qsort_lomuto" && SS >= lim && (index(i2, "SCENDED") || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "SLOW_QSORT_HOARE" && index(i1, "STRINGS")))
                            zoo[i3] = 1
-                       if (i3 == "hash" && SS >= lim && index(i1, "STRINGS") && (i2 == "ASCENDED_RANDOM" || i2 == "LOW_VARIATION100" || i2 == "LOW_VARIATION2"))
+                       if (i3 == "hash" && SS >= lim && index(i1, "STRINGS") && (i2 == "PARTIALLY_ORDERED" || i2 == "LOW_VARIATION100" || i2 == "LOW_VARIATION2"))
                            zoo[i3] = 1
                        if (i3 == "radix8_msb" && SS >= lim && index(i1, "_LONG") && i2 == "RANDOM")
                            zoo[i3] = 1
 
                        lim = 10*1000*1000
-                       if (i3 == "bubble" && SS >= lim && i2 != "ASCENDED" && i2 != "LOW_VARIATION1")
+                       if (i3 == "bubble" && SS >= lim && i2 != "ORDERED" && i2 != "LOW_VARIATION1")
                            zoo[i3] = 1
                        if ((i3 == "array*2" || i3 == "array*3" || i3 == "array*5" || i3 == "array*7") && SS >= lim && (index(i1, "STRING")  && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM") || index(i2, "SCENDED_RANDOM")))
                            zoo[i3] = 1

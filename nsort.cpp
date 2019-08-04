@@ -35,10 +35,10 @@ using namespace std;
 //#define CSTRINGS
 //#define CSTRINGS_LONG
 //#define RANDOM
-//#define ASCENDED
-//#define ASCENDED_RANDOM
-//#define DESCENDED_RANDOM
-//#define DESCENDED
+//#define ORDERED
+//#define PARTIALLY_ORDERED
+//#define PARTIALLY_REVERSED
+//#define REVERSED
 //#define LOW_VARIATION1
 //#define LOW_VARIATION2
 //#define LOW_VARIATION100
@@ -58,11 +58,11 @@ using namespace std;
 #define SS 10'000 //limits due to int types of indice are slightly above 2'000'000'000
 #endif
 
-#if defined(RANDOM) + defined(ASCENDED) + defined(ASCENDED_RANDOM) + defined(DESCENDED_RANDOM)+ defined(DESCENDED) + defined(LOW_VARIATION1) + defined(LOW_VARIATION2) + defined(LOW_VARIATION100) + defined(SLOW_QSORT_HOARE) > 1
+#if defined(RANDOM) + defined(ORDERED) + defined(PARTIALLY_ORDERED) + defined(PARTIALLY_REVERSED)+ defined(REVERSED) + defined(LOW_VARIATION1) + defined(LOW_VARIATION2) + defined(LOW_VARIATION100) + defined(SLOW_QSORT_HOARE) > 1
 #error AMBIGUOUS ORDER
 #endif
 
-#if defined(RANDOM) + defined(ASCENDED) + defined(ASCENDED_RANDOM) + defined(DESCENDED_RANDOM)+ defined(DESCENDED) + defined(LOW_VARIATION1) + defined(LOW_VARIATION2) + defined(LOW_VARIATION100) + defined(SLOW_QSORT_HOARE) == 0
+#if defined(RANDOM) + defined(ORDERED) + defined(PARTIALLY_ORDERED) + defined(PARTIALLY_REVERSED)+ defined(REVERSED) + defined(LOW_VARIATION1) + defined(LOW_VARIATION2) + defined(LOW_VARIATION100) + defined(SLOW_QSORT_HOARE) == 0
 #define RANDOM
 #endif
 
@@ -108,8 +108,10 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "bsd.cpp"
 #include "radix.cpp"
 #include "radix-msb.cpp"
-#include "qsort.cpp"
-#include "dp-quick.cpp"
+#include "quick-np.cpp"
+#include "quick-hoare.cpp"
+#include "quick-lomuto.cpp"
+#include "quick-dp.cpp"
 #include "shell.cpp"
 #include "tree.cpp"
 #include "hash.cpp"
@@ -221,7 +223,7 @@ L:
     test<X>(fio, v, bind(mergesort_bsd<X>, placeholders::_1), "mergesort_bsd");
 #endif
     test<X>(fio, v, bind(qsort1<X>, placeholders::_1, 0, SS - 1), "qsort_hoare");
-    //test<X>(fio, v, bind(qsort1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco"); //not tested with all data types 
+    test<X>(fio, v, bind(qsort1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco"); //not tested with all data types 
     test<X>(fio, v, bind(qsort2<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
     test<X>(fio, v, bind(qsort3<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
     test<X>(fio, v, bind(qsort4<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");

@@ -99,8 +99,10 @@ ostream& operator<<(ostream& os, const __int128 &v) {
 #include "bsd.cpp"
 #include "radix.cpp"
 #include "radix-msb.cpp"
-#include "qsort.cpp"
-#include "dp-quick.cpp"
+#include "quick-np.cpp"
+#include "quick-hoare.cpp"
+#include "quick-lomuto.cpp"
+#include "quick-dp.cpp"
 #include "shell.cpp"
 #include "tree.cpp"
 #include "hash.cpp"
@@ -220,7 +222,7 @@ L:
     test<X>(v, bind(mergesort_bsd<X>, placeholders::_1), "mergesort_bsd");
 #endif
     test<X>(v, bind(qsort1<X>, placeholders::_1, 0, SS - 1), "qsort_hoare");
-    //test<X>(v, bind(qsort1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco"); //not tested with all data types 
+    test<X>(v, bind(qsort1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco");
     test<X>(v, bind(qsort2<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
     test<X>(v, bind(qsort3<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
     test<X>(v, bind(qsort4<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");

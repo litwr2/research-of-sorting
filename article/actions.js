@@ -14,7 +14,7 @@ function precRound(n) {
         if (precision)
             while (afterdot.length - 1 < Math.log10(precision))
                 afterdot += '0'
-    } else if (precision > 1) {
+    } else if (precision > 1 && typeof(n) == "number") {
         afterdot = '.'
         while (afterdot.length - 1 < Math.log10(precision))
             afterdot += '0'
@@ -79,7 +79,8 @@ function getTa(data) {
 
 function drawTable1() {
     var i
-    var text = "<tr><th rowspan=2>#<th rowspan=2>Алгоритм<button onclick=changeOrd(0) style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[0] + 1] + "</button><th colspan=5>Размер данных"
+    var text = "<tr><th rowspan=2>#<th rowspan=2>Алгоритм<button onclick=changeOrd(0) style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[0] + 1]
+        + "</button><th colspan=" + M + ">Размер данных"
     text += "<tr>"
     for (i = 0; i < M; ++i)
         text += "<th align=center>10<sup>" + (i + 3)
@@ -113,7 +114,7 @@ function DataAvg() {
     var os = document.getElementById("optionSel").value
     for (var k = 0; k < ta.length; k++) {
         var sortm = ta[k][0]
-        for (var i = 1; i < M; ++i) {
+        for (var i = 1; i <= M; ++i) {
             if (typeof(ta[k][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os == 2 && k < 7 || os > 2 && indexSorted[os - 3].indexOf(sortm) != -1)) {
                 sum += ta[k][i]
                 cnt++
@@ -129,7 +130,7 @@ function DataMedian() {
     var os = document.getElementById("optionSel").value
     for (var k = 0; k < ta.length; k++) {
         var sortm = ta[k][0]
-        for (var i = 1; i < M; ++i)
+        for (var i = 1; i <= M; ++i)
             if (typeof(ta[k][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os == 2 && k < 7 || os > 2 && indexSorted[os - 3].indexOf(sortm) != -1))
                 vector.push(ta[k][i])
     }
@@ -143,7 +144,7 @@ function DataMin() {
     var os = document.getElementById("optionSel").value
     for (var k = 0; k < ta.length; k++) {
         var sortm = ta[k][0]
-        for (var i = 1; i < M; ++i)
+        for (var i = 1; i <= M; ++i)
             if (typeof(ta[k][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os == 2 && k < 7 || os > 2 && indexSorted[os - 3].indexOf(sortm) != -1) && ta[k][i] < min)
                 min = ta[k][i]
     }
@@ -156,7 +157,7 @@ function DataMax() {
     var os = document.getElementById("optionSel").value
     for (var k = 0; k < ta.length; k++) {
         var sortm = ta[k][0]
-        for (var i = 1; i < M; ++i)
+        for (var i = 1; i <= M; ++i)
             if (typeof(ta[k][i]) == "number" && (os == 0 || os == 1 && sortm in marked || os == 2 && k < 7 || os > 2 && indexSorted[os - 3].indexOf(sortm) != -1) && ta[k][i] > max)
                 max = ta[k][i]
     }
@@ -201,7 +202,6 @@ function drawActionTable1() {
 
     for (var i = 0; i < 2; i++) {
         text += "<br><button id=sbutt" + i + " onclick=changeRow(" + i + ")>" + sbuttc[duoMode[i]] + "</button>:"
-
         text += "<select id=select" + i + "0 onchange=changeAction(" + i + ",0) style=width:14em>"
         for (sv in indexValues[i]) {
             text += "<option value=" + sv
@@ -265,7 +265,7 @@ function changeOptAll() {
 }
 
 function changeRow(n) {
-    duoMode[n] = !duoMode[n]
+    duoMode[n] = 1 - duoMode[n]
     for (var i = 0; i < 2; ++i)
         if (i != n)
             duoMode[i] = 0

@@ -132,9 +132,9 @@ template<class T> void fill(vector<T> &v) {
 #else
        v.push_back({X{1}*abs(rand()*rand())});
 #endif
-#elif defined(ASCENDED) || defined(ASCENDED_RANDOM)
+#elif defined(ORDERED) || defined(PARTIALLY_ORDERED)
        v.push_back(cnv<T>(i));
-#elif defined(DESCENDED) || defined(DESCENDED_RANDOM)
+#elif defined(REVERSED) || defined(PARTIALLY_REVERSED)
        v.push_back(cnv<T>(SS - i));
 #elif LOW_VARIATION_CONST
        v.push_back(cnv<T>(rand()%LOW_VARIATION_CONST));
@@ -143,7 +143,7 @@ template<class T> void fill(vector<T> &v) {
 #endif
 #endif
 
-#if defined(ASCENDED_RANDOM) || defined(DESCENDED_RANDOM)
+#if defined(PARTIALLY_ORDERED) || defined(PARTIALLY_REVERSED)
     for (int i = 0; i < SS/100; i++)
         v[rand()%SS] = cnv<T>(rand()%STRING_BASE);
 #endif

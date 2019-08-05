@@ -41,7 +41,7 @@ template<class T> struct HashSort {
                  hashData[prevPtr].next = freePtr;
                  hashData[freePtr].next = curPtr;
               }
-              goto l2; 
+              goto l2;
            }
            prevPtr = curPtr;
            curPtr = hashData[curPtr].next;

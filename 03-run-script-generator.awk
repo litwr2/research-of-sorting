@@ -1,5 +1,5 @@
 BEGIN {
-    ss["shell_a3n"] = 1
+    ss["shell_a3n"] = 0
     ss["shell_10/3"] = 1
     ss["shell_prime_e"] = 1
     ss["shell_a102549"] = 1
@@ -23,10 +23,10 @@ BEGIN {
     ss["heapsort_bsd"] = 1
     ss["mergesort_bsd"] = 1
     ss["qsort_hoare"] = 1
-    ss["qsort_hoare_tco"] = 0
+    ss["qsort_hoare_tco"] = 1
     ss["qsort_no_pivot"] = 1
     ss["qsort_hoare2"] = 1
-    ss["qsort_lomuto"] = 1
+    ss["qsort_lomuto"] = 0
     ss["qsort_dualpivot"] = 1
     ss["stlsort"] = 1
     ss["stlstable"] = 1
@@ -72,7 +72,7 @@ BEGIN {
     ft["LOW_VARIATION100"] = 1
     ft["SLOW_QSORT_HOARE"] = 1
 
-    for (SS = 100*1000*1000; SS <= 100*1000*1000; SS *= 10) {
+    for (SS = 1000*1000; SS <= 100*1000*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {

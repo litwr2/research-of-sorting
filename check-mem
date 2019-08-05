@@ -1,5 +1,5 @@
-while sleep 2
+while sleep 5
 do
-    free | awk '/Mem:/ { if ($7 < 500000) exit 2; else printf "%d ", $7 }' || { killall nsort2; echo killed '(no memory)'; exit; sleep 10; }
-#    ps -A | awk '/nsort2/ { split($3, a, ":"); if (a[1] > 4) exit 5}'|| { killall nsort2; echo killed '(too long)'; sleep 10; }
+    free | awk '/Mem:/ { if ($7 < 500000) exit 2; else printf "%d ", $7 }' || { killall nsort2; echo killed '(no memory)'; exit; sleep 20; }
+    ps -A | awk '/nsort2/ { split($3, a, ":"); if (a[1] > 2) exit 5}'|| { killall nsort2; echo killed '(too long)'; sleep 20; }
 done

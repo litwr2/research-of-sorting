@@ -223,7 +223,7 @@ L:
     test<X>(fio, v, bind(mergesort_bsd<X>, placeholders::_1), "mergesort_bsd");
 #endif
     test<X>(fio, v, bind(qsort1<X>, placeholders::_1, 0, SS - 1), "qsort_hoare");
-    test<X>(fio, v, bind(qsort1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco"); //not tested with all data types 
+    test<X>(fio, v, bind(qsort1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco");
     test<X>(fio, v, bind(qsort2<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
     test<X>(fio, v, bind(qsort3<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
     test<X>(fio, v, bind(qsort4<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");

@@ -1,10 +1,10 @@
 BEGIN {
     ss["shell_a3n"] = 0
-    ss["shell_10/3"] = 1
-    ss["shell_prime_e"] = 0
+    ss["shell_10/3"] = 0
+    ss["shell_prime_e"] = 1
     ss["shell_a102549"] = 0
     ss["shell_exp_tab"] = 0
-    ss["shell_prime_10/3"] = 0
+    ss["shell_prime_10/3"] = 1
     ss["shell_a102549m"] = 0
     ss["shell_2.25"] = 0
     ss["radix8"] = 0
@@ -23,11 +23,11 @@ BEGIN {
     ss["heapsort_bsd"] = 0
     ss["mergesort_bsd"] = 0
     ss["qsort_hoare"] = 0
-    ss["qsort_hoare_tco"] = 0
+    ss["qsort_hoare_tco"] = 1
     ss["qsort_no_pivot"] = 0
     ss["qsort_hoare2"] = 0
     ss["qsort_lomuto"] = 0
-    ss["qsort_dualpivot"] = 0
+    ss["qsort_dualpivot"] = 1
     ss["stlsort"] = 0
     ss["stlstable"] = 0
     ss["timsort"] = 0
@@ -40,10 +40,10 @@ BEGIN {
     ss["tree_stl"] = 0
     ss["tree_boost"] = 0
     ss["array*1"] = 1
-    ss["array*2"] = 0
-    ss["array*3"] = 0
-    ss["array*5"] = 0
-    ss["array*7"] = 0
+    ss["array*2"] = 1
+    ss["array*3"] = 1
+    ss["array*5"] = 1
+    ss["array*7"] = 1
     ss["hash"] = 0
     ss["hashbt_std"] = 0
     ss["hashbt"] = 0
@@ -73,7 +73,7 @@ BEGIN {
     ft["LOW_VARIATION100"] = 1
     ft["SLOW_QSORT_HOARE"] = 1
 
-    for (SS = 1000*1000; SS <= 1000*1000; SS *= 10) {
+    for (SS = 1000; SS <= 100*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {

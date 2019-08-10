@@ -1,12 +1,12 @@
 BEGIN {
-    ss["shell_a3n"] = 0
+    ss["shell_a3n"] = 1
     ss["shell_10/3"] = 0
-    ss["shell_prime_e"] = 1
+    ss["shell_prime_e"] = 0
     ss["shell_a102549"] = 0
     ss["shell_exp_tab"] = 0
-    ss["shell_prime_10/3"] = 1
+    ss["shell_prime_10/3"] = 0
     ss["shell_a102549m"] = 0
-    ss["shell_2.25"] = 0
+    ss["shell_2.25"] = 1
     ss["radix8"] = 0
     ss["radix11"] = 0
     ss["radix16"] = 0
@@ -37,13 +37,13 @@ BEGIN {
     ss["flat_stable"] = 0
     ss["bubble"] = 0
     ss["selection"] = 0
-    ss["tree_stl"] = 0
-    ss["tree_boost"] = 0
-    ss["array*1"] = 1
-    ss["array*2"] = 1
-    ss["array*3"] = 1
-    ss["array*5"] = 1
-    ss["array*7"] = 1
+    ss["tree_stl"] = 1
+    ss["tree_boost"] = 1
+    ss["array*1"] = 0
+    ss["array*2"] = 0
+    ss["array*3"] = 0
+    ss["array*5"] = 0
+    ss["array*7"] = 0
     ss["hash"] = 0
     ss["hashbt_std"] = 0
     ss["hashbt"] = 0
@@ -51,17 +51,17 @@ BEGIN {
     ss["insertion"] = 0
     #for (i in ss) ss[i] = 1
 
-    t["PLAININT"] = 1
+    t["PLAININT"] = 0
     t["INT1P4"] = 1
-    t["INT64"] = 1
-    t["INT128"] = 1
-    t["FLOAT"] = 1
-    t["STRINGS"] = 1
-    t["CSTRINGS"] = 1
-    t["STRINGS_SHORT"] = 1
-    t["CSTRINGS_SHORT"] = 1
-    t["STRINGS_LONG"] = 1
-    t["CSTRINGS_LONG"] = 1
+    t["INT64"] = 0
+    t["INT128"] = 0
+    t["FLOAT"] = 0
+    t["STRINGS"] = 0
+    t["CSTRINGS"] = 0
+    t["STRINGS_SHORT"] = 0
+    t["CSTRINGS_SHORT"] = 0
+    t["STRINGS_LONG"] = 0
+    t["CSTRINGS_LONG"] = 0
 
     ft["RANDOM"] = 1
     ft["ORDERED"] = 1
@@ -73,7 +73,7 @@ BEGIN {
     ft["LOW_VARIATION100"] = 1
     ft["SLOW_QSORT_HOARE"] = 1
 
-    for (SS = 1000; SS <= 100*1000; SS *= 10) {
+    for (SS = 100*1000*1000; SS <= 100*1000*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {

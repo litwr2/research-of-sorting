@@ -100,7 +100,7 @@ template<class T> void array_sort(vector<T> &a, const int f) {
                if (k > 0) k = 1; else k = -1;
                j += (m + k)/2;
                while (l != j) {
-                   swap(auxArray[l], auxArray[l - k]);
+                   auxArray[l] = auxArray[l - k];
                    l -= k;
                }
                auxArray[j] = i;
@@ -200,7 +200,7 @@ template<> void array_sort(vector<const char*> &a, const int f) {
                if (k > 0) k = 1; else k = -1;
                j += (m + k)/2;
                while (l != j) {
-                   swap(auxArray[l], auxArray[l - k]);
+                   auxArray[l] =  auxArray[l - k];
                    l -= k;
                }
                auxArray[j] = i;

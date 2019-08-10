@@ -28,6 +28,14 @@ END {
           else
             printf "\"n/a\""
         }
+        #for (l = M - 1; l >= 0; --l)
+        #  if (l in a[i][j][k]) {
+        #    r = l
+        #    break
+        #  }
+        #c1 = log(a[i][j][k][r]/a[i][j][k][r - 1])/log(10)
+        #c2 = a[i][j][k][r]/10^(c1*r)
+        #printf ",%f,%f]", c1, c2
         printf "]"
       }
       printf "}"

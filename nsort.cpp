@@ -139,7 +139,7 @@ size_t test(fstream &fio, vector<T> &v, function<void(vector<T>&)> f, const char
     auto te = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     check(v);
     if (title[0] == 'Z') goto L;
-    cout << setw(16) << left << title << setw(12) << right << te - ts << endl;
+    cout << setw(16) << left << title << setw(14) << right << te - ts << endl;
 L:
     fio.seekg(0);
 #if !defined(STRINGS) && !defined(STRINGS_SHORT) && !defined(STRINGS_LONG)
@@ -245,11 +245,11 @@ L:
     test<X>(fio, v, bind(array_sort<X>, placeholders::_1, 7), "array*7");
 
     test<X>(fio, v, bind(hash_sort<X>, placeholders::_1), "hash");
-
-    test<X>(fio, v, bind(tree_sort_stl<X>, placeholders::_1), "tree_stl");
-    test<X>(fio, v, bind(tree_sort_boost<X>, placeholders::_1), "tree_boost");
-
     test<X>(fio, v, bind(hashbt_sort2<X>, placeholders::_1), "hashbt");
+
+    test<X>(fio, v, bind(tree_sort_boost<X>, placeholders::_1), "tree_boost");
+    test<X>(fio, v, bind(tree_sort_stl<X>, placeholders::_1), "tree_stl");
+
     test<X>(fio, v, bind(hashbt_sort_std<X>, placeholders::_1), "hashbt_std");
     test<X>(fio, v, bind(hashbt_sort_boost<X>, placeholders::_1), "hashbt_boost");
 

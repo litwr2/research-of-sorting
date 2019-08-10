@@ -1,5 +1,5 @@
 BEGIN {
-    ss["shell_a3n"] = 0
+    ss["shell_a3n"] = 1
     ss["shell_10/3"] = 1
     ss["shell_prime_e"] = 1
     ss["shell_a102549"] = 1
@@ -26,7 +26,7 @@ BEGIN {
     ss["qsort_hoare_tco"] = 1
     ss["qsort_no_pivot"] = 1
     ss["qsort_hoare2"] = 1
-    ss["qsort_lomuto"] = 0
+    ss["qsort_lomuto"] = 1
     ss["qsort_dualpivot"] = 1
     ss["stlsort"] = 1
     ss["stlstable"] = 1
@@ -91,17 +91,17 @@ BEGIN {
                            zoo[i3] = 1
                        if (i3 == "array*1" && SS >= lim && i2 != "LOW_VARIATION1")
                            zoo[i3] = 1
-                       if ((i3 == "array*2" || i3 == "array*3" || i3 == "array*5" || i3 == "array*7") && SS >= lim && (i2 == "LOW_VARIATION2" || (index(i2, "SCENDED_RANDOM") || index(i2,  "REVERSED") || i2 == "LOW_VARIATION100") && index(i1, "STRINGS")))
+                       if ((i3 == "array*2" || i3 == "array*3" || i3 == "array*5" || i3 == "array*7") && SS >= lim && (i2 == "LOW_VARIATION2" || (index(i2, "PARTIALLY") || index(i2,  "REVERSED") || i2 == "LOW_VARIATION100") && index(i1, "STRING")))
                            zoo[i3] = 1
-                       if (i3 == "hashbt" && SS >= lim && (index(i2, "SCENDED_RANDOM")))
+                       if (i3 == "hashbt" && SS >= lim && index(i2, "PARTIALLY"))
                            zoo[i3] = 1
-                       if ((i3 == "qsort_hoare" || i3 == "qsort_hoare2") && SS >= lim && i2 == "SLOW_QSORT_HOARE")
+                       if (index(i3, "hoare") && SS >= lim && i2 == "SLOW_QSORT_HOARE")
                            zoo[i3] = 1
-                       if (i3 == "qsort_no_pivot" && SS >= lim && (i2 == "ORDERED" || i2 == "REVERSED" || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "SLOW_QSORT_HOARE" && index(i1, "STRINGS")))
+                       if (i3 == "qsort_no_pivot" && SS >= lim && (i2 == "ORDERED" || i2 == "REVERSED" || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "SLOW_QSORT_HOARE" && index(i1, "STRING")))
                            zoo[i3] = 1
-                       if (i3 == "qsort_lomuto" && SS >= lim && (index(i2, "SCENDED") || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "SLOW_QSORT_HOARE" && index(i1, "STRINGS")))
+                       if (i3 == "qsort_lomuto" && SS >= lim && (index(i2, "PARTIALLY") || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "SLOW_QSORT_HOARE" && index(i1, "STRING")))
                            zoo[i3] = 1
-                       if (i3 == "hash" && SS >= lim && index(i1, "STRINGS") && (i2 == "PARTIALLY_ORDERED" || i2 == "LOW_VARIATION100" || i2 == "LOW_VARIATION2"))
+                       if (i3 == "hash" && SS >= lim && index(i1, "STRING") && (i2 == "PARTIALLY_ORDERED" || i2 == "LOW_VARIATION100" || i2 == "LOW_VARIATION2"))
                            zoo[i3] = 1
                        if (i3 == "radix8_msb" && SS >= lim && index(i1, "_LONG") && i2 == "RANDOM")
                            zoo[i3] = 1
@@ -109,26 +109,26 @@ BEGIN {
                        lim = 10*1000*1000
                        if (i3 == "bubble" && SS >= lim && i2 != "ORDERED" && i2 != "LOW_VARIATION1")
                            zoo[i3] = 1
-                       if ((i3 == "array*2" || i3 == "array*3" || i3 == "array*5" || i3 == "array*7") && SS >= lim && (index(i1, "STRING")  && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM") || index(i2, "SCENDED_RANDOM")))
+                       if ((i3 == "array*2" || i3 == "array*3" || i3 == "array*5" || i3 == "array*7") && SS >= lim && (index(i1, "STRING") && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !(!index(i1, "LONG") && i2 == "RANDOM") || index(i2, "PARTIALLY")))
                            zoo[i3] = 1
                        if (i3 == "hash" && SS >= lim && (index(i1, "STRING") && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM") || i2 == "LOW_VARIATION2" || i2 == "LOW_VARIATION100"))
                            zoo[i3] = 1
-                       if ((i3 == "qsort_no_pivot" || i3 == "qsort_lomuto") && SS >= lim && (i2 == "LOW_VARIATION100" && index(i1, "STRINGS") || i2 == "SLOW_QSORT_HOARE"))
+                       if ((i3 == "qsort_no_pivot" || i3 == "qsort_lomuto") && SS >= lim && (i2 == "LOW_VARIATION100" && index(i1, "STRING") || i2 == "SLOW_QSORT_HOARE"))
                            zoo[i3] = 1
                        if (SS >= lim && index(i1, "LONG"))
-                           zoo[i3] = 1  # 8 MB RAM is not enough
+                           zoo[i3] = 1  # 8 GB RAM is not enough?
 
                        lim = 100*1000*1000
                        if (SS >= lim && i1 == "STRINGS")
-                           zoo[i3] = 1  # 8 MB RAM is not enough
-                       if ((i3 == "qsort_no_pivot" || i3 == "qsort_lomuto") && SS >= lim && i2 == "LOW_VARIATION100")
+                           zoo[i3] = 1  # 8 GB RAM is not enough?
+                       if ((i3 == "qsort_no_pivot" || i3 == "qsort_lomuto") && SS >= lim && (i2 == "LOW_VARIATION100" || index(i1, "STRING")))
                            zoo[i3] = 1
                        if ((i3 == "array*2" || i3 == "array*3" || i3 == "array*5" || i3 == "array*7") && SS >= lim && i2 == "LOW_VARIATION100")
                            zoo[i3] = 1
                        if (SS >= lim && index(i3, "hashbt"))
-                           zoo[i3] = 1  # 8 MB RAM is not enough
+                           zoo[i3] = 1  # 8 GB RAM is not enough
                        if (SS >= lim && index(i1, "STRING") && !index(i1, "SHORT"))
-                           zoo[i3] = 1  # 8 MB RAM is not enough
+                           zoo[i3] = 1  # 8 GB RAM is not enough?
                    }
                    if (length(zoo) == length(ss)) continue
                    printf "\n# %s %s %s ", nSS, i1, i2; for(x in ss) dbg_ssc[x] = 1;for(x in zoo)delete dbg_ssc[x];delete dbg_sss;n=1;for(x in dbg_ssc)dbg_sss[n++]=x;asort(dbg_sss);for(x = 1; x < n; ++x) printf "%s ", dbg_sss[x]; printf "\n"

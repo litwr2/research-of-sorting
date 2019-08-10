@@ -197,7 +197,7 @@ function types(n, m) {
 
 function drawActionTable1() {
     var sv
-    var indexValues = [Data1, Data1[order[0]]]
+    var indexValues = [Data1, Data1[order[0]]] //Sort them!
     var text = ""
 
     for (var i = 0; i < 2; i++) {
@@ -224,7 +224,6 @@ function drawActionTable1() {
         }
     }
     document.getElementById("tab1a").innerHTML = text
-    var cmpType = ["absolute", "average", "median", "minimum", "maximum"]
     if (duoMode[0] + duoMode[1] == 0) { 
         text = "relation: <select id=optionRel onchange=changeOptRel()>"
         for (var i = 0; i < cmpType.length; ++i) {

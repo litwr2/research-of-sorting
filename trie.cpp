@@ -10,7 +10,7 @@ struct Transition {
 };
 template<class T>
 struct Data {
-    T* data;
+    int data;
     Data<T> *next;
 };
 template<class T>
@@ -20,25 +20,26 @@ struct Elem {
 };
 template<class T> struct Trie {
     vector<Elem<T>> v;
+    vector<T> &a, ca;
     int maxl, cnt;
-    Trie(int sz, int m) : v(sz), maxl(m), cnt(0) {}
-    void newe(Elem<T> &e, T* pd) {
+    Trie(vector<T> &a, int m) : v(a.size()*4), a(a), ca(a), maxl(m), cnt(0) {}
+    void newe(Elem<T> &e, int index) {
         Data<T> *tp = new Data<T>;
         tp->next = e.pdata;
         e.pdata = tp;
-        tp->data = pd;
+        tp->data = index;
     }
-    void add(T *pd, int d = 0, int ce = 0) {
-        unsigned char tc = *((char*)pd + maxl - 1 - d);
+    void add(int index, int d = 0, int ce = 0) {
+        unsigned char tc = *((char*)&ca[index] + maxl - 1 - d);
         if (v[ce].ts == 0) {
             v[ce].ts = new Transition;
             v[ce].ts->c = tc;
             v[ce].ts->t = ++cnt;
             v[ce].ts->next = 0;
             if (++d == maxl)
-                newe(v[cnt], pd);
+                newe(v[cnt], index);
             else
-                add(pd, d, cnt);
+                add(index, d, cnt);
         } else {
             Transition *p = v[ce].ts, *pp = p;
             while (p && p->c < tc) {
@@ -51,14 +52,14 @@ template<class T> struct Trie {
                 p->c = tc;
                 p->t = ++cnt;
                 if (++d == maxl)
-                    newe(v[cnt], pd);
+                    newe(v[cnt], index);
                 else
-                    add(pd, d, cnt);
+                    add(index, d, cnt);
             } else if (p->c == tc)
                 if (++d == maxl)
-                    newe(v[p->t], pd);
+                    newe(v[p->t], index);
                 else
-                    add(pd, d, p->t);
+                    add(index, d, p->t);
             else if (p != pp) {
                 Transition *t = new Transition;
                 t->next = p;
@@ -66,25 +67,25 @@ template<class T> struct Trie {
                 t->c = tc;
                 t->t = ++cnt;
                 if (++d == maxl)
-                    newe(v[cnt], pd);
+                    newe(v[cnt], index);
                 else
-                    add(pd, d, cnt);
+                    add(index, d, cnt);
             } else {
                 v[ce].ts = new Transition;
                 v[ce].ts->next = p;
                 v[ce].ts->c = tc;
                 v[ce].ts->t = ++cnt;
                 if (++d == maxl)
-                    newe(v[cnt], pd);
+                    newe(v[cnt], index);
                 else
-                    add(pd, d, cnt);
+                    add(index, d, cnt);
             }
         }
     }
     void traversal(int ce = 0) {
         Data<T> *d = v[ce].pdata;
         while (d) {
-            //cout << *d->data << endl;
+            a[cnt++] = ca[d->data];
             d = d->next;
         }
         Transition *p = v[ce].ts;
@@ -95,11 +96,19 @@ template<class T> struct Trie {
     }
 };
 
-int main() {
-    vector<int> a(1'000'000);
-    for (int i = 0; i < 1'000'000; ++i) a[i] = rand()%70000;
-    Trie<int> trie(a.size()*4, sizeof(int));
-    for (int i = 0; i < a.size(); ++i) trie.add(&a[i]);
+template<class T> void trieSort(vector<T> &a) {
+    Trie<int> trie(a, sizeof(int));
+    for (int i = 0; i < a.size(); ++i)
+        trie.add(i);
+    trie.cnt = 0;
     trie.traversal();
+}
+
+int main() {
+    vector<int> a(100);
+    for (int i = 0; i < 100; ++i) a[i] = rand()%70000;
+    trieSort(a);
+    for (int i = 0; i < a.size(); ++i) cout << a[i] << ' ';
+    cout << "ok\n";
 }
 

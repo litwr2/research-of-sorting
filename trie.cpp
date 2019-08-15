@@ -94,21 +94,22 @@ template<class T> struct Trie {
             p = p->next;
         }
     }
+    static void sort(vector<T> &a) {
+        Trie<int> trie(a, sizeof(int));
+        for (int i = 0; i < a.size(); ++i)
+            trie.add(i);
+        trie.cnt = 0;
+        trie.traversal();
+    }
 };
 
-template<class T> void trieSort(vector<T> &a) {
-    Trie<int> trie(a, sizeof(int));
-    for (int i = 0; i < a.size(); ++i)
-        trie.add(i);
-    trie.cnt = 0;
-    trie.traversal();
-}
-
 int main() {
-    vector<int> a(100);
-    for (int i = 0; i < 100; ++i) a[i] = rand()%70000;
-    trieSort(a);
-    for (int i = 0; i < a.size(); ++i) cout << a[i] << ' ';
+    vector<int> a(1'000'000);
+    for (int i = 0; i < 1'000'000; ++i) a[i] = rand()%70000;
+    Trie<int>::sort(a);
+    for (int i = 1; i < a.size(); ++i)
+       if (a[i - 1] > a[i]) return 1;
     cout << "ok\n";
+    return 0;
 }
 

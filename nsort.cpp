@@ -175,7 +175,7 @@ int main() {
 #else
     for (int i = 0; i < SS; ++i) fio << v[i] << endl;
 #endif
-#if 0
+#if 1
     auto tp = chrono::steady_clock::now() + chrono::seconds(10);
     size_t eps, itv, tv = test<X>(fio, v, bind(shell3<X>, placeholders::_1), "Z"); //train gc & cache, it is just a delay
     do {
@@ -195,9 +195,9 @@ L:
     test<X>(fio, v, bind(shell2<X>, placeholders::_1, 5), "shell_a102549m");
     test<X>(fio, v, bind(shell2<X>, placeholders::_1, 6), "shell_2.25");
 
-    test<X>(fio, v, bind(bubble_sort<X>, placeholders::_1), "bubble");
     test<X>(fio, v, bind(selection_sort<X>, placeholders::_1), "selection");
     test<X>(fio, v, bind(insertion_sort<X>, placeholders::_1), "insertion");
+    test<X>(fio, v, bind(bubble_sort<X>, placeholders::_1), "bubble");
 
 #if !defined(FLOAT)
     test<X>(fio, v, bind(radixsort<X>, placeholders::_1, 8), "radix8");

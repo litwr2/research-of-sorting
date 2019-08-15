@@ -1,5 +1,5 @@
 BEGIN {
-    ss["shell_a3n"] = 1
+    ss["shell_a3n"] = 0
     ss["shell_10/3"] = 0
     ss["shell_prime_e"] = 0
     ss["shell_a102549"] = 0
@@ -23,11 +23,11 @@ BEGIN {
     ss["heapsort_bsd"] = 0
     ss["mergesort_bsd"] = 0
     ss["qsort_hoare"] = 0
-    ss["qsort_hoare_tco"] = 1
-    ss["qsort_no_pivot"] = 0
+    ss["qsort_hoare_tco"] = 0
+    ss["qsort_no_pivot"] = 1
     ss["qsort_hoare2"] = 0
-    ss["qsort_lomuto"] = 0
-    ss["qsort_dualpivot"] = 1
+    ss["qsort_lomuto"] = 1
+    ss["qsort_dualpivot"] = 0
     ss["stlsort"] = 0
     ss["stlstable"] = 0
     ss["timsort"] = 0
@@ -35,11 +35,11 @@ BEGIN {
     ss["pdq"] = 0
     ss["spin"] = 0
     ss["flat_stable"] = 0
-    ss["bubble"] = 0
-    ss["selection"] = 0
-    ss["tree_stl"] = 1
-    ss["tree_boost"] = 1
-    ss["array*1"] = 0
+    ss["bubble"] = 1
+    ss["selection"] = 1
+    ss["tree_stl"] = 0
+    ss["tree_boost"] = 0
+    ss["array*1"] = 1
     ss["array*2"] = 0
     ss["array*3"] = 0
     ss["array*5"] = 0
@@ -48,18 +48,18 @@ BEGIN {
     ss["hashbt_std"] = 0
     ss["hashbt"] = 0
     ss["hashbt_boost"] = 0
-    ss["insertion"] = 0
+    ss["insertion"] = 1
     #for (i in ss) ss[i] = 1
 
-    t["PLAININT"] = 0
+    t["PLAININT"] = 1
     t["INT1P4"] = 1
-    t["INT64"] = 0
-    t["INT128"] = 0
-    t["FLOAT"] = 0
+    t["INT64"] = 1
+    t["INT128"] = 1
+    t["FLOAT"] = 1
     t["STRINGS"] = 0
     t["CSTRINGS"] = 0
     t["STRINGS_SHORT"] = 0
-    t["CSTRINGS_SHORT"] = 0
+    t["CSTRINGS_SHORT"] = 1
     t["STRINGS_LONG"] = 0
     t["CSTRINGS_LONG"] = 0
 
@@ -73,7 +73,7 @@ BEGIN {
     ft["LOW_VARIATION100"] = 1
     ft["SLOW_QSORT_HOARE"] = 1
 
-    for (SS = 100*1000*1000; SS <= 100*1000*1000; SS *= 10) {
+    for (SS = 1000*1000; SS <= 1000*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {

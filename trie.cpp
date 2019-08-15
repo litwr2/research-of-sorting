@@ -3,6 +3,7 @@
 #include<cstdlib>
 #include<algorithm>
 #include<string>
+#include<cstring>
 using namespace std;
 
 struct Transition {
@@ -210,18 +211,107 @@ cout << trie.cnt << endl;
         trie.traversal();
     }
 };
+
+template<> struct Trie<const char*> {
+    vector<char[max(sizeof(Transition), max(sizeof(Elem), sizeof(Data)))]> v;
+    vector<const char*> &a, ca;
+    int maxl, cnt;
+    Trie(vector<const char*> &a, int as) : v(as), a(a), ca(a), cnt(0) {
+cout << as << endl;
+        for (int i = 0; i < v.size(); ++i)
+            vE(i).pdata = vE(i).ts = -1;
+    }
+    void newe(Elem &e, int index) {
+        int tp = ++cnt;
+        vD(tp).next = e.pdata;
+        e.pdata = tp;
+        vD(tp).data = index;
+    }
+    void add(int index, int d = 0, int ce = 0) {
+        unsigned char tc = ca[index][d];
+        if (tc == 0) {
+            newe(vE(ce), index);
+            return;
+        }
+        if (vE(ce).ts < 0) {
+            vE(ce).ts = ++cnt;
+            vT(vE(ce).ts).c = tc;
+            vT(vE(ce).ts).t = ++cnt;
+            vT(vE(ce).ts).next = -1;
+            add(index, d + 1, cnt);
+        } else {
+            int p = vE(ce).ts, pp = p;
+            while (p >= 0 && vT(p).c < tc) {
+                pp = p;
+                p = vT(p).next;
+            }
+            if (p < 0) {
+                p = vT(pp).next = ++cnt;
+                vT(p).next = -1;
+                vT(p).c = tc;
+                vT(p).t = ++cnt;
+                add(index, d + 1, cnt);
+            } else if (vT(p).c == tc)
+                add(index, d + 1, vT(p).t);
+            else if (p != pp) {
+                int t = ++cnt;
+                vT(t).next = p;
+                vT(pp).next = t;
+                vT(t).c = tc;
+                vT(t).t = ++cnt;
+                add(index, d + 1, cnt);
+            } else {
+                pp = vE(ce).ts = ++cnt;
+                vT(pp).next = p;
+                vT(pp).c = tc;
+                vT(pp).t = ++cnt;
+                add(index, d + 1, cnt);
+            }
+        }
+    }
+    void traversal(int ce = 0) {
+        int d = vE(ce).pdata;
+        while (d >= 0) {
+            a[cnt++] = ca[vD(d).data]; 
+            d = vD(d).next;
+        }
+        int p = vE(ce).ts;
+        while (p >= 0) {
+            traversal(vT(p).t);
+            p = vT(p).next;
+        }
+    }
+    static void sort(vector<const char*> &a) {
+        size_t l = 0;
+        for (int i = 0; i < a.size(); ++i)
+            l += strlen(a[i]);
+cout << double(l)/a.size() << endl;
+        Trie<const char*> trie(a, 2*l + a.size() + 1);
+        for (int i = 0; i < a.size(); ++i)
+            trie.add(i);
+cout << trie.cnt << endl;
+        trie.cnt = 0;
+        trie.traversal();
+    }
+};
+
 int main() {
     /*vector<int> a(1'000'000);
     for (int i = 0; i < 1'000'000; ++i) a[i] = rand()%7'000'000;*/
-    vector<string> a(1'000'000);
-    for (int i = 0; i < 1'000'000; ++i)
+    vector<const char*> a(1'000'000);
+    for (int i = 0; i < 1'000'000; ++i) {
+        string s;
         for (int j = 0; j < rand()%4; ++j)
-            a[i] += to_string(rand()%7'000'000);
+            s += to_string(rand()%7'000'000);
+        a[i] = new char [s.length() + 1];
+        strcpy((char*)a[i], s.data());
+    }
     //vector<string> a{"cow", "", "bee", "beaver", "squirrel", "tiger", "rhino", "cow", "parrot", "wolf", ""};
-    Trie<string>::sort(a);
-    for (int i = 1; i < a.size(); ++i)
-       if (a[i - 1] > a[i]) return 1;
+    //vector<const char*> a{"cow", "", "bee", "beaver", "squirrel", "tiger", "rhino", "cow", "parrot", "wolf", ""};
+    Trie<const char*>::sort(a);
     //for (int i = 0; i < a.size(); ++i) cout << '"' << a[i] << "\" "; cout << endl;
+    for (int i = 1; i < a.size(); ++i)
+       if (strcmp(a[i - 1], a[i]) > 0) return 1;
     cout << "ok\n";
     return 0;
 }

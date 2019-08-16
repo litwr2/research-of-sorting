@@ -75,8 +75,9 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 int main() {
     vector<X> a;
     fill(a);
-///    for (int i = 0; i < SS; ++i) a.push_back(uint64_t(rand())*rand());
+//    for (int i = 0; i < SS; ++i) a.push_back(uint64_t(rand())*rand());
 //    for (int i = 0; i < SS; ++i) cout << a[i] << ' '; cout << endl;
+    array_sort(a, 7);
 //    radixsortmsd(a, 4);
 //    insertion_sort(a);
     //MsbRadix<X>(a, 16)();

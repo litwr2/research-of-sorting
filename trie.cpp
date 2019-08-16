@@ -187,7 +187,7 @@ template<> struct Trie<string> {
     void traversal(int ce = 0) {
         int d = vE(ce).pdata;
         while (d >= 0) {
-            a[cnt++] = ca[vD(d).data]; 
+            swap(a[cnt++], ca[vD(d).data]);
             d = vD(d).next;
         }
         int p = vE(ce).ts;
@@ -199,7 +199,7 @@ template<> struct Trie<string> {
     static void sort(vector<string> &a) {
         size_t l = 0;
         for (int i = 0; i < a.size(); ++i)
-            l += a[i].size();
+            l += a[i].length();
         Trie<string> trie(a, 2*l + a.size() + 1);
         for (int i = 0; i < a.size(); ++i)
             trie.add(i);

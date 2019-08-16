@@ -13,6 +13,7 @@ BEGIN {
     ss["radix8_msb"] = 0
     ss["radix11_msb"] = 0
     ss["radix16_msb"] = 0
+    ss["radix8_trie"] = 1
     ss["shell_10/3_oms7"] = 0
     ss["radix8_oms7"] = 0
     ss["radix8_msb_oms7"] = 0

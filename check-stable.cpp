@@ -24,7 +24,7 @@ using namespace std;
 #define LOW_VARIATION_CONST 2
 
 #ifndef SS
-#define SS 10000 //limits due to int types of indice are slightly above 2'000'000'000
+#define SS 10'000 //limits due to int types of indice are slightly above 2'000'000'000
 #endif
 
 struct X {
@@ -55,6 +55,7 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "array.cpp"
 #include "bubble.cpp"
 #include "selection.cpp"
+#include "trie.cpp"
 
 bool stable;
 
@@ -94,7 +95,7 @@ int main() {
     test<X>(v, bind(shell2<X>, placeholders::_1, 2), "shell_exp_tab");
     test<X>(v, bind(shell2<X>, placeholders::_1, 4), "shell_prime_10/3");
     test<X>(v, bind(shell2<X>, placeholders::_1, 5), "shell_a102549m");
-    test<X>(v, bind(shell2<X>, placeholders::_1, 5), "shell_2.25");
+    test<X>(v, bind(shell2<X>, placeholders::_1, 6), "shell_2.25");
 
     test<X>(v, bind(radixsort<X>, placeholders::_1, 8), "radix8");
     test<X>(v, bind(radix_msb<X>, placeholders::_1, 8), "radix8_msb");
@@ -102,6 +103,7 @@ int main() {
     test<X>(v, bind(radixsort<X>, placeholders::_1, 16), "radix16");
     test<X>(v, bind(radix_msb<X>, placeholders::_1, 11), "radix11_msb");
     test<X>(v, bind(radix_msb<X>, placeholders::_1, 16), "radix16_msb");
+    test<X>(v, bind(Trie<X>::sort, placeholders::_1), "radix8_trie");
 #ifdef PLAININT
     test<X>(v, bind(oms7_helper<X>, placeholders::_1, 5), "shell_10/3_oms7");
     test<X>(v, bind(oms7_helper<X>, placeholders::_1, 7), "radix8_oms7");
@@ -116,7 +118,7 @@ int main() {
     test<X>(v, bind(hsort_bsd<X>, placeholders::_1), "heapsort_bsd");
     test<X>(v, bind(mergesort_bsd<X>, placeholders::_1), "mergesort_bsd");
     test<X>(v, bind(qsort1<X>, placeholders::_1, 0, SS - 1), "qsort_hoare");
-    //test<X>(v, bind(qsort1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco"); //not tested with all data types 
+    test<X>(v, bind(qsort1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco");
     test<X>(v, bind(qsort2<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
     test<X>(v, bind(qsort3<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
     test<X>(v, bind(qsort4<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");

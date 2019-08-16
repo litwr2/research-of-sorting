@@ -1,7 +1,7 @@
 template<class T>
 void radixsort(vector<T> &a, int N) {
     int s = sizeof(T);
-    if (s == sizeof(int(a[0]))) s = 4; //for X type
+    if (sizeof(int)*5 == s) s = sizeof(int); //for INT1P4 type
     int k = (s*8 + N - 1) / N;
     int M = 1 << N;
     vector<T> b(a.size());

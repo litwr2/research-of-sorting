@@ -17,12 +17,13 @@
 using namespace std;
 
 #ifndef SS
-#define SS 10'000 //limits due to int types of indice are slightly above 2'000'000'000
+#define SS 100'000 //limits due to int types of indice are slightly above 2'000'000'000
 #endif
 
 #define RANDOM
-#define LOW_VARIATION_CONST 0
-#define CSTRINGS
+//#define LOW_VARIATION2
+#define LOW_VARIATION_CONST 2
+#define INT1P4
 
 #ifdef PLAININT
 typedef int X;
@@ -69,6 +70,7 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "array.cpp"
 #include "bubble.cpp"
 #include "selection.cpp"
+#include "trie.cpp"
 
 int main() {
     vector<X> a;
@@ -78,6 +80,7 @@ int main() {
 //    radixsortmsd(a, 4);
 //    insertion_sort(a);
     //MsbRadix<X>(a, 16)();
+    //Trie<X>::sort(a);
 //    radix_msb(a, 8);
 //    dualPivotQuicksort(a);
 //    for (int i = 0; i < SS; ++i) cout << a[i] << '\n'; cout << endl;

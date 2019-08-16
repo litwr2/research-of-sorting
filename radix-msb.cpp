@@ -46,7 +46,7 @@ template<class T> struct MsbRadix {
 
     void operator()() {
         int s = sizeof(T);
-        if (s == sizeof(int(a[0]))) s = 4; //for X type
+        if (s == sizeof(int)*5) s = sizeof(int); //for INT1P4 type
         int d = (s*8 + N - 1) / N - 1;
         _radixsort_msb(&a[0], &a[0] + a.size(), d);
     }

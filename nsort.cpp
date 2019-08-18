@@ -203,7 +203,7 @@ L:
 #if !defined(FLOAT)
     test<X>(fio, v, bind(radixsort<X>, placeholders::_1, 8), "radix8");
     test<X>(fio, v, bind(radix_msb<X>, placeholders::_1, 8), "radix8_msb");
-    //test<X>(fio, v, bind(Trie<X>::sort, placeholders::_1, 8), "radix8_trie");
+    test<X>(fio, v, bind((Trie<X>::sort), placeholders::_1), "radix8_trie");
 #if !defined(STRINGS) && !defined(STRINGS_SHORT) && !defined(STRINGS_LONG) && !defined(CSTRINGS) && !defined(CSTRINGS_SHORT) && !defined(CSTRINGS_LONG)
     test<X>(fio, v, bind(radixsort<X>, placeholders::_1, 11), "radix11");
     test<X>(fio, v, bind(radixsort<X>, placeholders::_1, 16), "radix16");

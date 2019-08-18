@@ -23,7 +23,7 @@ using namespace std;
 #define RANDOM
 //#define LOW_VARIATION2
 #define LOW_VARIATION_CONST 2
-#define INT1P4
+#define INT128
 
 #ifdef PLAININT
 typedef int X;
@@ -77,11 +77,11 @@ int main() {
     fill(a);
 //    for (int i = 0; i < SS; ++i) a.push_back(uint64_t(rand())*rand());
 //    for (int i = 0; i < SS; ++i) cout << a[i] << ' '; cout << endl;
-    array_sort(a, 7);
+//    array_sort(a, 7);
 //    radixsortmsd(a, 4);
 //    insertion_sort(a);
     //MsbRadix<X>(a, 16)();
-    //Trie<X>::sort(a);
+    Trie<X>::sort(a);
 //    radix_msb(a, 8);
 //    dualPivotQuicksort(a);
 //    for (int i = 0; i < SS; ++i) cout << a[i] << '\n'; cout << endl;

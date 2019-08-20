@@ -82,7 +82,7 @@ function getTa(data) {
 function drawTable1() {
     var i
     var text = "<tr><th rowspan=2>#<th rowspan=2>Алгоритм<button onclick=changeOrd(0) style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[0] + 1]
-        + "</button><th colspan=" + M + ">Размер данных" + "<th align=center rowspan=2>3aвиcимocть"
+        + "</button><th colspan=" + M + ">Размер данных" + "<th align=center rowspan=2>Временная<br>зaвиcимocть"
     text += "<tr>"
     for (i = 0; i < M; ++i)
         text += "<th align=center>10<sup>" + (i + 3)

@@ -34,9 +34,10 @@ END {
             r = l
             break
           }
-        c1 = 0
-        if (a[i][j][k][r - 1] != 0)
-          c1 = log(a[i][j][k][r]/a[i][j][k][r - 1])/log(10)
+        #c1 = log(a[i][j][k][r]/a[i][j][k][r - 1])/log(10)
+        t = 0
+        if (a[i][j][k][t] < 10) t = 1
+        c1 = log(a[i][j][k][r]/a[i][j][k][t])/log(10)/(r - t)
         c2 = a[i][j][k][r]/10^(c1*(r + 3))
         printf ",%f,%f]", c1, c2
         #end of the calculation

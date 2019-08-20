@@ -21,7 +21,8 @@ int main() {
     vector<int> v(SS);
     for (int i = 0; i < SS; ++i) v[i] = rand()%7777;
     cout << "ready\n";
-    tree_sort_stl(v);
+    //tree_sort_stl(v);
+    system("ps -A|grep out >zz");
     return 0;
 }
 

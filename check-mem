@@ -3,5 +3,5 @@ do
     #free
     #free | awk '/Mem:/ { if ($7 < 500000) exit 2; else printf "%d ", $7 }' || { killall nsort2; echo killed '(no memory)'; exit; sleep 20; }
     ps aux | awk '$11 == "nsort2" { if ($6 > 7700000) exit 5; else printf "%d ", $6; exit 0}'|| { killall nsort2; echo killed '(no memory)'; sleep 20; }
-    ps -A | awk '/nsort2/ { split($3, a, ":"); if (a[1] > 8) exit 5; else printf "[%s] ", $3}'|| { killall nsort2; echo killed '(too long)'; sleep 20; }
+    ps -A | awk '/nsort2/ { split($3, a, ":"); if (a[1] > 2) exit 5; else printf "[%s] ", $3}'|| { killall nsort2; echo killed '(too long)'; sleep 20; }
 done

@@ -94,7 +94,7 @@ template<class T> struct Trie {
     void traversal(int ce = 0) {
         int d = vE(ce).pdata;
         while (d >= 0) {
-            a[cnt++] = ca[vD(d).data]; 
+            a[cnt++] = ca[vD(d).data];
             d = vD(d).next;
         }
         int p = vE(ce).ts;

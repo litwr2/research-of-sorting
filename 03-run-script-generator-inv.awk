@@ -1,26 +1,26 @@
 BEGIN {
     ss["shell_a3n"] = 0
-    ss["shell_10/3"] = 1
+    ss["shell_10/3"] = 0
     ss["shell_prime_e"] = 0
     ss["shell_a102549"] = 0
     ss["shell_exp_tab"] = 0
-    ss["shell_prime_10/3"] = 1
+    ss["shell_prime_10/3"] = 0
     ss["shell_a102549m"] = 0
     ss["shell_2.25"] = 1
-    ss["radix8"] = 1
-    ss["radix11"] = 1
-    ss["radix16"] = 1
-    ss["radix8_msb"] = 1
-    ss["radix11_msb"] = 1
-    ss["radix16_msb"] = 1
-    ss["radix8_trie"] = 1
+    ss["radix8"] = 0
+    ss["radix11"] = 0
+    ss["radix16"] = 0
+    ss["radix8_msb"] = 0
+    ss["radix11_msb"] = 0
+    ss["radix16_msb"] = 0
+    ss["radix8_trie"] = 0
     ss["shell_10/3_oms7"] = 0
     ss["radix8_oms7"] = 0
     ss["radix8_msb_oms7"] = 0
     ss["heapsort_stl"] = 0
     ss["radix_bsd"] = 0
     ss["sradix_bsd"] = 0
-    ss["clib_qsort"] = 1
+    ss["clib_qsort"] = 0
     ss["heapsort_bsd"] = 0
     ss["mergesort_bsd"] = 0
     ss["qsort_hoare"] = 0
@@ -47,13 +47,13 @@ BEGIN {
     ss["array*7"] = 0
     ss["hash"] = 0
     ss["hashbt_std"] = 0
-    ss["hashbt"] = 0
+    ss["hashbt"] = 1
     ss["hashbt_boost"] = 0
     ss["insertion"] = 0
     #for (i in ss) ss[i] = 1
 
-    t["PLAININT"] = 0
-    t["INT1P4"] = 1
+    t["PLAININT"] = 1
+    t["INT1P4"] = 0
     t["INT64"] = 0
     t["INT128"] = 0
     t["FLOAT"] = 0
@@ -65,16 +65,16 @@ BEGIN {
     t["CSTRINGS_LONG"] = 0
 
     ft["RANDOM"] = 1
-    ft["ORDERED"] = 1
-    ft["REVERSED"] = 1
-    ft["PARTIALLY_ORDERED"] = 1
-    ft["PARTIALLY_REVERSED"] = 1
-    ft["LOW_VARIATION1"] = 1
-    ft["LOW_VARIATION2"] = 1
-    ft["LOW_VARIATION100"] = 1
-    ft["SLOW_QSORT_HOARE"] = 1
+    ft["ORDERED"] = 0
+    ft["REVERSED"] = 0
+    ft["PARTIALLY_ORDERED"] = 0
+    ft["PARTIALLY_REVERSED"] = 0
+    ft["LOW_VARIATION1"] = 0
+    ft["LOW_VARIATION2"] = 0
+    ft["LOW_VARIATION100"] = 0
+    ft["SLOW_QSORT_HOARE"] = 0
 
-    for (SS = 1000; SS <= 100*1000*1000; SS *= 10) {
+    for (SS = 10*1000*1000; SS <= 100*1000*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {

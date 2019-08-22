@@ -36,8 +36,10 @@ END {
           }
         #c1 = log(a[i][j][k][r]/a[i][j][k][r - 1])/log(10)
         t = 0
-        if (a[i][j][k][t] < 10) t = 1
+        while (a[i][j][k][t] < 10 || a[i][j][k][t]*5 > a[i][j][k][t + 1] && t + 1 < r) ++t
         c1 = log(a[i][j][k][r]/a[i][j][k][t])/log(10)/(r - t)
+        #c3 = log(a[i][j][k][r]/a[i][j][k][r - 1])/log(10)
+        #if (c1 < 0.95 && c3 >= 0.95) c2 = c3;
         c2 = a[i][j][k][r]/10^(c1*(r + 3))
         printf ",%f,%f]", c1, c2
         #end of the calculation

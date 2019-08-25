@@ -48,7 +48,8 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "quick-hoare.cpp"
 #include "quick-lomuto.cpp"
 #include "quick-dp.cpp"
-#include "shell.cpp"
+#include "shell-plain.cpp"
+#include "shell-tab.cpp"
 #include "tree.cpp"
 #include "hash.cpp"
 #include "hashtree.cpp"
@@ -88,14 +89,14 @@ int main() {
     fill(v);
     for (int i = 0; i < SS; ++i) v[i].v[0] = i;
 
-    test<X>(v, bind(shell1<X>, placeholders::_1), "shell_a3n");
-    test<X>(v, bind(shell3<X>, placeholders::_1), "shell_10/3");
-    test<X>(v, bind(shell2<X>, placeholders::_1, 0), "shell_prime_e");
-    test<X>(v, bind(shell2<X>, placeholders::_1, 1), "shell_a102549");
-    test<X>(v, bind(shell2<X>, placeholders::_1, 2), "shell_exp_tab");
-    test<X>(v, bind(shell2<X>, placeholders::_1, 4), "shell_prime_10/3");
-    test<X>(v, bind(shell2<X>, placeholders::_1, 5), "shell_a102549m");
-    test<X>(v, bind(shell2<X>, placeholders::_1, 6), "shell_2.25");
+    test<X>(v, bind(shell_a3n<X>, placeholders::_1), "shell_a3n");
+    test<X>(v, bind(shell_10d3<X>, placeholders::_1), "shell_10/3");
+    test<X>(v, bind(shell_tab<X>, placeholders::_1, 0), "shell_prime_e");
+    test<X>(v, bind(shell_tab<X>, placeholders::_1, 1), "shell_a102549");
+    test<X>(v, bind(shell_tab<X>, placeholders::_1, 2), "shell_exp_tab");
+    test<X>(v, bind(shell_tab<X>, placeholders::_1, 4), "shell_prime_10/3");
+    test<X>(v, bind(shell_tab<X>, placeholders::_1, 5), "shell_a102549m");
+    test<X>(v, bind(shell_tab<X>, placeholders::_1, 6), "shell_2.25");
 
     test<X>(v, bind(radixsort<X>, placeholders::_1, 8), "radix8");
     test<X>(v, bind(radix_msb<X>, placeholders::_1, 8), "radix8_msb");
@@ -104,7 +105,7 @@ int main() {
     test<X>(v, bind(radix_msb<X>, placeholders::_1, 11), "radix11_msb");
     test<X>(v, bind(radix_msb<X>, placeholders::_1, 16), "radix16_msb");
     test<X>(v, bind(Trie<X>::sort, placeholders::_1), "radix8_trie");
-#ifdef PLAININT
+#ifdef INT32
     test<X>(v, bind(oms7_helper<X>, placeholders::_1, 5), "shell_10/3_oms7");
     test<X>(v, bind(oms7_helper<X>, placeholders::_1, 7), "radix8_oms7");
     test<X>(v, bind(oms7_helper<X>, placeholders::_1, 8), "radix8_msb_oms7");
@@ -117,11 +118,11 @@ int main() {
     test<X>(v, bind(qsort0<X>, placeholders::_1), "clib_qsort");
     test<X>(v, bind(hsort_bsd<X>, placeholders::_1), "heapsort_bsd");
     test<X>(v, bind(mergesort_bsd<X>, placeholders::_1), "mergesort_bsd");
-    test<X>(v, bind(qsort1<X>, placeholders::_1, 0, SS - 1), "qsort_hoare");
-    test<X>(v, bind(qsort1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco");
-    test<X>(v, bind(qsort2<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
-    test<X>(v, bind(qsort3<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
-    test<X>(v, bind(qsort4<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");
+    test<X>(v, bind(qsort_hoare1<X>, placeholders::_1, 0, SS - 1), "qsort_hoare");
+    test<X>(v, bind(qsort_hoare1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco");
+    test<X>(v, bind(qsort_np<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
+    test<X>(v, bind(qsort_hoare2<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
+    test<X>(v, bind(qsort_lomuto<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");
     test<X>(v, bind(dualPivotQuicksort<X>, placeholders::_1), "qsort_dualpivot");
     test<X>(v, bind(stl_sort<X>, placeholders::_1), "stlsort");
     test<X>(v, bind(stl_stable_sort<X>, placeholders::_1), "stlstable");

@@ -1,4 +1,5 @@
 var M = 6 //max index
+var MA = M //max actual index
 
 function precRound(n) {
     var t = n
@@ -80,11 +81,14 @@ function getTa(data) {
 }
 
 function drawTable1() {
-    var i
+    var i = 0
+    for (sortm in Data[order[0]][type[0]])
+        if (typeof(Data[order[0]][type[0]][sortm][M - 1]) == "number") { i = 1; break }
+    if (i == 0) MA = M - 1; else MA = M
     var text = "<tr><th rowspan=2>#<th rowspan=2>Алгоритм<button onclick=changeOrd(0) style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[0] + 1]
-        + "</button><th colspan=" + M + ">Размер данных" + "<th align=center rowspan=2>Временная<br>зaвиcимocть"
+        + "</button><th colspan=" + MA + ">Размер данных" + "<th align=center rowspan=2>Временная<br>зaвиcимocть"
     text += "<tr>"
-    for (i = 0; i < M; ++i)
+    for (i = 0; i < MA; ++i)
         text += "<th align=center>10<sup>" + (i + 3)
             + "</sup><button onclick=changeOrd(" + (i + 1)
             + ") style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[i + 1] + 1] + "</button>"
@@ -96,7 +100,7 @@ function drawTable1() {
             text += "<tr><td align=center>" + (++n) + "<input id=" + ta[i][0] + " type=checkbox "
             if (ta[i][0] in marked) text += "checked "
             text += "onclick=changeCheck(\"" + ta[i][0] + "\")><td>" + ta[i][0]
-            for (var k = 0; k < M; ++k) {
+            for (var k = 0; k < MA; ++k) {
                 text += "<td align=right>"
                 var a = ta[i][k + 1]
                 if (typeof(a) == "number")

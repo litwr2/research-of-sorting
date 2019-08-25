@@ -25,7 +25,7 @@ using namespace std;
 #define LOW_VARIATION_CONST 2
 #define INT128
 
-#ifdef PLAININT
+#ifdef INT32
 typedef int X;
 #elif defined(STRINGS) || defined(STRINGS_SHORT) || defined(STRINGS_LONG)
 typedef string X;
@@ -63,7 +63,8 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "quick-hoare.cpp"
 #include "quick-lomuto.cpp"
 #include "quick-dp.cpp"
-#include "shell.cpp"
+#include "shell-plain.cpp"
+#include "shell-tab.cpp"
 #include "tree.cpp"
 #include "hash.cpp"
 #include "hashtree.cpp"

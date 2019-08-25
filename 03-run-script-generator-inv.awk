@@ -6,14 +6,14 @@ BEGIN {
     ss["shell_exp_tab"] = 0
     ss["shell_prime_10/3"] = 0
     ss["shell_a102549m"] = 0
-    ss["shell_2.25"] = 1
+    ss["shell_2.25"] = 0
     ss["radix8"] = 0
     ss["radix11"] = 0
     ss["radix16"] = 0
     ss["radix8_msb"] = 0
     ss["radix11_msb"] = 0
     ss["radix16_msb"] = 0
-    ss["radix8_trie"] = 1
+    ss["radix8_trie"] = 0
     ss["shell_10/3_oms7"] = 0
     ss["radix8_oms7"] = 0
     ss["radix8_msb_oms7"] = 0
@@ -24,9 +24,9 @@ BEGIN {
     ss["heapsort_bsd"] = 0
     ss["mergesort_bsd"] = 0
     ss["qsort_hoare"] = 0
-    ss["qsort_hoare_tco"] = 0
-    ss["qsort_no_pivot"] = 0
+    ss["qsort_hoare_tco"] = 1
     ss["qsort_hoare2"] = 0
+    ss["qsort_no_pivot"] = 0
     ss["qsort_lomuto"] = 0
     ss["qsort_dualpivot"] = 0
     ss["stlsort"] = 0
@@ -52,17 +52,17 @@ BEGIN {
     ss["insertion"] = 0
     #for (i in ss) ss[i] = 1
 
-    t["PLAININT"] = 0
-    t["INT1P4"] = 0
-    t["INT64"] = 0
-    t["INT128"] = 0
-    t["FLOAT"] = 0
+    t["INT32"] = 1
+    t["INT1P4"] = 1
+    t["INT64"] = 1
+    t["INT128"] = 1
+    t["FLOAT"] = 1
     t["STRINGS"] = 0
     t["CSTRINGS"] = 0
-    t["STRINGS_SHORT"] = 0
-    t["CSTRINGS_SHORT"] = 0
-    t["STRINGS_LONG"] = 1
-    t["CSTRINGS_LONG"] = 1
+    t["STRINGS_SHORT"] = 1
+    t["CSTRINGS_SHORT"] = 1
+    t["STRINGS_LONG"] = 0
+    t["CSTRINGS_LONG"] = 0
 
     ft["RANDOM"] = 1
     ft["ORDERED"] = 1
@@ -74,7 +74,7 @@ BEGIN {
     ft["LOW_VARIATION100"] = 1
     ft["SLOW_QSORT_HOARE"] = 1
 
-    for (SS = 1*1*1000; SS <= 1*1000*1000; SS *= 10) {
+    for (SS = 1*100*1000; SS <= 1*100*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {

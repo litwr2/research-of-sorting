@@ -1,5 +1,5 @@
 template<class T>
-void qsort2(vector<T> &a, int LBound, int UBound) { //no pivot
+void qsort_np(vector<T> &a, int LBound, int UBound) { //no pivot
     int i = LBound, j = UBound;
     while (i != j) {
         while (i != j)
@@ -17,12 +17,12 @@ void qsort2(vector<T> &a, int LBound, int UBound) { //no pivot
                 break;
             }
     }
-    if (i - 1 > LBound) qsort2(a, LBound, i - 1);
-    if (j + 1 < UBound) qsort2(a, j + 1, UBound);
+    if (i - 1 > LBound) qsort_np(a, LBound, i - 1);
+    if (j + 1 < UBound) qsort_np(a, j + 1, UBound);
 }
 
 template<>
-void qsort2(vector<const char*> &a, int LBound, int UBound) { //no pivot
+void qsort_np(vector<const char*> &a, int LBound, int UBound) { //no pivot
     int i = LBound, j = UBound;
     while (i != j) {
         while (i != j)
@@ -40,6 +40,6 @@ void qsort2(vector<const char*> &a, int LBound, int UBound) { //no pivot
                 break;
             }
     }
-    if (i - 1 > LBound) qsort2(a, LBound, i - 1);
-    if (j + 1 < UBound) qsort2(a, j + 1, UBound);
+    if (i - 1 > LBound) qsort_np(a, LBound, i - 1);
+    if (j + 1 < UBound) qsort_np(a, j + 1, UBound);
 }

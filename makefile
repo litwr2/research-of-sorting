@@ -1,5 +1,5 @@
 CXXFLAGS = -s -O3 -Wno-narrowing $(EXTRA)
-LDFLAGS = -lstdc++ -lbsd
+LDFLAGS = -lstdc++ -lbsd -pthread
 
 $(FNP): $(FNP).o
 

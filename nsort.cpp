@@ -1,4 +1,5 @@
 #include <set>
+#include <map>
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -15,6 +16,11 @@
 #include <limits>
 #include <cstring>
 
+#ifdef CHECKMEM
+#include <thread>
+#include <unistd.h>
+#endif
+
 using namespace std;
 
 #ifndef FN
@@ -23,7 +29,7 @@ using namespace std;
 #ifndef PASSES
 #define PASSES 1
 #endif
-//#define PLAININT
+//#define INT32
 //#define INT1P4
 //#define INT64
 //#define INT128
@@ -66,15 +72,15 @@ using namespace std;
 #define RANDOM
 #endif
 
-#if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS) + defined(CSTRINGS_SHORT) + defined(CSTRINGS_LONG) + defined(STRINGS_SHORT) + defined(STRINGS_LONG) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) > 1
+#if defined(INT32) + defined(STRINGS) + defined(CSTRINGS) + defined(CSTRINGS_SHORT) + defined(CSTRINGS_LONG) + defined(STRINGS_SHORT) + defined(STRINGS_LONG) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) > 1
 #error AMBIGUOUS TYPE
 #endif
 
-#if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS_SHORT) + defined(CSTRINGS_LONG) + defined(STRINGS_SHORT) + defined(STRINGS_LONG) + defined(CSTRINGS) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) == 0
-#define PLAININT
+#if defined(INT32) + defined(STRINGS) + defined(CSTRINGS_SHORT) + defined(CSTRINGS_LONG) + defined(STRINGS_SHORT) + defined(STRINGS_LONG) + defined(CSTRINGS) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) == 0
+#define INT32
 #endif
 
-#ifdef PLAININT
+#ifdef INT32
 typedef int X;
 #elif defined(STRINGS) || defined(STRINGS_SHORT) || defined(STRINGS_LONG)
 typedef string X;
@@ -112,7 +118,8 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "quick-hoare.cpp"
 #include "quick-lomuto.cpp"
 #include "quick-dp.cpp"
-#include "shell.cpp"
+#include "shell-plain.cpp"
+#include "shell-tab.cpp"
 #include "tree.cpp"
 #include "hash.cpp"
 #include "hashtree.cpp"
@@ -133,14 +140,54 @@ void check(vector<const char*>& v) {
         if (strcmp(v[i - 1], v[i]) > 0) exit(2);
 }
 
+map<string, size_t> mem_sz_data;
+volatile int mem_sz_flag;
+
+void getmemsz(const string &sm) {
+    string fn = string("/proc/") + to_string(getpid()) + "/status";
+    ifstream fi(fn);
+    if (!fi) return;
+    string is;
+    for (;;) {
+        fi.seekg(0);
+        for (;;) {
+            if (fi.eof()) return;
+            getline(fi, is);
+            if (is.find("VmRSS") != string::npos) break;
+        }
+        auto p1 = is.find_first_of("0123456789");
+        if (p1 == string::npos) return;
+        auto p2 = is.find_first_not_of("0123456789", p1);
+        if (p2 == string::npos) return;
+        size_t kbi = atol(is.substr(p1, p2 - p1).c_str());
+        if (mem_sz_data.find(sm) == mem_sz_data.end())
+            mem_sz_data[sm] = kbi;
+        else if (mem_sz_data[sm] < kbi)
+            mem_sz_data[sm] = kbi;
+        this_thread::sleep_for(chrono::milliseconds(1));
+        if (mem_sz_flag) break;
+    }
+}
+
 template<class T>
 size_t test(fstream &fio, vector<T> &v, function<void(vector<T>&)> f, const char *title) {
+#ifdef CHECKMEM
+    this_thread::sleep_for(chrono::seconds(2));
+    thread t(getmemsz, title);
+#endif
     auto ts = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     f(v);
     auto te = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     check(v);
     if (title[0] == 'Z') goto L;
+#ifdef CHECKMEM
+    mem_sz_flag = 1;
+    t.join();
+    mem_sz_flag = 0;
+    cout << title << ' ' << mem_sz_data[title] << endl; 
+#else
     cout << setw(16) << left << title << setw(14) << right << te - ts << endl;
+#endif
 L:
     fio.seekg(0);
 #if !defined(STRINGS) && !defined(STRINGS_SHORT) && !defined(STRINGS_LONG)
@@ -154,12 +201,23 @@ L:
 
 template<>
 size_t test(fstream &fio, vector<const char*> &v, function<void(vector<const char*>&)> f, const char *title) {
+#ifdef CHECKMEM
+    this_thread::sleep_for(chrono::seconds(2));
+    thread t(getmemsz, title);
+#endif
     auto ts = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     f(v);
     auto te = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     check(v);
     if (title[0] == 'Z') goto L;
+#ifdef CHECKMEM
+    mem_sz_flag = 1;
+    t.join();
+    mem_sz_flag = 0;
+    cout << title << ' ' << mem_sz_data[title] << endl; 
+#else
     cout << setw(16) << left << title << setw(14) << right << te - ts << endl;
+#endif
 L:
     fio.seekg(0);
     fio.read(reinterpret_cast<char*>(&v[0]), SS*sizeof(char*));
@@ -176,25 +234,25 @@ int main() {
 #else
     for (int i = 0; i < SS; ++i) fio << v[i] << endl;
 #endif
-#if 1
+#if !defined(CHECKMEM)
     auto tp = chrono::steady_clock::now() + chrono::seconds(10);
-    size_t eps, itv, tv = test<X>(fio, v, bind(shell3<X>, placeholders::_1), "Z"); //train gc & cache, it is just a delay
+    size_t eps, itv, tv = test<X>(fio, v, bind(shell_10d3<X>, placeholders::_1), "Z"); //train gc & cache, it is just a delay
     do {
-        itv = test<X>(fio, v, bind(shell3<X>, placeholders::_1), "Z");
+        itv = test<X>(fio, v, bind(shell_10d3<X>, placeholders::_1), "Z");
         eps = int(double(abs(itv - tv))/tv*100);
         tv = itv;
     } while (eps > 10 && chrono::steady_clock::now() < tp);
 #endif
     int passes = PASSES;
 L:
-    test<X>(fio, v, bind(shell1<X>, placeholders::_1), "shell_a3n");
-    test<X>(fio, v, bind(shell3<X>, placeholders::_1), "shell_10/3");
-    test<X>(fio, v, bind(shell2<X>, placeholders::_1, 0), "shell_prime_e");
-    test<X>(fio, v, bind(shell2<X>, placeholders::_1, 1), "shell_a102549");
-    test<X>(fio, v, bind(shell2<X>, placeholders::_1, 2), "shell_exp_tab");
-    test<X>(fio, v, bind(shell2<X>, placeholders::_1, 4), "shell_prime_10/3");
-    test<X>(fio, v, bind(shell2<X>, placeholders::_1, 5), "shell_a102549m");
-    test<X>(fio, v, bind(shell2<X>, placeholders::_1, 6), "shell_2.25");
+    test<X>(fio, v, bind(shell_a3n<X>, placeholders::_1), "shell_a3n");
+    test<X>(fio, v, bind(shell_10d3<X>, placeholders::_1), "shell_10/3");
+    test<X>(fio, v, bind(shell_tab<X>, placeholders::_1, 0), "shell_prime_e");
+    test<X>(fio, v, bind(shell_tab<X>, placeholders::_1, 1), "shell_a102549");
+    test<X>(fio, v, bind(shell_tab<X>, placeholders::_1, 2), "shell_exp_tab");
+    test<X>(fio, v, bind(shell_tab<X>, placeholders::_1, 4), "shell_prime_10/3");
+    test<X>(fio, v, bind(shell_tab<X>, placeholders::_1, 5), "shell_a102549m");
+    test<X>(fio, v, bind(shell_tab<X>, placeholders::_1, 6), "shell_2.25");
 
     test<X>(fio, v, bind(selection_sort<X>, placeholders::_1), "selection");
     test<X>(fio, v, bind(insertion_sort<X>, placeholders::_1), "insertion");
@@ -211,7 +269,7 @@ L:
     test<X>(fio, v, bind(radix_msb<X>, placeholders::_1, 16), "radix16_msb");
 #endif
 #endif
-#ifdef PLAININT
+#ifdef INT32
     test<X>(fio, v, bind(oms7_helper<X>, placeholders::_1, 5), "shell_10/3_oms7");
     test<X>(fio, v, bind(oms7_helper<X>, placeholders::_1, 7), "radix8_oms7");
     test<X>(fio, v, bind(oms7_helper<X>, placeholders::_1, 8), "radix8_msb_oms7");
@@ -226,11 +284,11 @@ L:
     test<X>(fio, v, bind(hsort_bsd<X>, placeholders::_1), "heapsort_bsd");
     test<X>(fio, v, bind(mergesort_bsd<X>, placeholders::_1), "mergesort_bsd");
 #endif
-    test<X>(fio, v, bind(qsort1<X>, placeholders::_1, 0, SS - 1), "qsort_hoare");
-    test<X>(fio, v, bind(qsort1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco");
-    test<X>(fio, v, bind(qsort2<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
-    test<X>(fio, v, bind(qsort3<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
-    test<X>(fio, v, bind(qsort4<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");
+    test<X>(fio, v, bind(qsort_hoare1<X>, placeholders::_1, 0, SS - 1), "qsort_hoare");
+    test<X>(fio, v, bind(qsort_hoare1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco");
+    test<X>(fio, v, bind(qsort_np<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
+    test<X>(fio, v, bind(qsort_hoare2<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
+    test<X>(fio, v, bind(qsort_lomuto<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");
     test<X>(fio, v, bind(dualPivotQuicksort<X>, placeholders::_1), "qsort_dualpivot");
     test<X>(fio, v, bind(stl_sort<X>, placeholders::_1), "stlsort");
     test<X>(fio, v, bind(stl_stable_sort<X>, placeholders::_1), "stlstable");

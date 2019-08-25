@@ -21,7 +21,7 @@ using namespace std;
 #ifndef PASSES
 #define PASSES 1
 #endif
-//#define PLAININT
+//#define INT32
 //#define INT1P4
 //#define INT64
 //#define INT128
@@ -46,12 +46,12 @@ using namespace std;
 #define REPEATS 2
 #endif
 
-#if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS) + defined(CSTRINGS_SHORT) + defined(CSTRINGS_LONG) + defined(STRINGS_SHORT) + defined(STRINGS_LONG) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) > 1
+#if defined(INT32) + defined(STRINGS) + defined(CSTRINGS) + defined(CSTRINGS_SHORT) + defined(CSTRINGS_LONG) + defined(STRINGS_SHORT) + defined(STRINGS_LONG) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) > 1
 #error AMBIGUOUS TYPE
 #endif
 
-#if defined(PLAININT) + defined(STRINGS) + defined(CSTRINGS_SHORT) + defined(CSTRINGS_LONG) + defined(STRINGS_SHORT) + defined(STRINGS_LONG) + defined(CSTRINGS) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) == 0
-#define PLAININT
+#if defined(INT32) + defined(STRINGS) + defined(CSTRINGS_SHORT) + defined(CSTRINGS_LONG) + defined(STRINGS_SHORT) + defined(STRINGS_LONG) + defined(CSTRINGS) + defined(INT64) + defined(FLOAT) + defined(INT128) + defined(INT1P4) == 0
+#define INT32
 #endif
 
 uint64_t rdtsc(){
@@ -60,7 +60,7 @@ uint64_t rdtsc(){
     return ((uint64_t)hi << 32) | lo;
 }
 
-#ifdef PLAININT
+#ifdef INT32
 typedef int X;
 #elif defined(STRINGS) || defined(STRINGS_SHORT) || defined(STRINGS_LONG)
 typedef string X;
@@ -103,7 +103,8 @@ ostream& operator<<(ostream& os, const __int128 &v) {
 #include "quick-hoare.cpp"
 #include "quick-lomuto.cpp"
 #include "quick-dp.cpp"
-#include "shell.cpp"
+#include "shell-plain.cpp"
+#include "shell-tab.cpp"
 #include "tree.cpp"
 #include "hash.cpp"
 #include "hashtree.cpp"
@@ -186,16 +187,16 @@ int main() {
     for (int i = 0; i < SS; ++i) v[i] = cnv<X>(i);
     double adjustment_sum = 0;
     for (int i = 0; i < 10; ++i)
-        test<X>(v, bind(shell3<X>, placeholders::_1), "Z");
+        test<X>(v, bind(shell_10d3<X>, placeholders::_1), "Z");
 
     int passes = PASSES;
 L:
-    test<X>(v, bind(shell1<X>, placeholders::_1), "shell_a3n");
-    test<X>(v, bind(shell3<X>, placeholders::_1), "shell_10/3");
-    test<X>(v, bind(shell2<X>, placeholders::_1, 0), "shell_prime_e");
-    test<X>(v, bind(shell2<X>, placeholders::_1, 1), "shell_a102549");
-    test<X>(v, bind(shell2<X>, placeholders::_1, 2), "shell_exp_tab");
-    test<X>(v, bind(shell2<X>, placeholders::_1, 4), "shell_prime_10/3");
+    test<X>(v, bind(shell_a3n<X>, placeholders::_1), "shell_a3n");
+    test<X>(v, bind(shell_10d3<X>, placeholders::_1), "shell_10/3");
+    test<X>(v, bind(shell_tab<X>, placeholders::_1, 0), "shell_prime_e");
+    test<X>(v, bind(shell_tab<X>, placeholders::_1, 1), "shell_a102549");
+    test<X>(v, bind(shell_tab<X>, placeholders::_1, 2), "shell_exp_tab");
+    test<X>(v, bind(shell_tab<X>, placeholders::_1, 4), "shell_prime_10/3");
 
 #if !defined(FLOAT)
     test<X>(v, bind(radixsort<X>, placeholders::_1, 8), "radix8");
@@ -208,7 +209,7 @@ L:
     test<X>(v, bind(radix_msb<X>, placeholders::_1, 16), "radix16_msb");
 #endif
 #endif
-#ifdef PLAININT
+#ifdef INT32
     test<X>(v, bind(oms7_helper<X>, placeholders::_1, 5), "shell_10/3_oms7");
     test<X>(v, bind(oms7_helper<X>, placeholders::_1, 7), "radix8_oms7");
     test<X>(v, bind(oms7_helper<X>, placeholders::_1, 8), "radix8_msb_oms7");
@@ -223,11 +224,11 @@ L:
     test<X>(v, bind(hsort_bsd<X>, placeholders::_1), "heapsort_bsd");
     test<X>(v, bind(mergesort_bsd<X>, placeholders::_1), "mergesort_bsd");
 #endif
-    test<X>(v, bind(qsort1<X>, placeholders::_1, 0, SS - 1), "qsort_hoare");
-    test<X>(v, bind(qsort1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco");
-    test<X>(v, bind(qsort2<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
-    test<X>(v, bind(qsort3<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
-    test<X>(v, bind(qsort4<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");
+    test<X>(v, bind(qsort_hoare1<X>, placeholders::_1, 0, SS - 1), "qsort_hoare");
+    test<X>(v, bind(qsort_hoare1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco");
+    test<X>(v, bind(qsort_np<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
+    test<X>(v, bind(qsort_hoare2<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
+    test<X>(v, bind(qsort_lomuto<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");
     test<X>(v, bind(dualPivotQuicksort<X>, placeholders::_1), "qsort_dualpivot");
     test<X>(v, bind(stl_sort<X>, placeholders::_1), "stlsort");
     test<X>(v, bind(stl_stable_sort<X>, placeholders::_1), "stlstable");

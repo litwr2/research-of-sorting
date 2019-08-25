@@ -81,7 +81,7 @@ void insert2(vector<const char*> &v, list<const char*> &l, int final) {
 }
 
 template<class T>
-void fill_for_quadratic_qsort1(vector<T> &v) {
+void fill_for_quadratic_qsort_hoare1(vector<T> &v) {
 	v = {cnv<T>(1), cnv<T>(3)};
 	list<T> l{cnv<T>(2), cnv<T>(0)};
 	for (int i = 0; i < (SS - 4)/2; i++)
@@ -93,7 +93,7 @@ void fill_for_quadratic_qsort1(vector<T> &v) {
 
 template<class T> void fill(vector<T> &v) {
 #ifdef SLOW_QSORT_HOARE
-    fill_for_quadratic_qsort1(v);
+    fill_for_quadratic_qsort_hoare1(v);
 #else
     for (int i = 0; i < SS; i++)
 #ifdef RANDOM

@@ -51,7 +51,7 @@ BEGIN {
     ss["hashbt_boost"] = 1
     ss["insertion"] = 1
 
-    t["PLAININT"] = 1
+    t["INT32"] = 1
     t["INT1P4"] = 1
     t["INT64"] = 1
     t["INT128"] = 1

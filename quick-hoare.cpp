@@ -58,7 +58,7 @@ LOOP:
         }
     }
     else {
-    if (i < UBound) qsort_hoare1tc(a, i, UBound);
+        if (i < UBound) qsort_hoare1tc(a, i, UBound);
         if (LBound < j) {  // qsort_hoare1(a, LBound, j);
             i = LBound;
             UBound = j;
@@ -91,7 +91,7 @@ LOOP:
         }
     }
     else {
-    if (i < UBound) qsort_hoare1tc(a, i, UBound);
+        if (i < UBound) qsort_hoare1tc(a, i, UBound);
         if (LBound < j) {  // qsort_hoare1(a, LBound, j);
             i = LBound;
             UBound = j;

@@ -10,13 +10,13 @@ BEGIN {
     ss["radix8"] = 1
     ss["radix11"] = 0
     ss["radix16"] = 0
-    ss["radix8_msb"] = 0
-    ss["radix11_msb"] = 0
-    ss["radix16_msb"] = 0
+    ss["radix8_msd"] = 0
+    ss["radix11_msd"] = 0
+    ss["radix16_msd"] = 0
     ss["radix8_trie"] = 1
     ss["shell_10/3_oms7"] = 0
     ss["radix8_oms7"] = 0
-    ss["radix8_msb_oms7"] = 0
+    ss["radix8_msd_oms7"] = 0
     ss["heapsort_stl"] = 1
     ss["radix_bsd"] = 0
     ss["sradix_bsd"] = 0

@@ -10,13 +10,13 @@ BEGIN {
     ss["radix8"] = 1
     ss["radix11"] = 1
     ss["radix16"] = 1
-    ss["radix8_msb"] = 1
-    ss["radix11_msb"] = 1
-    ss["radix16_msb"] = 1
+    ss["radix8_msd"] = 1
+    ss["radix11_msd"] = 1
+    ss["radix16_msd"] = 1
     ss["radix8_trie"] = 1
     ss["shell_10/3_oms7"] = 1
     ss["radix8_oms7"] = 1
-    ss["radix8_msb_oms7"] = 1
+    ss["radix8_msd_oms7"] = 1
     ss["heapsort_stl"] = 1
     ss["radix_bsd"] = 1
     ss["sradix_bsd"] = 1
@@ -104,7 +104,7 @@ BEGIN {
                            zoo[i3] = 1
                        if (i3 == "hash" && SS >= lim && index(i1, "STRING") && (i2 == "PARTIALLY_ORDERED" || i2 == "LOW_VARIATION100" || i2 == "LOW_VARIATION2"))
                            zoo[i3] = 1
-                       if (i3 == "radix8_msb" && SS >= lim && index(i1, "_LONG") && i2 == "RANDOM")
+                       if (i3 == "radix8_msd" && SS >= lim && index(i1, "_LONG") && i2 == "RANDOM")
                            zoo[i3] = 1
 
                        lim = 10*1000*1000

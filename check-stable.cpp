@@ -43,7 +43,7 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "boost.cpp"
 #include "bsd.cpp"
 #include "radix.cpp"
-#include "radix-msb.cpp"
+#include "radix-msd.cpp"
 #include "quick-np.cpp"
 #include "quick-hoare.cpp"
 #include "quick-lomuto.cpp"
@@ -99,16 +99,16 @@ int main() {
     test<X>(v, bind(shell_tab<X>, placeholders::_1, 6), "shell_2.25");
 
     test<X>(v, bind(radixsort<X>, placeholders::_1, 8), "radix8");
-    test<X>(v, bind(radix_msb<X>, placeholders::_1, 8), "radix8_msb");
+    test<X>(v, bind(radix_msd<X>, placeholders::_1, 8), "radix8_msd");
     test<X>(v, bind(radixsort<X>, placeholders::_1, 11), "radix11");
     test<X>(v, bind(radixsort<X>, placeholders::_1, 16), "radix16");
-    test<X>(v, bind(radix_msb<X>, placeholders::_1, 11), "radix11_msb");
-    test<X>(v, bind(radix_msb<X>, placeholders::_1, 16), "radix16_msb");
+    test<X>(v, bind(radix_msd<X>, placeholders::_1, 11), "radix11_msd");
+    test<X>(v, bind(radix_msd<X>, placeholders::_1, 16), "radix16_msd");
     test<X>(v, bind(Trie<X>::sort, placeholders::_1), "radix8_trie");
 #ifdef INT32
     test<X>(v, bind(oms7_helper<X>, placeholders::_1, 5), "shell_10/3_oms7");
     test<X>(v, bind(oms7_helper<X>, placeholders::_1, 7), "radix8_oms7");
-    test<X>(v, bind(oms7_helper<X>, placeholders::_1, 8), "radix8_msb_oms7");
+    test<X>(v, bind(oms7_helper<X>, placeholders::_1, 8), "radix8_msd_oms7");
 #endif
     test<X>(v, bind(hsortstl<X>, placeholders::_1), "heapsort_stl");
 #if defined(CSTRINGS) || defined(CSTRINGS_SHORT) || defined(CSTRINGS_LONG)

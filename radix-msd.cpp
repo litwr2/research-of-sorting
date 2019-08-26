@@ -1,12 +1,12 @@
-template<class T> struct MsbRadix {
+template<class T> struct MsdRadix {
     vector<T> temp;
     vector<T> &a;
     int N;
     int maxd;
 
-    MsbRadix(vector<T> &a, int N) : a(a), N(N), temp(a.size()) {}
+    MsdRadix(vector<T> &a, int N) : a(a), N(N), temp(a.size()) {}
 
-    void _radixsort_msb(T *l, T *r, int d) {
+    void _radixsort_msd(T *l, T *r, int d) {
         if (r - l <= 32) {
             _insertion_sort(l, r);
             return;
@@ -38,9 +38,9 @@ template<class T> struct MsbRadix {
             int r = run[i];
             if (d > 0)
                 if (r != 0)
-                    _radixsort_msb(l + cnt[r - 1], l + cnt[r], d - 1);
+                    _radixsort_msd(l + cnt[r - 1], l + cnt[r], d - 1);
                 else
-                    _radixsort_msb(l, l + cnt[r], d - 1);
+                    _radixsort_msd(l, l + cnt[r], d - 1);
         }
     }
 
@@ -48,19 +48,19 @@ template<class T> struct MsbRadix {
         int s = sizeof(T);
         if (s == sizeof(int)*5) s = sizeof(int); //for INT1P4 type
         int d = (s*8 + N - 1) / N - 1;
-        _radixsort_msb(&a[0], &a[0] + a.size(), d);
+        _radixsort_msd(&a[0], &a[0] + a.size(), d);
     }
 };
 
-template<> MsbRadix<string>::MsbRadix(vector<string> &a, int N) : a(a), N(N), temp(a.size()) {
-    if (N != 8) throw "radix-msb supports only N = 8 for strings";
+template<> MsdRadix<string>::MsdRadix(vector<string> &a, int N) : a(a), N(N), temp(a.size()) {
+    if (N != 8) throw "radix-msd supports only N = 8 for strings";
     maxd = 0;
     for (int i = 0; i < a.size(); ++i)
         if (a[i].length() > maxd) maxd = a[i].length();
     maxd--;
 }
 
-template<> void MsbRadix<string>::_radixsort_msb(string *l, string *r, int d) {
+template<> void MsdRadix<string>::_radixsort_msd(string *l, string *r, int d) {
     if (r - l <= 3) {
         _insertion_sort(l, r);
         return;
@@ -92,25 +92,25 @@ template<> void MsbRadix<string>::_radixsort_msb(string *l, string *r, int d) {
         int r = run[i];
         if (d < maxd)
             if (r != 0)
-                _radixsort_msb(l + cnt[r - 1], l + cnt[r], d + 1);
+                _radixsort_msd(l + cnt[r - 1], l + cnt[r], d + 1);
             else
-                _radixsort_msb(l, l + cnt[r], d + 1);
+                _radixsort_msd(l, l + cnt[r], d + 1);
     }
 }
 
-template<> void MsbRadix<string>::operator()() {
-    _radixsort_msb(&a[0], &a[0] + a.size(), 0);
+template<> void MsdRadix<string>::operator()() {
+    _radixsort_msd(&a[0], &a[0] + a.size(), 0);
 }
 
-template<> MsbRadix<const char*>::MsbRadix(vector<const char*> &a, int N) : a(a), N(N), temp(a.size()) {
-    if (N != 8) throw "radix-msb supports only N = 8 for strings";
+template<> MsdRadix<const char*>::MsdRadix(vector<const char*> &a, int N) : a(a), N(N), temp(a.size()) {
+    if (N != 8) throw "radix-msd supports only N = 8 for strings";
     maxd = 0;
     for (int i = 0; i < a.size(); ++i)
         if (strlen(a[i]) > maxd) maxd = strlen(a[i]);
     maxd--;
 }
 
-template<> void MsbRadix<const char*>::_radixsort_msb(const char **l, const char **r, int d) {
+template<> void MsdRadix<const char*>::_radixsort_msd(const char **l, const char **r, int d) {
     if (r - l <= 32) {
         _insertion_sort(l, r);
         return;
@@ -142,18 +142,18 @@ template<> void MsbRadix<const char*>::_radixsort_msb(const char **l, const char
         int r = run[i];
         if (d < maxd)
             if (r != 0)
-                _radixsort_msb(l + cnt[r - 1], l + cnt[r], d + 1);
+                _radixsort_msd(l + cnt[r - 1], l + cnt[r], d + 1);
             else
-                _radixsort_msb(l, l + cnt[r], d + 1);
+                _radixsort_msd(l, l + cnt[r], d + 1);
     }
 }
 
-template<> void MsbRadix<const char*>::operator()() {
-    _radixsort_msb(&a[0], &a[0] + a.size(), 0);
+template<> void MsdRadix<const char*>::operator()() {
+    _radixsort_msd(&a[0], &a[0] + a.size(), 0);
 
 }
 
-template<class T> void radix_msb(vector<T> &a, int N) {
-    MsbRadix<T>(a, N)();
+template<class T> void radix_msd(vector<T> &a, int N) {
+    MsdRadix<T>(a, N)();
 }
 

@@ -58,7 +58,7 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "boost.cpp"
 #include "bsd.cpp"
 #include "radix.cpp"
-#include "radix-msb.cpp"
+#include "radix-msd.cpp"
 #include "quick-np.cpp"
 #include "quick-hoare.cpp"
 #include "quick-lomuto.cpp"
@@ -81,9 +81,9 @@ int main() {
 //    array_sort(a, 7);
 //    radixsortmsd(a, 4);
 //    insertion_sort(a);
-    //MsbRadix<X>(a, 16)();
+    //MsdRadix<X>(a, 16)();
     Trie<X>::sort(a);
-//    radix_msb(a, 8);
+//    radix_msd(a, 8);
 //    dualPivotQuicksort(a);
 //    for (int i = 0; i < SS; ++i) cout << a[i] << '\n'; cout << endl;
 #if defined(CSTRINGS) || defined(CSTRINGS_LONG) || defined(CSTRINGS_SHORT)

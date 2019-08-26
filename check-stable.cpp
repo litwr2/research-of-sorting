@@ -93,7 +93,7 @@ int main() {
     test<X>(v, bind(shell_10d3<X>, placeholders::_1), "shell_10/3");
     test<X>(v, bind(shell_tab<X>, placeholders::_1, 0), "shell_prime_e");
     test<X>(v, bind(shell_tab<X>, placeholders::_1, 1), "shell_a102549");
-    test<X>(v, bind(shell_tab<X>, placeholders::_1, 2), "shell_exp_tab");
+    test<X>(v, bind(shell_tab<X>, placeholders::_1, 2), "shell_prime_2");
     test<X>(v, bind(shell_tab<X>, placeholders::_1, 4), "shell_prime_10/3");
     test<X>(v, bind(shell_tab<X>, placeholders::_1, 5), "shell_a102549m");
     test<X>(v, bind(shell_tab<X>, placeholders::_1, 6), "shell_2.25");

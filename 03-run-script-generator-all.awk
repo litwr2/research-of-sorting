@@ -3,7 +3,7 @@ BEGIN {
     ss["shell_10/3"] = 0
     ss["shell_prime_e"] = 0
     ss["shell_a102549"] = 0
-    ss["shell_exp_tab"] = 0
+    ss["shell_prime_2"] = 0
     ss["shell_prime_10/3"] = 0
     ss["shell_a102549m"] = 0
     ss["shell_2.25"] = 1

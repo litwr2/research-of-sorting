@@ -24,9 +24,9 @@ END {
           if (lflag) printf ","
           lflag = 1
           if (l in a[i][j][k])
-            printf "%d", a[i][j][k][l]
+            printf "%.3f", a[i][j][k][l]/1000.
           else
-            printf "\"n/a\""
+            printf "\"n/d\""
         }
         #start of a and k coefficients calculation
         for (l = M - 1; l >= 0; --l)

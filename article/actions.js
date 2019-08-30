@@ -82,9 +82,11 @@ function getTa(data) {
 
 function drawTable1() {
     var i = 0
-    for (sortm in Data[order[0]][type[0]])
-        if (typeof(Data[order[0]][type[0]][sortm][M - 1]) == "number") { i = 1; break }
-    if (i == 0) MA = M - 1; else MA = M
+    for (sortm in Data[order[0]][type[0]]) {
+        if (typeof(Data[order[0]][type[0]][sortm][M - 1]) == "number") { i = 2; break }
+        if (typeof(Data[order[0]][type[0]][sortm][M - 2]) == "number") i = 1
+    }
+    MA = M - 2 + i
     var text = "<tr><th rowspan=2>#<th rowspan=2>Алгоритм<button onclick=changeOrd(0) style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[0] + 1]
         + "</button><th colspan=" + MA + ">Размер данных" + "<th align=center rowspan=2>Временная<br>зaвиcимocть"
     text += "<tr>"
@@ -214,13 +216,22 @@ function types(n, m) {
 
 function drawActionTable1() {
     var sv
-    var indexValues = [Data1, Data1[order[0]]] //Sort them!
+    var Data1a = []
+    for (sv in Data1)
+        Data1a.push(sv)
+    Data1a.sort()
+    var Data2a = []
+    for (sv in Data1[order[0]])
+        Data2a.push(sv)
+    Data2a.sort()
+    var indexValues = [Data1a, Data2a]
     var text = ""
 
     for (var i = 0; i < 2; i++) {
         text += "<br><button id=sbutt" + i + " onclick=changeRow(" + i + ")>" + sbuttc[duoMode[i]] + "</button>:"
         text += "<select id=select" + i + "0 onchange=changeAction(" + i + ",0) style=width:14em>"
-        for (sv in indexValues[i]) {
+        for (var k = 0; k < indexValues[i].length; ++k) {
+            sv = indexValues[i][k]
             text += "<option value=" + sv
             if (sv == types(i, 0))
                 text += " selected"
@@ -231,7 +242,8 @@ function drawActionTable1() {
         if (duoMode[i] == 1) {
             text += " / "
             text += "<select id=select" + i + "1 onchange=changeAction(" + i + ",1) style=width:14em>";
-            for (sv in indexValues[i]) {
+            for (var k = 0; k < indexValues[i].length; ++k) {
+                sv = indexValues[i][k]
                 text += "<option value=" + sv
                 if (sv == types(i, 1))
                     text += " selected"
@@ -262,7 +274,7 @@ function changeOptAll() {
                 if (typeof(Data[order[0]][type[0]][sortm][i]) == "number" && typeof(Data[order[1]][type[0]][sortm][i]) == "number")
                     Data1[order[0]][type[0]][sortm][i] = Data[order[0]][type[0]][sortm][i]/Data[order[1]][type[0]][sortm][i]
                 else
-                    Data1[order[0]][type[0]][sortm][i] = "n/a"
+                    Data1[order[0]][type[0]][sortm][i] = "n/d"
             Data1[order[0]][type[0]][sortm][M] = Data[order[0]][type[0]][sortm][M] - Data[order[1]][type[0]][sortm][M]
             Data1[order[0]][type[0]][sortm][M + 1] = Data[order[0]][type[0]][sortm][M + 1]/Data[order[1]][type[0]][sortm][M + 1]
         }
@@ -277,7 +289,7 @@ function changeOptAll() {
                 if (b != 0)
                     Data1[order[0]][type[0]][sortm][i] = Data[order[0]][type[0]][sortm][i]/b
                 else
-                    Data1[order[0]][type[0]][sortm][i] = "n/a"
+                    Data1[order[0]][type[0]][sortm][i] = "n/d"
             }
             Data1[order[0]][type[0]][sortm][M] = Data[order[0]][type[0]][sortm][M] - Data[order[0]][type[1]][sortm][M]
             Data1[order[0]][type[0]][sortm][M + 1] = Data[order[0]][type[0]][sortm][M + 1]/Data[order[0]][type[1]][sortm][M + 1]

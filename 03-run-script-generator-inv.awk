@@ -24,9 +24,9 @@ BEGIN {
     ss["heapsort_bsd"] = 0
     ss["mergesort_bsd"] = 0
     ss["qsort_hoare"] = 0
-    ss["qsort_hoare_tco"] = 1
+    ss["qsort_hoare_tco"] = 0
     ss["qsort_hoare2"] = 0
-    ss["qsort_no_pivot"] = 0
+    ss["qsort_no_pivot"] = 1
     ss["qsort_lomuto"] = 0
     ss["qsort_dualpivot"] = 0
     ss["stlsort"] = 0
@@ -52,19 +52,19 @@ BEGIN {
     ss["insertion"] = 0
     #for (i in ss) ss[i] = 1
 
-    t["INT32"] = 1
-    t["INT1P4"] = 1
-    t["INT64"] = 1
-    t["INT128"] = 1
-    t["FLOAT"] = 1
-    t["STRINGS"] = 1
-    t["CSTRINGS"] = 1
-    t["STRINGS_SHORT"] = 1
+    t["INT32"] = 0
+    t["INT1P4"] = 0
+    t["INT64"] = 0
+    t["INT128"] = 0
+    t["FLOAT"] = 0
+    t["STRINGS"] = 0
+    t["CSTRINGS"] = 0
+    t["STRINGS_SHORT"] = 0
     t["CSTRINGS_SHORT"] = 1
-    t["STRINGS_LONG"] = 1
-    t["CSTRINGS_LONG"] = 1
+    t["STRINGS_LONG"] = 0
+    t["CSTRINGS_LONG"] = 0
 
-    ft["RANDOM"] = 0
+    ft["RANDOM"] = 1
     ft["ORDERED"] = 0
     ft["REVERSED"] = 0
     ft["PARTIALLY_ORDERED"] = 0
@@ -72,9 +72,9 @@ BEGIN {
     ft["LOW_VARIATION1"] = 0
     ft["LOW_VARIATION2"] = 0
     ft["LOW_VARIATION100"] = 0
-    ft["SLOW_QSORT_HOARE"] = 1
+    ft["SLOW_QSORT_HOARE"] = 0
 
-    for (SS = 1*1*1000; SS <= 1*100*1000; SS *= 10) {
+    for (SS = 100*1000*1000; SS <= 100*1000*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {
@@ -98,6 +98,6 @@ BEGIN {
                    else if (SS <= 100000) passes = 2
                    print excl "touch always.cpp;EXTRA=\"-D" i1 " -D" i2 " -DSS=" SS " -DPASSES=" passes "\" FNP=nsort2 make && nsort2 >>results/" nSS "-" i1 "-" i2 " || echo $? ERROR!!!!!"
                }
-        }
-        print "echo ok"
+    }
+    print "echo ok"
 }

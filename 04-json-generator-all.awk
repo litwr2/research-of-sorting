@@ -20,7 +20,7 @@ END {
         if (l in a[i][j])
           printf "%d", a[i][j][l]
         else
-          printf "\"n/a\""
+          printf "\"n/d\""
       }
       printf "]"
     }

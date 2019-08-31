@@ -307,7 +307,7 @@ L:
     test<X>(fio, v, bind(array_sort<X>, placeholders::_1, 7), "array*7");
 
     test<X>(fio, v, bind(hash_sort<X>, placeholders::_1), "hash");
-    test<X>(fio, v, bind(hashbt_sort2<X>, placeholders::_1), "hashbt");
+    test<X>(fio, v, bind(hashbt_sort<X>, placeholders::_1), "hashbt");
 
     test<X>(fio, v, bind(tree_sort_boost<X>, placeholders::_1), "tree_boost");
     test<X>(fio, v, bind(tree_sort_stl<X>, placeholders::_1), "tree_stl");

@@ -13,7 +13,7 @@ table, th, td {
 var Data = JSON.parse(json)
 var Data1 = JSON.parse(json)
 var stdlibSorts = ["heapsort_stl", "radix_bsd", "sradix_bsd", "clib_qsort", "heapsort_bsd", "mergesort_bsd", "stlsort", 
-"stlstable", "spread", "pdq", "spin", "flat_stable"]
+"stlstable", "spread", "pdq", "spin", "flat_stable", "timsort", "tree_stl", "tree_boost"]
 var fastSteadySorts = stdlibSorts.concat(["shell_10/3", "shell_prime_e", "shell_a102549", "shell_prime_10/3", "shell_a102549m", "shell_2.25", "radix8", "radix11", "radix16", "shell_10/3_oms7", "radix8_oms7", "radix8_msd_oms7", "radix8_trie", "timsort", "qsort_dualpivot"])
 var shellSorts = ["shell_a3n", "shell_10/3", "shell_prime_e", "shell_a102549", "shell_prime_10/3", "shell_10/3_oms7", "shell_a102549m", "shell_2.25", "shell_prime_2"]
 var quickSorts = ["qsort_hoare", "qsort_hoare_tco", "qsort_no_pivot", "qsort_hoare2", "qsort_lomuto", "qsort_dualpivot", "clib_qsort"]
@@ -35,9 +35,11 @@ var duoMode = [0, 0]
 var sbuttc = ["1 &#8594; 2", "2 &#8594; 1"]
 </script>
 
+<p>Время измеряется в миллисекундах, но в законе временной зависимости, чтобы избежать слишком маленьких коэфициентов приводятся формулы для микросекунд. Таким образом, если подставляем в формулу значение для <i>N</i>, то результат надо ещё разделить на 1000, чтобы получить число, близкое к соответствующему из таблицы.
+
 <div align=center>
 <script src=actions.js></script>
-<p align=left id=tab1a>
+<p id=tab1a>
 
 <p>
 <span id=rel></span>

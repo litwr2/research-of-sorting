@@ -98,7 +98,7 @@ template<> struct BinaryTreeForHash<const char*> {
      }
 };
 
-template<class T> void hashbt_sort2(vector<T> &a) {
+template<class T> void hashbt_sort(vector<T> &a) {
     BinaryTreeForHash<T> bt;
 
     bt.maxElem = bt.minElem = a[0];
@@ -116,7 +116,7 @@ template<class T> void hashbt_sort2(vector<T> &a) {
         bt.traversal(a, bt.storageRoot[i]);
 }
 
-template<> void hashbt_sort2(vector<const char* > &a) {
+template<> void hashbt_sort(vector<const char* > &a) {
     BinaryTreeForHash<const char*> bt;
 
     bt.maxElem = bt.minElem = a[0];

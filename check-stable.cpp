@@ -149,7 +149,7 @@ int main() {
 
     test<X>(v, bind(hash_sort<X>, placeholders::_1), "hash");
     test<X>(v, bind(hashbt_sort_std<X>, placeholders::_1), "hashbt_std");
-    test<X>(v, bind(hashbt_sort2<X>, placeholders::_1), "hashbt");
+    test<X>(v, bind(hashbt_sort<X>, placeholders::_1), "hashbt");
     test<X>(v, bind(hashbt_sort_boost<X>, placeholders::_1), "hashbt_boost");
 
     cerr << "zok\t" << SS << ' ' <<  typeid(X).name() << "\n";

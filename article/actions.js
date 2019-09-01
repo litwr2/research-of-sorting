@@ -280,13 +280,15 @@ function changeOptAll() {
         }
     } else if (duoMode[1] > 0) {
         for (var sortm in Data1[order[0]][type[0]]) {
+            if (!(sortm in Data[order[0]][type[0]] && sortm in Data[order[0]][type[1]])) continue
             for (var i = 0; i < M; ++i) {
                 var b
-                if (sortm in Data[order[0]][type[1]])
+                if (sortm in Data[order[0]][type[1]]) {
                     b = Data[order[0]][type[1]][sortm][i]
-                else
+                    if (typeof(b) != "number") b = 0
+                } else
                     b = 0
-                if (b != 0)
+                if (b != 0 && typeof(Data[order[0]][type[0]][sortm][i]) == "number")
                     Data1[order[0]][type[0]][sortm][i] = Data[order[0]][type[0]][sortm][i]/b
                 else
                     Data1[order[0]][type[0]][sortm][i] = "n/d"

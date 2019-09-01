@@ -4,6 +4,7 @@ BEGIN {
     mdata["radix_msd"] = "=TN"
     mdata["radix_bsd"] = 0
     mdata["sradix_bsd"] = "=TN*"
+    mdata["radix8_trie"] = "от =TN + 24L до =(T + 24L + 12)N"
     mdata["clib_qsort"] = "от =TN/2 до =TN*"
     mdata["heapsort"] = 0
     mdata["mergesort_bsd"] = "от =Tlog2N до =TN*"

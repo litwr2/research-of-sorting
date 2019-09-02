@@ -22,7 +22,19 @@ END {
         else
           printf "\"n/d\""
       }
-      printf "]"
+      #start of a and k coefficients calculation
+      for (l = M - 1; l >= 0; --l)
+        if (l in a[i][j]) {
+          r = l
+          break
+        }
+      c1 = log(a[i][j][r]/a[i][j][0])/log((r + 7)/7)
+      #c3 = log(a[i][j][r]/a[i][j][r - 1])/log((r + 7)/(r + 6))
+      #if (c1 < 0.95 && c3 >= 0.95) c2 = c3;
+      c2 = a[i][j][r]/(r + 7)^c1
+      printf ",%f,%f]", c1, c2
+      #end of the calculation
+      #printf "]"
     }
     printf "}"
   }

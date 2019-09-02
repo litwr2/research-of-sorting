@@ -7,8 +7,8 @@ BEGIN {
     mdata["radix8_trie"] = "от =TN + 24L до =(T + 24L + 12)N"
     mdata["clib_qsort"] = "от =TN/2 до =TN*"
     mdata["heapsort"] = 0
-    mdata["mergesort_bsd"] = "от =Tlog2N до =TN*"
-    mdata["quicksort"] = "от =16log2N до =16N"
+    mdata["mergesort_bsd"] = "от =Tlog2N до TN*"
+    mdata["quicksort"] = "от =16log2N до 16N"
     mdata["quicksort_tco"] = "от 0 до N"
     mdata["stlsort"] = "от 0 до до =Tlog2N*"
     mdata["stlstable"] = "от 0 до =TN/2*"

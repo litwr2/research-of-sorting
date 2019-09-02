@@ -34,7 +34,6 @@ END {
             r = l
             break
           }
-        #c1 = log(a[i][j][k][r]/a[i][j][k][r - 1])/log(10)
         t = 0
         while (a[i][j][k][t] < 10 || a[i][j][k][t]*5 > a[i][j][k][t + 1] && t + 1 < r) ++t
         c1 = log(a[i][j][k][r]/a[i][j][k][t])/log(10)/(r - t)

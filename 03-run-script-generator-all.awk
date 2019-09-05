@@ -69,11 +69,11 @@ BEGIN {
            delete zoo
            for (i3 in ss) {
                if (ss[i3] == 0 || t[i1] == 0) zoo[i3] = 1
-               if (SS > 7 && i3 == "radix16") zoo[i3] = 1
-               if (SS > 8 && i3 == "radix11") zoo[i3] = 1
-               if (SS > 8 && i3 == "flat_stable") zoo[i3] = 1
-               if (SS > 9 && i3 == "radix8") zoo[i3] = 1
-               if (SS > 9 && i3 == "radix8_oms7") zoo[i3] = 1
+               #if (SS > 7 && i3 == "radix16") zoo[i3] = 1
+               #if (SS > 8 && i3 == "radix11") zoo[i3] = 1
+               #if (SS > 8 && i3 == "flat_stable") zoo[i3] = 1
+               #if (SS > 9 && i3 == "radix8") zoo[i3] = 1
+               #if (SS > 9 && i3 == "radix8_oms7") zoo[i3] = 1
            }
            for (x in zoo)
                excl = excl "echo '\"" x "\"';"

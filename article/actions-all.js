@@ -1,5 +1,4 @@
 var M = 6 //max index
-var MA = M //max actual index
 
 function precRound(n) {
     var t = n
@@ -9,27 +8,25 @@ function precRound(n) {
     var s = t.toString()
     var dotp = s.indexOf('.')
     var afterdot = ''
-    var r = ''
-    if (s.indexOf('e') == -1) {
-        if (dotp != -1) {
-            afterdot = s.slice(dotp)
-            s = s.slice(0, dotp)
-            if (precision)
-                while (afterdot.length - 1 < Math.log10(precision))
-                    afterdot += '0'
-        } else if (precision > 1 && typeof(n) == "number") {
-            afterdot = '.'
+    if (dotp != -1) {
+        afterdot = s.slice(dotp)
+        s = s.slice(0, dotp)
+        if (precision)
             while (afterdot.length - 1 < Math.log10(precision))
                 afterdot += '0'
-        }
-        while (s.length > 3) {
-            var n = s.length%3
-            if (n == 0) n = 3
-            r += s.slice(0, n)
-            s = s.slice(n)
-            if (s.length > 0)
-                r += "'"
-        }
+    } else if (precision > 1 && typeof(n) == "number") {
+        afterdot = '.'
+        while (afterdot.length - 1 < Math.log10(precision))
+            afterdot += '0'
+    }
+    var r = ''
+    while (s.length > 3) {
+        var n = s.length%3
+        if (n == 0) n = 3
+        r += s.slice(0, n)
+        s = s.slice(n)
+        if (s.length > 0)
+            r += "'"
     }
     r += s
     if (r == '') r = '0'
@@ -66,10 +63,10 @@ function sortCompare(a, b, i) {
 function getTa(data) {
     var ta = []
     var sortm
-    for (sortm in data[order[0]][type[0]]) {
+    for (sortm in data[type[0]]) {
         var el = [ sortm ]
         for (var k = 0; k < M + 2; ++k)
-            el.push(data[order[0]][type[0]][sortm][k])
+            el.push(data[type[0]][sortm][k])
         ta.push(el)
     }
     if (sortOrder[0] != 0)
@@ -81,18 +78,13 @@ function getTa(data) {
 }
 
 function drawTable1() {
-    var i = 0
-    for (sortm in Data[order[0]][type[0]]) {
-        if (typeof(Data[order[0]][type[0]][sortm][M - 1]) == "number") { i = 2; break }
-        if (typeof(Data[order[0]][type[0]][sortm][M - 2]) == "number") i = 1
-    }
-    MA = M - 2 + i
+    var i
     var text = "<tr><th rowspan=2>#<th rowspan=2>Алгоритм<button onclick=changeOrd(0) style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[0] + 1]
-        + "</button><th colspan=" + MA + ">Размер данных" + "<th align=center rowspan=2>Временная<br>зaвиcимocть"
+        + "</button><th colspan=" + M + ">Размер данных" + "<th align=center rowspan=2>Временная<br>зaвиcимocть"
     text += "<tr>"
-    for (i = 0; i < MA; ++i)
-        text += "<th align=center>10<sup>" + (i + 3)
-            + "</sup><button onclick=changeOrd(" + (i + 1)
+    for (i = 0; i < M; ++i)
+        text += "<th align=center>" + (i + 7)
+            + "<button onclick=changeOrd(" + (i + 1)
             + ") style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[i + 1] + 1] + "</button>"
     var n = 0
     var ta = getTa(Data1)
@@ -102,7 +94,7 @@ function drawTable1() {
             text += "<tr><td align=center>" + (++n) + "<input id=" + ta[i][0] + " type=checkbox "
             if (ta[i][0] in marked) text += "checked "
             text += "onclick=changeCheck(\"" + ta[i][0] + "\")><td>" + ta[i][0]
-            for (var k = 0; k < MA; ++k) {
+            for (var k = 0; k < M; ++k) {
                 text += "<td align=right>"
                 var a = ta[i][k + 1]
                 if (typeof(a) == "number")
@@ -191,13 +183,10 @@ function changeOptRel() {
         pivot = DataMin();
     else if (optionRel == 4)  //maximum
         pivot = DataMax();
-    for (var sortm in Data[order[0]][type[0]]) {
+    for (var sortm in Data[type[0]])
         for (var i = 0; i < M; ++i)
-            if (typeof(Data[order[0]][type[0]][sortm][i]) == "number")
-               Data1[order[0]][type[0]][sortm][i] = Data[order[0]][type[0]][sortm][i]/pivot
-        Data1[order[0]][type[0]][sortm][M] = Data[order[0]][type[0]][sortm][M]
-        Data1[order[0]][type[0]][sortm][M + 1] = Data[order[0]][type[0]][sortm][M + 1]
-    }
+            if (typeof(Data[type[0]][sortm][i]) == "number")
+               Data1[type[0]][sortm][i] = Data[type[0]][sortm][i]/pivot
     drawTable1()
 }
 
@@ -209,51 +198,35 @@ function changeOptPrec() {
     drawTable1()
 }
 
-function types(n, m) {
-    if (n == 1) return type[m]
+function types(m) {
     return order[m]
 }
 
 function drawActionTable1() {
     var sv
-    var Data1a = []
-    for (sv in Data1)
-        Data1a.push(sv)
-    Data1a.sort()
-    var Data2a = []
-    for (sv in Data1[order[0]])
-        Data2a.push(sv)
-    Data2a.sort()
-    var indexValues = [Data1a, Data2a]
-    var text = ""
+    var text = "<br><button id=sbutt onclick=changeRow()>" + sbuttc[duoMode] + "</button>:"
+    text += "<select id=select0 onchange=changeAction(0) style=width:14em>"
+    for (sv in Data1) {
+        text += "<option value=" + sv
+        if (sv == type[0])
+            text += " selected"
+        text += ">" + sv + "</option>"
+    }
+    text += "</select>" 
 
-    for (var i = 0; i < 2; i++) {
-        text += "<br><button id=sbutt" + i + " onclick=changeRow(" + i + ")>" + sbuttc[duoMode[i]] + "</button>:"
-        text += "<select id=select" + i + "0 onchange=changeAction(" + i + ",0) style=width:14em>"
-        for (var k = 0; k < indexValues[i].length; ++k) {
-            sv = indexValues[i][k]
+    if (duoMode == 1) {
+        text += " / "
+        text += "<select id=select1 onchange=changeAction(1) style=width:14em>";
+        for (sv in Data1) {
             text += "<option value=" + sv
-            if (sv == types(i, 0))
+            if (sv == type[1])
                 text += " selected"
             text += ">" + sv + "</option>"
         }
         text += "</select>"
-
-        if (duoMode[i] == 1) {
-            text += " / "
-            text += "<select id=select" + i + "1 onchange=changeAction(" + i + ",1) style=width:14em>";
-            for (var k = 0; k < indexValues[i].length; ++k) {
-                sv = indexValues[i][k]
-                text += "<option value=" + sv
-                if (sv == types(i, 1))
-                    text += " selected"
-                text += ">" + sv + "</option>"
-            }
-            text += "</select>"
-        }
     }
     document.getElementById("tab1a").innerHTML = text
-    if (duoMode[0] + duoMode[1] == 0) { 
+    if (duoMode == 0) { 
         text = "relation: <select id=optionRel onchange=changeOptRel()>"
         for (var i = 0; i < cmpType.length; ++i) {
             text += "<option value=" + i
@@ -268,54 +241,39 @@ function drawActionTable1() {
 }
 
 function changeOptAll() {
-    if (duoMode[0] > 0) {
-        for (var sortm in Data1[order[0]][type[0]]) {
+    if (duoMode > 0) {
+        for (var sortm in Data1[type[0]]) {
             for (var i = 0; i < M; ++i)
-                if (typeof(Data[order[0]][type[0]][sortm][i]) == "number" && typeof(Data[order[1]][type[0]][sortm][i]) == "number")
-                    Data1[order[0]][type[0]][sortm][i] = Data[order[0]][type[0]][sortm][i]/Data[order[1]][type[0]][sortm][i]
-                else
-                    Data1[order[0]][type[0]][sortm][i] = "n/d"
-            Data1[order[0]][type[0]][sortm][M] = Data[order[0]][type[0]][sortm][M] - Data[order[1]][type[0]][sortm][M]
-            Data1[order[0]][type[0]][sortm][M + 1] = Data[order[0]][type[0]][sortm][M + 1]/Data[order[1]][type[0]][sortm][M + 1]
-        }
-    } else if (duoMode[1] > 0) {
-        for (var sortm in Data1[order[0]][type[0]]) {
-            for (var i = 0; i < M; ++i)
-                Data1[order[0]][type[0]][sortm][i] = "n/d"
-            if (!(sortm in Data[order[0]][type[0]] && sortm in Data[order[0]][type[1]])) continue
+                Data1[type[0]][sortm][i] = "n/d"
+            if (!(sortm in Data[type[0]] && sortm in Data[type[1]])) continue
             for (var i = 0; i < M; ++i) {
                 var b
-                if (sortm in Data[order[0]][type[1]]) {
-                    b = Data[order[0]][type[1]][sortm][i]
+                if (sortm in Data[type[1]]) {
+                    b = Data[type[1]][sortm][i]
                     if (typeof(b) != "number") b = 0
-                } else
+                }
+                else
                     b = 0
-                if (b != 0 && typeof(Data[order[0]][type[0]][sortm][i]) == "number")
-                    Data1[order[0]][type[0]][sortm][i] = Data[order[0]][type[0]][sortm][i]/b
+                if (b != 0 && typeof(Data[type[0]][sortm][i]) == "number")
+                    Data1[type[0]][sortm][i] = Data[type[0]][sortm][i]/b
+                else
+                    Data1[type[0]][sortm][i] = "n/d"
             }
-            Data1[order[0]][type[0]][sortm][M] = Data[order[0]][type[0]][sortm][M] - Data[order[0]][type[1]][sortm][M]
-            Data1[order[0]][type[0]][sortm][M + 1] = Data[order[0]][type[0]][sortm][M + 1]/Data[order[0]][type[1]][sortm][M + 1]
         }
     } else
         changeOptRel()
 }
 
-function changeRow(n) {
-    duoMode[n] = 1 - duoMode[n]
-    for (var i = 0; i < 2; ++i)
-        if (i != n)
-            duoMode[i] = 0
+function changeRow() {
+    duoMode = 1 - duoMode
     drawActionTable1()
     changeOptAll()
     drawTable1()
 }
 
-function changeAction(n, m) {
-    var nms = "select" + n + m.toString()
-    if (n == 1)
-        type[m] = document.getElementById(nms).value
-    else
-        order[m] = document.getElementById(nms).value
+function changeAction(m) {
+    var nms = "select" + m.toString()
+    type[m] = document.getElementById(nms).value
     changeOptAll()
     drawTable1()
 }

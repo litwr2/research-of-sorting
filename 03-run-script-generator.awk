@@ -52,16 +52,16 @@ BEGIN {
     ss["insertion"] = 1
 
     t["INT32"] = 1
-    t["INT1P4"] = 1
-    t["INT64"] = 1
-    t["INT128"] = 1
-    t["FLOAT"] = 1
-    t["STRINGS"] = 1
-    t["CSTRINGS"] = 1
-    t["STRINGS_SHORT"] = 1
-    t["CSTRINGS_SHORT"] = 1
-    t["STRINGS_LONG"] = 1
-    t["CSTRINGS_LONG"] = 1
+    t["INT1P4"] = 0
+    t["INT64"] = 0
+    t["INT128"] = 0
+    t["FLOAT"] = 0
+    t["STRINGS"] = 0
+    t["CSTRINGS"] = 0
+    t["STRINGS_SHORT"] = 0
+    t["CSTRINGS_SHORT"] = 0
+    t["STRINGS_LONG"] = 0
+    t["CSTRINGS_LONG"] = 0
 
     ft["RANDOM"] = 1
     ft["ORDERED"] = 1
@@ -73,7 +73,7 @@ BEGIN {
     ft["LOW_VARIATION100"] = 1
     ft["SLOW_QSORT_HOARE"] = 1
 
-    for (SS = 1*1*1000; SS <= 1*1*1000; SS *= 10) {
+    for (SS = 1000*1000*1000; SS <= 1000*1000*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {

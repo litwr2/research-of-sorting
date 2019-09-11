@@ -130,7 +130,7 @@ template<class T> void fill(vector<T> &v) {
            s[i] = 0;
            return s;}());
 #else
-       v.push_back({X{1}*abs(rand()*rand())});
+       v.push_back({[]{ X v{rand()*rand()}; if (v < 0) return X{1}*-(v/2); return X{1}*v;}()});
 #endif
 #elif defined(ORDERED) || defined(PARTIALLY_ORDERED)
        v.push_back(cnv<T>(i));

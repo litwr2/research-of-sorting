@@ -1,4 +1,4 @@
-var M = 6 //max index
+var M = 7 //max index
 var MA = M //max actual index
 
 function precRound(n) {

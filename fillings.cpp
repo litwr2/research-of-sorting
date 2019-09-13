@@ -34,16 +34,15 @@ template<> const char *cnv(int n) {
 }
 
 template<class T> T nxt(T n) {
-    return {n + 1};
+    return {n + 2};
 }
 
 template<> string nxt(string n) {
-    return to_string(stoi(n) + 1) + string(rand()%SL + 1, 'A');
+    return to_string(stoi(n) + 2) + string(rand()%SL + 1, 'A');
 }
 
 template<> const char *nxt(const char *n) {
-    int t = atoi(n) + 1;
-    delete n;
+    int t = atoi(n) + 2;
     unsigned r = rand()%SL + 1;
     unsigned l = to_string(t).length() + r + 1;
     char *s = new char [l];
@@ -53,47 +52,19 @@ template<> const char *nxt(const char *n) {
 }
 
 template<class T>
-void insert2(vector<T> &v, list<T> &l, int final = 0) {
-	v.push_back(nxt(v.back()));
-	l.push_back(l.front());
-	l.erase(l.begin());
-	if (!final) {
-		l.push_back(v.back());
-                v.back() = nxt(v.back());
-        }
-}
-
-template<>
-void insert2(vector<const char*> &v, list<const char*> &l, int final) {
-        const char *s = v.back();
-        const char *cs = new char [strlen(s) + 1];
-        strcpy((char*)cs, s);
-	v.push_back(nxt(cs));
-	l.push_back(l.front());
-	l.erase(l.begin());
-	if (!final) {
-                s = v.back();
-		l.push_back(s);
-                cs = new char [strlen(s) + 1];
-                strcpy((char*)cs, s);
-                v.back() = nxt(cs);
-        }
-}
-
-template<class T>
-void fill_for_quadratic_qsort_hoare1(vector<T> &v) {
-	v = {cnv<T>(1), cnv<T>(3)};
-	list<T> l{cnv<T>(2), cnv<T>(0)};
-	for (int i = 0; i < (SS - 4)/2; i++)
-		insert2(v, l);
-	if (SS%2)
-		insert2(v, l, 1);
-	v.insert(v.end(), l.begin(), l.end());
+void fill_for_quadratic_qsort_hoare(vector<T> &v) {
+    v = {cnv<T>(1), cnv<T>(3), cnv<T>(5), cnv<T>(0), cnv<T>(2), cnv<T>(4)};
+    v.resize(SS);
+    for (int i = 3; i < SS/2; i++) {
+	    v[2*i] = v[i];
+        v[2*i + 1] = nxt(v[2*i - 1]);
+        v[i] = cnv<T>(2*i + 1);
+    }
 }
 
 template<class T> void fill(vector<T> &v) {
 #ifdef SLOW_QSORT_HOARE
-    fill_for_quadratic_qsort_hoare1(v);
+    fill_for_quadratic_qsort_hoare(v);
 #else
     for (int i = 0; i < SS; i++)
 #ifdef RANDOM

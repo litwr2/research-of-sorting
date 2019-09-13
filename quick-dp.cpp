@@ -8,21 +8,7 @@ template<class T> struct DualPivotQuicksort817 {
     static const int DIST_SIZE = 13;
     static const int TINY_SIZE = 17;
     static void sort(vector<T> &a) {
-        sort(a, 0, a.size());
-    }
-    static void sort(vector<T> &a, int fromIndex, int toIndex) {
-        //rangeCheck(a.size(), fromIndex, toIndex);
-        dualPivotQuicksort(a, fromIndex, toIndex - 1);
-    }
-    static void rangeCheck(int length, int fromIndex, int toIndex) {
-    /*
-        if (fromIndex > toIndex)
-            throw runtime_error("fromIndex(" + to_string(fromIndex) + ") toIndex(" + to_string(toIndex) + ")");
-        if (fromIndex < 0)
-            throw runtime_error("ArrayIndexOutOfBoundsException(fromIndex)"); //FIXME!!
-        if (toIndex > length)
-            throw runtime_error("ArrayIndexOutOfBoundsException(toIndex)"); //FIXME!!
-    */
+        dualPivotQuicksort(a, 0, a.size() - 1);
     }
     static void dualPivotQuicksort(vector<T> &a, int left, int right) {
         int len = right - left;
@@ -112,21 +98,7 @@ template<> struct DualPivotQuicksort817<const char*> {
     static const int DIST_SIZE = 13;
     static const int TINY_SIZE = 17;
     static void sort(vector<const char*> &a) {
-        sort(a, 0, a.size());
-    }
-    static void sort(vector<const char*> &a, int fromIndex, int toIndex) {
-        rangeCheck(a.size(), fromIndex, toIndex);
-        dualPivotQuicksort(a, fromIndex, toIndex - 1);
-    }
-    static void rangeCheck(int length, int fromIndex, int toIndex) {
-    /*
-        if (fromIndex > toIndex)
-            throw runtime_error("fromIndex(" + to_string(fromIndex) + ") toIndex(" + to_string(toIndex) + ")");
-        if (fromIndex < 0)
-            throw runtime_error("ArrayIndexOutOfBoundsException(fromIndex)"); //FIXME!!
-        if (toIndex > length)
-            throw runtime_error("ArrayIndexOutOfBoundsException(toIndex)"); //FIXME!!
-    */
+        dualPivotQuicksort(a, 0, a.size() - 1);
     }
     static void dualPivotQuicksort(vector<const char*> &a, int left, int right) {
         int len = right - left;

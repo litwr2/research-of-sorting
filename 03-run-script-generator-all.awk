@@ -20,7 +20,7 @@ BEGIN {
     ss["heapsort_stl"] = 0
     ss["radix_bsd"] = 0
     ss["sradix_bsd"] = 0
-    ss["clib_qsort"] = 1
+    ss["clib_qsort"] = 0
     ss["heapsort_bsd"] = 0
     ss["mergesort_bsd"] = 0
     ss["qsort_hoare"] = 0
@@ -28,7 +28,7 @@ BEGIN {
     ss["qsort_hoare2"] = 0
     ss["qsort_no_pivot"] = 0
     ss["qsort_lomuto"] = 0
-    ss["qsort_dualpivot"] = 0
+    ss["qsort_dualpivot"] = 1
     ss["stlsort"] = 0
     ss["stlstable"] = 0
     ss["timsort"] = 0
@@ -51,11 +51,11 @@ BEGIN {
     ss["hashbt_boost"] = 0
     ss["insertion"] = 0
 
-    t["INT32"] = 1
-    t["INT1P4"] = 1
-    t["INT64"] = 1
-    t["INT128"] = 1
-    t["FLOAT"] = 1
+    t["INT32"] = 0
+    t["INT1P4"] = 0
+    t["INT64"] = 0
+    t["INT128"] = 0
+    t["FLOAT"] = 0
     t["STRINGS"] = 0
     t["CSTRINGS"] = 0
     t["STRINGS_SHORT"] = 1
@@ -63,7 +63,7 @@ BEGIN {
     t["STRINGS_LONG"] = 0
     t["CSTRINGS_LONG"] = 0
 
-    for (SS = 12; SS <= 12; ++SS)  # 7 .. 12
+    for (SS = 8; SS <= 12; ++SS)  # 7 .. 12
        for (i1 in t) {
            excl = ""
            delete zoo
@@ -84,10 +84,10 @@ BEGIN {
                excl = "cat"
            excl = excl " nsort-all.cpp >nsort-all2.cpp;"
            passes = 1
-           if (SS <= 9) passes = 3
-           else if (SS <= 10) passes = 2
-           else if (SS <= 11) passes = 2
-           else if (SS <= 12) passes = 2
+           #if (SS <= 9) passes = 3
+           #else if (SS <= 10) passes = 2
+           #else if (SS <= 11) passes = 2
+           #else if (SS <= 12) passes = 2
            repeats = 2
            print excl "touch always.cpp;EXTRA=\"-DREPEATS=" repeats " -D" i1 " -DSS=" SS " -DPASSES=" passes "\" FNP=nsort-all2 make && nsort-all2 >>results-all/" SS "-" i1 " || echo $? ERROR!!!!!"
            }

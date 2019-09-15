@@ -82,11 +82,9 @@ function getTa(data) {
 
 function drawTable1() {
     var i = 0
-    for (sortm in Data[order[0]][type[0]]) {
-        if (typeof(Data[order[0]][type[0]][sortm][M - 1]) == "number") { i = 2; break }
-        if (typeof(Data[order[0]][type[0]][sortm][M - 2]) == "number") i = 1
-    }
-    MA = M - 2 + i
+    for (i = M - 1; i > 0; i--)
+        for (sortm in Data[order[0]][type[0]])
+            if (typeof(Data[order[0]][type[0]][sortm][i]) == "number") { MA = i + 1; i = 0; break }
     var text = "<tr><th rowspan=2>#<th rowspan=2>Алгоритм<button onclick=changeOrd(0) style='padding:0px 0px;margin:0px 5px'>" + orderArrows[sortOrder[0] + 1]
         + "</button><th colspan=" + MA + ">Размер данных" + "<th align=center rowspan=2>Временная<br>зaвиcимocть"
     text += "<tr>"

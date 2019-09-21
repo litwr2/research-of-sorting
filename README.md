@@ -35,7 +35,7 @@ quick-hoare.cpp - a Hoare's quick sort implementation with the pivot in the midd
 
 quick-lomuto.cpp - a Lomuto's quick sort implementation
 
-quick-np.cpp - an implementation of the quick sort without pivot
+quick-np.cpp - an implementation of the quick sort without pivots
 
 radix.cpp - the LSD radix sort implementation
 
@@ -51,11 +51,10 @@ std.cpp - a wrapper to use sort methods from the C++ standard library: qsort, so
 
 tim.cpp - a wrapper to use a Tim sort implementation from a [repo](https://github.com/gfx/cpp-TimSort) - put the required header file into _opt_ subdirectory
 
-tree.cpp - two implementations of binary tree sort using the boost and C++ standard libraries
+tree.cpp - two implementations of the binary tree sort using the boost and C++ standard libraries
 
 trie.cpp - a trie sort implementation
 
-The performance results gathered are placed into two interactive tables: the [first](https://litwr2.github.io/ros/table1.html) one contains data for particular large sorting arrays, the [second](https://litwr2.github.io/ros/table2.html) one contains data for tiny sorting arrays which iterate through all possible order of elements.
+The gathered performance results are placed into two interactive tables: the [first](https://litwr2.github.io/ros/table1.html) one contains data for particular large sorting arrays, the [second](https://litwr2.github.io/ros/table2.html) one contains data for tiny sorting arrays which iterate through all possible order of elements.
 
 A static [table](https://litwr2.github.io/ros/table3.html) contains data about additional memory requirements for various sort methods.
-

@@ -1,3 +1,4 @@
+// a wrapper to use sort methods from the bsd library: mergesort, heapsort, radixsort, sradixsort
 #include <bsd/stdlib.h>
 
 template <class T>

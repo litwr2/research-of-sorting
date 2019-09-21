@@ -1,3 +1,7 @@
+// three sort methods which use hashes which use binary trees instead of lists
+// the first method uses an unbalanced tree, the second - a tree (std::multiset) from the C++ standard library
+// the third - a tree (boost::container::multiset) from the boost library
+
 template<class T> struct BinaryTreeForHash {
      struct Node {
          T data;

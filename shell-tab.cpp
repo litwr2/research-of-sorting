@@ -1,3 +1,5 @@
+// Shell's sort implementations with tables
+
 template<class T>  //Shell sort v2 (table)
 void shell_tab(vector<T> &a, int type) {
   static const int x0[] = {485165237, 178482289, 65659969, 24154967, 8886109, 3269011, 1202609, 442439, 162713, 59879, 22027, 8101, 2971, 1097, 401, 149, 53, 19, 7, 3, 1, 0};  //primes approximately close to powers of e

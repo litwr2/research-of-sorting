@@ -1,3 +1,5 @@
+// two implementations of binary tree sort using the boost and C++ standard libraries
+
 template<class T> class Sort_alloc : public allocator<T> {
    void* pool;
    int count;

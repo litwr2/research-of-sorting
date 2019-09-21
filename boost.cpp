@@ -1,3 +1,4 @@
+// a wrapper to use sort methods from the boost libraries: spreadsort, pdqsort, spinsort, flat_stable_sort
 #include <boost/sort/spreadsort/spreadsort.hpp>
 #include <boost/sort/pdqsort/pdqsort.hpp>
 #include <boost/sort/sort.hpp>
@@ -26,7 +27,7 @@ void spreadsort(vector<int> &a) {
 
 struct bracket {
     inline unsigned char operator()(const char* x, size_t offset) const {
-      return x[offset];
+        return x[offset];
     }
 };
 

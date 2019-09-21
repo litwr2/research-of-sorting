@@ -1,3 +1,4 @@
+// it is used to check the correctness of a method
 #include <set>
 #include <iostream>
 #include <iomanip>
@@ -85,7 +86,8 @@ int main() {
     //MsdRadix<X>(a, 16)();
 //    Trie<X>::sort(a);
 //    radix_msd(a, 8);
-    dualPivotQuicksort(a);
+//    dualPivotQuicksort(a);
+      qsort_hoare1(a, 0, SS - 1);
 //    for (int i = 0; i < SS; ++i) cout << a[i] << '\n'; cout << endl;
 #if defined(CSTRINGS) || defined(CSTRINGS_LONG) || defined(CSTRINGS_SHORT)
     for (int i = 1; i < SS; ++i) if (strcmp(a[i - 1], a[i]) > 0) {cout << "ERROR" << endl; break;}

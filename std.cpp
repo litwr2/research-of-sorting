@@ -1,3 +1,5 @@
+// a wrapper to use sort methods from the C++ standard library: qsort, sort_heap, sort, stable_sort
+
 template <class T>
 void qsort0(vector<T> &a) {
    qsort((void*)&a[0], SS, sizeof(T), cmpfunc<T>);

@@ -58,3 +58,6 @@ trie.cpp - a trie sort implementation
 The gathered performance results are placed into two interactive tables: the [first](https://litwr2.github.io/ros/table1.html) one contains data for particular large sorting arrays, the [second](https://litwr2.github.io/ros/table2.html) one contains data for tiny sorting arrays which iterate through all possible order of elements.
 
 A static [table](https://litwr2.github.io/ros/table3.html) contains data about additional memory requirements for various sort methods.
+
+All these results were got from AMD Phenom&#x2122; II X4 955 @3.214 MHz working under Linux x86-64.  GCC was used.
+

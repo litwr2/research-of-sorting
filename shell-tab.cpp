@@ -26,13 +26,10 @@ void shell_tab(vector<T> &a, int type) {
      gap = p[k++];
      for (i = gap; i < a.size(); ++i) {
         j = i - gap;
-        //T t = a[j + gap];
         while (a[j] > a[j + gap]) {
-           //a[j] = a[j + gap];
            swap(a[j], a[j + gap]);
            if (j >= gap) j -= gap; else break;
         }
-        //a[j] = t;
      }
   }
 }
@@ -63,13 +60,10 @@ void shell_tab(vector<const char*> &a, int type) {
      gap = p[k++];
      for (i = gap; i < a.size(); ++i) {
         j = i - gap;
-        //T t = a[j + gap];
         while (strcmp(a[j], a[j + gap]) > 0) {
-           //a[j] = a[j + gap];
            swap(a[j], a[j + gap]);
            if (j >= gap) j -= gap; else break;
         }
-        //a[j] = t;
      }
   }
 }
@@ -88,13 +82,10 @@ void shell_10d3(vector<T> &a) {
      gap = p[k--];
      for (i = gap; i < a.size(); ++i) {
         j = i - gap;
-        //T t = a[j + gap];
         while (a[j] > a[j + gap]) {
-           //a[j] = a[j + gap];
            swap(a[j], a[j + gap]);
            if (j >= gap) j -= gap; else break;
         }
-        //a[j] = t;
      }
   }
 }
@@ -113,13 +104,10 @@ void shell_10d3(vector<const char *> &a) {
      gap = p[k--];
      for (i = gap; i < a.size(); ++i) {
         j = i - gap;
-        //T t = a[j + gap];
         while (strcmp(a[j], a[j + gap]) > 0) {
-           //a[j] = a[j + gap];
            swap(a[j], a[j + gap]);
            if (j >= gap) j -= gap; else break;
         }
-        //a[j] = t;
      }
   }
 }

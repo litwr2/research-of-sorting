@@ -15,6 +15,8 @@
 #include <functional>
 #include <limits>
 #include <cstring>
+#include <csetjmp>
+#include <cmath>
 
 #ifdef CHECKMEM
 #include <thread>
@@ -104,6 +106,7 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #error This type is not known
 #endif
 
+#include "sort-algo.cpp"
 #include "oms7.cpp"
 #include "baseop.cpp"
 #include "fillings.cpp"
@@ -118,6 +121,7 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "quick-hoare.cpp"
 #include "quick-lomuto.cpp"
 #include "quick-dp.cpp"
+#include "quick-safe-insertion.cpp"
 #include "shell-plain.cpp"
 #include "shell-tab.cpp"
 #include "tree.cpp"
@@ -186,7 +190,7 @@ size_t test(fstream &fio, vector<T> &v, function<void(vector<T>&)> f, const char
     mem_sz_flag = 0;
     cout << title << ' ' << mem_sz_data[title] << endl; 
 #else
-    cout << setw(16) << left << title << setw(14) << right << te - ts << endl;
+    cout << setw(17) << left << title << setw(14) << right << te - ts << endl;
 #endif
 L:
     fio.seekg(0);
@@ -216,7 +220,7 @@ size_t test(fstream &fio, vector<const char*> &v, function<void(vector<const cha
     mem_sz_flag = 0;
     cout << title << ' ' << mem_sz_data[title] << endl; 
 #else
-    cout << setw(16) << left << title << setw(14) << right << te - ts << endl;
+    cout << setw(17) << left << title << setw(14) << right << te - ts << endl;
 #endif
 L:
     fio.seekg(0);
@@ -284,10 +288,18 @@ L:
     test<X>(fio, v, bind(hsort_bsd<X>, placeholders::_1), "heapsort_bsd");
     test<X>(fio, v, bind(mergesort_bsd<X>, placeholders::_1), "mergesort_bsd");
 #endif
+    test<X>(fio, v, bind(mergesort_sa<X>, placeholders::_1), "mergesort_sa");
+    test<X>(fio, v, bind(mergesort_sa<X>, placeholders::_1), "mergesort_iter_sa");
+
     test<X>(fio, v, bind(qsort_hoare1<X>, placeholders::_1, 0, SS - 1), "qsort_hoare");
     test<X>(fio, v, bind(qsort_hoare1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco");
     test<X>(fio, v, bind(qsort_np<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
     test<X>(fio, v, bind(qsort_hoare2<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
+    test<X>(fio, v, bind(quicksort_lr_sa<X>, placeholders::_1), "qsort_lr_sa");
+    test<X>(fio, v, bind(quicksort_ll_sa<X>, placeholders::_1), "qsort_ll_sa");
+    test<X>(fio, v, bind(quicksort_3lr_sa<X>, placeholders::_1), "qsort_3lr_sa");
+    test<X>(fio, v, bind(quicksort_3ll_sa<X>, placeholders::_1), "qsort_3ll_sa");
+    test<X>(fio, v, bind(qsort_safe<X>, placeholders::_1, 0, SS - 1), "qsort_safe");
     test<X>(fio, v, bind(qsort_lomuto<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");
     test<X>(fio, v, bind(dualPivotQuicksort<X>, placeholders::_1), "qsort_dualpivot");
     test<X>(fio, v, bind(stl_sort<X>, placeholders::_1), "stlsort");

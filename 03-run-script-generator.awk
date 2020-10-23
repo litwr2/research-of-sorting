@@ -2,12 +2,12 @@ BEGIN {
     ss["shell_a3n"] = 0
     ss["shell_10/3"] = 0
     ss["shell_prime_e"] = 0
-    ss["shell_a102549"] = 0
+    ss["shell_a102549"] = 1
     ss["shell_prime_2"] = 0
     ss["shell_prime_10/3"] = 0
     ss["shell_a102549m"] = 0
     ss["shell_2.25"] = 0
-    ss["radix8"] = 1
+    ss["radix8"] = 0
     ss["radix11"] = 0
     ss["radix16"] = 0
     ss["radix8_msd"] = 0
@@ -17,19 +17,26 @@ BEGIN {
     ss["shell_10/3_oms7"] = 0
     ss["radix8_oms7"] = 0
     ss["radix8_msd_oms7"] = 0
-    ss["heapsort_stl"] = 0
+    ss["heapsort_stl"] = 1
     ss["radix_bsd"] = 0
     ss["sradix_bsd"] = 0
-    ss["clib_qsort"] = 0
-    ss["heapsort_bsd"] = 0
+    ss["clib_qsort"] = 1
+    ss["heapsort_bsd"] = 1
     ss["mergesort_bsd"] = 0
-    ss["qsort_hoare"] = 0
+    ss["mergesort_sa"] = 0
+    ss["mergesort_iter_sa"] = 0
+    ss["qsort_hoare"] = 1
     ss["qsort_hoare_tco"] = 0
     ss["qsort_no_pivot"] = 0
-    ss["qsort_hoare2"] = 0
+    ss["qsort_hoare2"] = 1
+    ss["qsort_ll_sa"] = 1
+    ss["qsort_lr_sa"] = 1
+    ss["qsort_3ll_sa"] = 1
+    ss["qsort_3lr_sa"] = 1
+    ss["qsort_safe"] = 1
     ss["qsort_lomuto"] = 0
-    ss["qsort_dualpivot"] = 0
-    ss["stlsort"] = 0
+    ss["qsort_dualpivot"] = 1
+    ss["stlsort"] = 1
     ss["stlstable"] = 0
     ss["timsort"] = 0
     ss["spread"] = 0
@@ -52,7 +59,7 @@ BEGIN {
     ss["insertion"] = 0
 
     t["INT32"] = 1
-    t["INT1P4"] = 1
+    t["INT1P4"] = 0
     t["INT64"] = 0
     t["INT128"] = 0
     t["FLOAT"] = 0
@@ -64,16 +71,17 @@ BEGIN {
     t["CSTRINGS_LONG"] = 0
 
     ft["RANDOM"] = 1
-    ft["ORDERED"] = 0
+    ft["ORDERED"] = 1
     ft["REVERSED"] = 0
     ft["PARTIALLY_ORDERED"] = 0
     ft["PARTIALLY_REVERSED"] = 0
-    ft["LOW_VARIATION1"] = 0
-    ft["LOW_VARIATION2"] = 0
+    ft["LOW_VARIATION1"] = 1
+    ft["LOW_VARIATION2"] = 1
     ft["LOW_VARIATION100"] = 0
-    ft["SLOW_QSORT_HOARE"] = 0
+    ft["SLOW_QSORT_HOARE"] = 1
+    ft["SLOW_QSORT_HOARE_L"] = 1
 
-    for (SS = 10*1000*1000; SS <= 100*1000*1000; SS *= 10) {
+    for (SS = 1*100*1000; SS <= 1*100*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {
@@ -96,11 +104,11 @@ BEGIN {
                            zoo[i3] = 1
                        if (i3 == "hashbt" && SS >= lim && index(i2, "PARTIALLY"))
                            zoo[i3] = 1
-                       if (index(i3, "hoare") && SS >= lim && i2 == "SLOW_QSORT_HOARE")
+                       if (index(i3, "hoare") && SS >= lim*10 && index(i2, "SLOW_QSORT_HOARE"))
                            zoo[i3] = 1
-                       if (i3 == "qsort_no_pivot" && SS >= lim && (i2 == "ORDERED" || i2 == "REVERSED" || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "SLOW_QSORT_HOARE" && index(i1, "STRING")))
+                       if (i3 == "qsort_no_pivot" && SS >= lim && (i2 == "ORDERED" || i2 == "REVERSED" || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || index(i2, "SLOW_QSORT_HOARE") && index(i1, "STRING")))
                            zoo[i3] = 1
-                       if (i3 == "qsort_lomuto" && SS >= lim && (index(i2, "PARTIALLY") || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || i2 == "SLOW_QSORT_HOARE" && index(i1, "STRING")))
+                       if (i3 == "qsort_lomuto" && SS >= lim && (index(i2, "PARTIALLY") || i2 == "LOW_VARIATION1" || i2 == "LOW_VARIATION2" || index(i2, "SLOW_QSORT_HOARE") && index(i1, "STRING")))
                            zoo[i3] = 1
                        if (i3 == "hash" && SS >= lim && index(i1, "STRING") && (i2 == "PARTIALLY_ORDERED" || i2 == "LOW_VARIATION100" || i2 == "LOW_VARIATION2"))
                            zoo[i3] = 1
@@ -114,7 +122,7 @@ BEGIN {
                            zoo[i3] = 1
                        if (i3 == "hash" && SS >= lim && (index(i1, "STRING") && i2 != "LOW_VARIATION1" && !(index(i1, "SHORT") && i2 == "RANDOM") && !((i1 == "STRINGS" || i1 == "CSTRINGS") && i2 == "RANDOM") || i2 == "LOW_VARIATION2" || i2 == "LOW_VARIATION100"))
                            zoo[i3] = 1
-                       if ((i3 == "qsort_no_pivot" || i3 == "qsort_lomuto") && SS >= lim && (i2 == "LOW_VARIATION100" && index(i1, "STRING") || i2 == "SLOW_QSORT_HOARE"))
+                       if ((i3 == "qsort_no_pivot" || i3 == "qsort_lomuto") && SS >= lim && (i2 == "LOW_VARIATION100" && index(i1, "STRING") || index(i2, "SLOW_QSORT_HOARE")))
                            zoo[i3] = 1
                        if (SS >= lim && index(i1, "LONG"))
                            zoo[i3] = 1  # 8 GB RAM is not enough?

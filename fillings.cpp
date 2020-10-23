@@ -62,9 +62,32 @@ void fill_for_quadratic_qsort_hoare(vector<T> &v) {
     }
 }
 
+int gena1(int j) {
+    if ((j & 1) == 1) return j - 1;
+    return gena1(j/2) + j;
+}
+
+int gena(int j, int i) {
+    if (i == 0) return 0;
+    if ((j - i & 1) == 0) return j - i;
+    return gena1(j + i - 1 >> 1) + j - i + 1;
+}
+
+template<class T>
+void fill_for_quadratic_qsort_hoare_l(vector<T> &v) {
+    int sz = SS/2;
+    v.resize(SS);
+    for (int i = 0; i < sz; i++) {
+        v[sz - i - 1] = cnv<T>(gena(sz, i));
+        v[i + sz] = cnv<T>(2*i + 1);
+    }
+}
+
 template<class T> void fill(vector<T> &v) {
 #ifdef SLOW_QSORT_HOARE
     fill_for_quadratic_qsort_hoare(v);
+#elif defined(SLOW_QSORT_HOARE_L)
+    fill_for_quadratic_qsort_hoare_l(v);
 #else
     for (int i = 0; i < SS; i++)
 #ifdef RANDOM

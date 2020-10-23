@@ -295,10 +295,12 @@ L:
     test<X>(fio, v, bind(qsort_hoare1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco");
     test<X>(fio, v, bind(qsort_np<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
     test<X>(fio, v, bind(qsort_hoare2<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
+#if !defined(CSTRINGS) && !defined(CSTRINGS_SHORT) && !defined(CSTRINGS_LONG)
     test<X>(fio, v, bind(quicksort_lr_sa<X>, placeholders::_1), "qsort_lr_sa");
     test<X>(fio, v, bind(quicksort_ll_sa<X>, placeholders::_1), "qsort_ll_sa");
     test<X>(fio, v, bind(quicksort_3lr_sa<X>, placeholders::_1), "qsort_3lr_sa");
     test<X>(fio, v, bind(quicksort_3ll_sa<X>, placeholders::_1), "qsort_3ll_sa");
+#endif
     test<X>(fio, v, bind(qsort_safe<X>, placeholders::_1, 0, SS - 1), "qsort_safe");
     test<X>(fio, v, bind(qsort_lomuto<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");
     test<X>(fio, v, bind(dualPivotQuicksort<X>, placeholders::_1), "qsort_dualpivot");

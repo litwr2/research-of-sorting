@@ -27,7 +27,7 @@ nsort.cpp - the main program to gather results of work with various data
 
 nsort-all.cpp - the main program to gather results of work with all permutations
 
-oms7.cpp - a wrapper to use several sort methods from a [repo](https://pastebin.com/M08sgZS6) - copy all required methods to a file named _oms7base.cpp_ and put it into _opt_ subdirectory
+oms7.cpp - a wrapper to use several sort methods from a [repo](https://pastebin.com/M08sgZS6) - copy all required methods to a file named _oms7base.cpp_ and put them into _opt_ subdirectory
 
 quick-dp.cpp - a dual pivots quick sort implementation
 
@@ -36,6 +36,8 @@ quick-hoare.cpp - a Hoare's quick sort implementation with the pivot in the midd
 quick-lomuto.cpp - a Lomuto's quick sort implementation
 
 quick-np.cpp - an implementation of the quick sort without pivots
+
+quick-safe-insertion.cpp - a Hoare's quick sort which uses insertion sort for tiny patitions and which is safe against quadratic timings
 
 radix.cpp - the LSD radix sort implementation
 
@@ -46,6 +48,8 @@ selection.cpp - a selection sort implementation
 shell-plain.cpp - a Shell's sort implementation without tables
 
 shell-tab.cpp - Shell's sort implementations with tables
+
+sort-algo.cpp - a wrapper to use several sort methods from a [repo](https://github.com/chromi/sound-of-sorting/tree/master/src) - copy all required methods to a file named _SortAlgo-m.cpp_ and put them into _opt/SortAlgo_ subdirectory
 
 std.cpp - a wrapper to use sort methods from the C++ standard library: qsort, sort\_heap, sort, stable\_sort
 

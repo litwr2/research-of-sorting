@@ -190,7 +190,7 @@ size_t test(fstream &fio, vector<T> &v, function<void(vector<T>&)> f, const char
     mem_sz_flag = 0;
     cout << title << ' ' << mem_sz_data[title] << endl; 
 #else
-    cout << setw(17) << left << title << setw(14) << right << te - ts << endl;
+    cout << setw(20) << left << title << setw(14) << right << te - ts << endl;
 #endif
 L:
     fio.seekg(0);
@@ -220,7 +220,7 @@ size_t test(fstream &fio, vector<const char*> &v, function<void(vector<const cha
     mem_sz_flag = 0;
     cout << title << ' ' << mem_sz_data[title] << endl; 
 #else
-    cout << setw(17) << left << title << setw(14) << right << te - ts << endl;
+    cout << setw(20) << left << title << setw(14) << right << te - ts << endl;
 #endif
 L:
     fio.seekg(0);
@@ -288,18 +288,48 @@ L:
     test<X>(fio, v, bind(hsort_bsd<X>, placeholders::_1), "heapsort_bsd");
     test<X>(fio, v, bind(mergesort_bsd<X>, placeholders::_1), "mergesort_bsd");
 #endif
-    test<X>(fio, v, bind(mergesort_sa<X>, placeholders::_1), "mergesort_sa");
-    test<X>(fio, v, bind(mergesort_sa<X>, placeholders::_1), "mergesort_iter_sa");
-
     test<X>(fio, v, bind(qsort_hoare1<X>, placeholders::_1, 0, SS - 1), "qsort_hoare");
     test<X>(fio, v, bind(qsort_hoare1tc<X>, placeholders::_1, 0, SS - 1), "qsort_hoare_tco");
     test<X>(fio, v, bind(qsort_np<X>, placeholders::_1, 0, SS - 1), "qsort_no_pivot");
     test<X>(fio, v, bind(qsort_hoare2<X>, placeholders::_1, 0, SS - 1), "qsort_hoare2");
+#if defined(INT32) || defined(INT64) || defined(INT128)
+    test<X>(fio, v, bind(radix_msd_sa<X>, placeholders::_1), "radix_msd_sa");
+    test<X>(fio, v, bind(radix_lsd_sa<X>, placeholders::_1), "radix_lsd_sa");
+#endif
 #if !defined(CSTRINGS) && !defined(CSTRINGS_SHORT) && !defined(CSTRINGS_LONG)
+    test<X>(fio, v, bind(bogo_sa<X>, placeholders::_1), "bogosort_sa");
+    test<X>(fio, v, bind(bozo_sa<X>, placeholders::_1), "bozosort_sa");
+    test<X>(fio, v, bind(stooge_sa<X>, placeholders::_1), "stooge_sa");
+    test<X>(fio, v, bind(slowsort_sa<X>, placeholders::_1), "slowsort_sa");
+    test<X>(fio, v, bind(cyclesort_sa<X>, placeholders::_1), "cyclesort_sa");
+    test<X>(fio, v, bind(bininsertionsort_sa<X>, placeholders::_1), "bininsertionsort_sa");
+    test<X>(fio, v, bind(cocktailshaker_sa<X>, placeholders::_1), "cocktailshaker_sa");
+    test<X>(fio, v, bind(gnome_sa<X>, placeholders::_1), "gnome_sa");
+    test<X>(fio, v, bind(oddeven_sa<X>, placeholders::_1), "oddeven_sa");
+    test<X>(fio, v, bind(heap_sa<X>, placeholders::_1), "heapsort_sa");
+    test<X>(fio, v, bind(bitonic_sa<X>, placeholders::_1), "bitonic_sa");
+    test<X>(fio, v, bind(bitonic_nw_sa<X>, placeholders::_1), "bitonic_nw_sa");
+    test<X>(fio, v, bind(batcher_nw_sa<X>, placeholders::_1), "batcher_nw_sa");
+    test<X>(fio, v, bind(smooth_sa<X>, placeholders::_1), "smooth_sa");
+    test<X>(fio, v, bind(splay_sa<X>, placeholders::_1), "splay_sa");
+    test<X>(fio, v, bind(splayshake_sa<X>, placeholders::_1), "splayshake_sa");
+    test<X>(fio, v, bind(splaymerge_sa<X>, placeholders::_1), "splaymerge_sa");
+    test<X>(fio, v, bind(mergesort_sa<X>, placeholders::_1), "mergesort_sa");
+    test<X>(fio, v, bind(mergesort_iter_sa<X>, placeholders::_1), "mergesort_iter_sa");
+    test<X>(fio, v, bind(mergesortInPlace_sa<X>, placeholders::_1), "mergesort_ip_sa");
+    test<X>(fio, v, bind(mergesortSemiInPlace_sa<X>, placeholders::_1), "mergesort_sip_sa");
+    test<X>(fio, v, bind(cataMergesort_sa<X>, placeholders::_1), "catamergesort_sa");
+    test<X>(fio, v, bind(cataMergesortStable_sa<X>, placeholders::_1), "catamergesort_stb_sa");
     test<X>(fio, v, bind(quicksort_lr_sa<X>, placeholders::_1), "qsort_lr_sa");
     test<X>(fio, v, bind(quicksort_ll_sa<X>, placeholders::_1), "qsort_ll_sa");
     test<X>(fio, v, bind(quicksort_3lr_sa<X>, placeholders::_1), "qsort_3lr_sa");
     test<X>(fio, v, bind(quicksort_3ll_sa<X>, placeholders::_1), "qsort_3ll_sa");
+    test<X>(fio, v, bind(quicksort_2p_sa<X>, placeholders::_1), "qsort_2p_sa");
+    test<X>(fio, v, bind(introsort_sa<X>, placeholders::_1), "introsort_sa");
+    test<X>(fio, v, bind(introsort2_sa<X>, placeholders::_1), "introsort2_sa");
+    test<X>(fio, v, bind(introsort2_stb_sa<X>, placeholders::_1), "introsort2_stb_sa");
+    test<X>(fio, v, bind(septenaryquick_sa<X>, placeholders::_1), "septenaryquick_sa");
+    test<X>(fio, v, bind(septenaryquick_stb_sa<X>, placeholders::_1), "septenaryquick_stb_sa");
 #endif
     test<X>(fio, v, bind(qsort_safe<X>, placeholders::_1, 0, SS - 1), "qsort_safe");
     test<X>(fio, v, bind(qsort_lomuto<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");

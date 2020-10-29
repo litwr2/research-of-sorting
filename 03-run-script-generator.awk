@@ -2,17 +2,19 @@ BEGIN {
     ss["shell_a3n"] = 0
     ss["shell_10/3"] = 0
     ss["shell_prime_e"] = 0
-    ss["shell_a102549"] = 1
+    ss["shell_a102549"] = 0
     ss["shell_prime_2"] = 0
     ss["shell_prime_10/3"] = 0
-    ss["shell_a102549m"] = 0
+    ss["shell_a102549m"] = 1
     ss["shell_2.25"] = 0
-    ss["radix8"] = 0
+    ss["radix8"] = 1
     ss["radix11"] = 0
     ss["radix16"] = 0
-    ss["radix8_msd"] = 0
+    ss["radix8_msd"] = 1
     ss["radix11_msd"] = 0
     ss["radix16_msd"] = 0
+    ss["radix_msd_sa"] = 1
+    ss["radix_lsd_sa"] = 1
     ss["radix8_trie"] = 0
     ss["shell_10/3_oms7"] = 0
     ss["radix8_oms7"] = 0
@@ -22,27 +24,38 @@ BEGIN {
     ss["sradix_bsd"] = 0
     ss["clib_qsort"] = 1
     ss["heapsort_bsd"] = 1
-    ss["mergesort_bsd"] = 0
-    ss["mergesort_sa"] = 0
-    ss["mergesort_iter_sa"] = 0
-    ss["qsort_hoare"] = 1
+    ss["heapsort_sa"] = 1
+    ss["mergesort_bsd"] = 1
+    ss["mergesort_sa"] = 1
+    ss["mergesort_iter_sa"] = 1
+    ss["mergesort_ip_sa"] = 1
+    ss["mergesort_sip_sa"] = 1
+    ss["catamergesort_sa"] = 1
+    ss["catamergesort_stb_sa"] = 1
+    ss["qsort_hoare"] = 0
     ss["qsort_hoare_tco"] = 0
     ss["qsort_no_pivot"] = 0
-    ss["qsort_hoare2"] = 1
+    ss["qsort_hoare2"] = 0
     ss["qsort_ll_sa"] = 1
     ss["qsort_lr_sa"] = 1
     ss["qsort_3ll_sa"] = 1
     ss["qsort_3lr_sa"] = 1
+    ss["qsort_2p_sa"] = 1
+    ss["introsort_sa"] = 1
+    ss["introsort2_sa"] = 1
+    ss["introsort2_stb_sa"] = 1
+    ss["septenaryquick_sa"] = 1
+    ss["septenaryquick_stb_sa"] = 1
     ss["qsort_safe"] = 1
-    ss["qsort_lomuto"] = 0
+    ss["qsort_lomuto"] = 1
     ss["qsort_dualpivot"] = 1
     ss["stlsort"] = 1
-    ss["stlstable"] = 0
-    ss["timsort"] = 0
-    ss["spread"] = 0
-    ss["pdq"] = 0
-    ss["spin"] = 0
-    ss["flat_stable"] = 0
+    ss["stlstable"] = 1
+    ss["timsort"] = 1
+    ss["spread"] = 1
+    ss["pdq"] = 1
+    ss["spin"] = 1
+    ss["flat_stable"] = 1
     ss["bubble"] = 0
     ss["selection"] = 0
     ss["tree_stl"] = 0
@@ -57,6 +70,22 @@ BEGIN {
     ss["hashbt"] = 0
     ss["hashbt_boost"] = 0
     ss["insertion"] = 0
+    ss["gnome_sa"] = 0
+    ss["oddeven_sa"] = 0
+    ss["cocktailshaker_sa"] = 0
+    ss["bininsertionsort_sa"] = 0
+    ss["bogosort_sa"] = 0
+    ss["bozosort_sa"] = 0
+    ss["bitonic_sa"] = 1
+    ss["bitonic_nw_sa"] = 1
+    ss["batcher_nw_sa"] = 1
+    ss["smooth_sa"] = 1
+    ss["stooge_sa"] = 0
+    ss["slowsort_sa"] = 0
+    ss["cyclesort_sa"] = 0
+    ss["splay_sa"] = 1
+    ss["splayshake_sa"] = 1
+    ss["splaymerge_sa"] = 1
 
     t["INT32"] = 1
     t["INT1P4"] = 0
@@ -72,12 +101,12 @@ BEGIN {
 
     ft["RANDOM"] = 1
     ft["ORDERED"] = 1
-    ft["REVERSED"] = 0
-    ft["PARTIALLY_ORDERED"] = 0
-    ft["PARTIALLY_REVERSED"] = 0
+    ft["REVERSED"] = 1
+    ft["PARTIALLY_ORDERED"] = 1
+    ft["PARTIALLY_REVERSED"] = 1
     ft["LOW_VARIATION1"] = 1
     ft["LOW_VARIATION2"] = 1
-    ft["LOW_VARIATION100"] = 0
+    ft["LOW_VARIATION100"] = 1
     ft["SLOW_QSORT_HOARE"] = 1
     ft["SLOW_QSORT_HOARE_L"] = 1
 
@@ -89,12 +118,18 @@ BEGIN {
                    delete zoo
                    for (i3 in ss) {
                        if (ss[i3] == 0 || t[i1] == 0 || ft[i2] == 0) zoo[i3] = 1
+                       if (SS > 20 && (index(i3, "bogo") || index(i3, "bozo")))
+                           zoo[i3] = 1
+                       if (SS > 1000 && (index(i3, "slowsort")))
+                           zoo[i3] = 1
+                       if (SS > 10000 && (index(i3, "stooge") || index(i3, "cycle") || index(i3, "oddeven")))
+                           zoo[i3] = 1
                        lim = 100*1000
                        if (i3 == "radix8" && SS >= lim && index(i1, "_LONG") && i2 == "RANDOM")
                            zoo[i3] = 1
 
                        lim = 1000*1000
-                       if (i3 == "bubble" && SS >= lim && i2 != "ORDERED" && (i2 != "PARTIALLY_ORDERED" || index(i1, "STRINGS")) && i2 != "LOW_VARIATION1")
+                       if ((i3 == "bubble" || index(i3, "cocktailshaker") || index(i3, "gnome")) && SS >= lim && i2 != "ORDERED" && (i2 != "PARTIALLY_ORDERED" || index(i1, "STRINGS")) && i2 != "LOW_VARIATION1")
                            zoo[i3] = 1
                        if ((i3 == "selection" || i3 == "insertion") && SS >= lim)
                            zoo[i3] = 1

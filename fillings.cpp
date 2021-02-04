@@ -83,6 +83,13 @@ void fill_for_quadratic_qsort_hoare_l(vector<T> &v) {
     }
 }
 
+template<class T>
+void fill_homebrew_randomly(vector<T> &v) {
+    v.resize(SS);
+    for (int i = 1; i < SS; i++)
+        v[i] = (i >> 2 | (v[i - 1]  & 3) << 6) + i*i%43;
+}
+
 template<class T> void fill(vector<T> &v) {
 #ifdef SLOW_QSORT_HOARE
     fill_for_quadratic_qsort_hoare(v);

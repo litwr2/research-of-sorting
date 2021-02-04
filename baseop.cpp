@@ -1,14 +1,8 @@
 template <class T>
 int cmpfunc(const void *a, const void *b) {
-    return *(T*)a - *(T*)b;
-}
-
-template<>
-int cmpfunc<int64_t>(const void *a, const void *b) {
-    int64_t r = *(int64_t*)a - *(int64_t*)b;
+    T r = *(T*)a - *(T*)b;  //may be the overflow for int
     if (r < 0) return -1;
-    if (r > 0) return 1;
-    return 0;
+    return r > 0;
 }
 
 template<>

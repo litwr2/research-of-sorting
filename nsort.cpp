@@ -301,7 +301,7 @@ L:
     test<X>(fio, v, bind(bozo_sa<X>, placeholders::_1), "bozosort_sa");
     test<X>(fio, v, bind(stooge_sa<X>, placeholders::_1), "stooge_sa");
     test<X>(fio, v, bind(slowsort_sa<X>, placeholders::_1), "slowsort_sa");
-    test<X>(fio, v, bind(cyclesort_sa<X>, placeholders::_1), "cyclesort_sa");
+    test<X>(fio, v, bind(cyclesort_sa<X>, placeholders::_1), "cyclesort_sa");    //doesn't work
     test<X>(fio, v, bind(bininsertionsort_sa<X>, placeholders::_1), "bininsertionsort_sa");
     test<X>(fio, v, bind(cocktailshaker_sa<X>, placeholders::_1), "cocktailshaker_sa");
     test<X>(fio, v, bind(gnome_sa<X>, placeholders::_1), "gnome_sa");
@@ -332,6 +332,7 @@ L:
     test<X>(fio, v, bind(septenaryquick_stb_sa<X>, placeholders::_1), "septenaryquick_stb_sa");
 #endif
     test<X>(fio, v, bind(qsort_safe<X>, placeholders::_1, 0, SS - 1), "qsort_safe");
+    test<X>(fio, v, bind(qsort_safe3<X>, placeholders::_1, 0, SS - 1), "qsort_safe3");
     test<X>(fio, v, bind(qsort_lomuto<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");
     test<X>(fio, v, bind(dualPivotQuicksort<X>, placeholders::_1), "qsort_dualpivot");
     test<X>(fio, v, bind(stl_sort<X>, placeholders::_1), "stlsort");

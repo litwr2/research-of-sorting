@@ -2,7 +2,7 @@
 namespace SafeQuicksortWithInsertionSort {
     jmp_buf jmpdata;
     template <class T>
-    void qsort_safe1(vector<T> &a, int LBound, int UBound, int lvl) {  //modified Hoare quicksort
+    void qsort_safe(vector<T> &a, int LBound, int UBound, int lvl) {  //modified Hoare quicksort
         if (UBound - LBound <= 16) { // insertion sort on tiny array
             for (int i = LBound + 1; i <= UBound; i++)
                 for (int j = i; j > LBound && a[j] < a[j - 1]; j--)
@@ -10,7 +10,7 @@ namespace SafeQuicksortWithInsertionSort {
             return;
         }
         if (--lvl == 0) longjmp(jmpdata, 1);
-        int i = LBound, j = UBound, p = (i + j)/2;
+        int i = LBound, j = UBound;
         T x = a[(i + j)/2];
 #ifdef MEDIAN3
         if (a[0] < x) {  //median of 3
@@ -30,12 +30,12 @@ namespace SafeQuicksortWithInsertionSort {
            }
         }
         while (i <= j);
-        if (LBound < j) qsort_safe1(a, LBound, j, lvl);
-        if (i < UBound) qsort_safe1(a, i, UBound, lvl);
+        if (LBound < j) qsort_safe(a, LBound, j, lvl);
+        if (i < UBound) qsort_safe(a, i, UBound, lvl);
     }
 
     template <>
-    void qsort_safe1(vector<const char*> &a, int LBound, int UBound, int lvl) {  //modified Hoare quicksort
+    void qsort_safe(vector<const char*> &a, int LBound, int UBound, int lvl) {  //modified Hoare quicksort
         if (UBound - LBound <= 16) { // insertion sort on tiny array
             for (int i = LBound + 1; i <= UBound; i++)
                 for (int j = i; j > LBound && strcmp(a[j], a[j - 1]) < 0; j--)
@@ -63,8 +63,8 @@ namespace SafeQuicksortWithInsertionSort {
            }
         }
         while (i <= j);
-        if (LBound < j) qsort_safe1(a, LBound, j, lvl);
-        if (i < UBound) qsort_safe1(a, i, UBound, lvl);
+        if (LBound < j) qsort_safe(a, LBound, j, lvl);
+        if (i < UBound) qsort_safe(a, i, UBound, lvl);
     }
 }
 
@@ -72,6 +72,6 @@ template <class T>
 void qsort_safe(vector<T> &a, int LBound, int UBound) {
     int lvl = log(UBound - LBound)*4;
     setjmp(SafeQuicksortWithInsertionSort::jmpdata);
-    SafeQuicksortWithInsertionSort::qsort_safe1(a, LBound, UBound, lvl);
+    SafeQuicksortWithInsertionSort::qsort_safe(a, LBound, UBound, lvl);
 }
 

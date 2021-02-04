@@ -82,7 +82,7 @@ BEGIN {
     ss["smooth_sa"] = 1
     ss["stooge_sa"] = 0
     ss["slowsort_sa"] = 0
-    ss["cyclesort_sa"] = 0
+    ss["cyclesort_sa"] = 0  #doesn't work
     ss["splay_sa"] = 1
     ss["splayshake_sa"] = 1
     ss["splaymerge_sa"] = 1

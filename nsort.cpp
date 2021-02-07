@@ -129,6 +129,7 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "hashtree.cpp"
 #include "array.cpp"
 #include "bubble.cpp"
+#include "combo.cpp"
 #include "selection.cpp"
 #include "trie.cpp"
 
@@ -261,6 +262,7 @@ L:
     test<X>(fio, v, bind(selection_sort<X>, placeholders::_1), "selection");
     test<X>(fio, v, bind(insertion_sort<X>, placeholders::_1), "insertion");
     test<X>(fio, v, bind(bubble_sort<X>, placeholders::_1), "bubble");
+    test<X>(fio, v, bind(combo_sort<X>, placeholders::_1), "combo");
 
 #if !defined(FLOAT)
     test<X>(fio, v, bind(radixsort<X>, placeholders::_1, 8), "radix8");
@@ -332,7 +334,6 @@ L:
     test<X>(fio, v, bind(septenaryquick_stb_sa<X>, placeholders::_1), "septenaryquick_stb_sa");
 #endif
     test<X>(fio, v, bind(qsort_safe<X>, placeholders::_1, 0, SS - 1), "qsort_safe");
-    test<X>(fio, v, bind(qsort_safe3<X>, placeholders::_1, 0, SS - 1), "qsort_safe3");
     test<X>(fio, v, bind(qsort_lomuto<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");
     test<X>(fio, v, bind(dualPivotQuicksort<X>, placeholders::_1), "qsort_dualpivot");
     test<X>(fio, v, bind(stl_sort<X>, placeholders::_1), "stlsort");

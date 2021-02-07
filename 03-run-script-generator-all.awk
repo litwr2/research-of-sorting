@@ -37,6 +37,7 @@ BEGIN {
     ss["spin"] = 0
     ss["flat_stable"] = 0
     ss["bubble"] = 0
+    ss["combo"] = 0
     ss["selection"] = 0
     ss["tree_stl"] = 0
     ss["tree_boost"] = 0

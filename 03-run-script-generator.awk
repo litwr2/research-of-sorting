@@ -22,7 +22,7 @@ BEGIN {
     ss["heapsort_stl"] = 0
     ss["radix_bsd"] = 0
     ss["sradix_bsd"] = 0
-    ss["clib_qsort"] = 1
+    ss["clib_qsort"] = 0
     ss["heapsort_bsd"] = 0
     ss["heapsort_sa"] = 0
     ss["mergesort_bsd"] = 0
@@ -47,6 +47,7 @@ BEGIN {
     ss["septenaryquick_sa"] = 0
     ss["septenaryquick_stb_sa"] = 0
     ss["qsort_safe"] = 1
+    ss["qsort_safe_nss"] = 1
     ss["qsort_lomuto"] = 0
     ss["qsort_dualpivot"] = 0
     ss["stlsort"] = 0
@@ -57,7 +58,7 @@ BEGIN {
     ss["spin"] = 0
     ss["flat_stable"] = 0
     ss["bubble"] = 0
-    ss["combo"] = 1
+    ss["combo"] = 0
     ss["selection"] = 0
     ss["tree_stl"] = 0
     ss["tree_boost"] = 0
@@ -94,7 +95,7 @@ BEGIN {
     t["INT128"] = 0
     t["FLOAT"] = 0
     t["STRINGS"] = 0
-    t["CSTRINGS"] = 0
+    t["CSTRINGS"] = 1
     t["STRINGS_SHORT"] = 0
     t["CSTRINGS_SHORT"] = 0
     t["STRINGS_LONG"] = 0

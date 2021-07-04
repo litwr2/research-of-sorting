@@ -24,7 +24,7 @@
 #endif
 
 using namespace std;
-
+#define xabs(x) ((x<0)?-(x):(x))
 #ifndef FN
 #define FN "tempd"
 #endif
@@ -122,6 +122,7 @@ int operator-(const X &a, const X &b) { return a.k - b.k; }
 #include "quick-lomuto.cpp"
 #include "quick-dp.cpp"
 #include "quick-safe-insertion.cpp"
+#include "quick-safe-insertion-nss.cpp"
 #include "shell-plain.cpp"
 #include "shell-tab.cpp"
 #include "tree.cpp"
@@ -244,7 +245,7 @@ int main() {
     size_t eps, itv, tv = test<X>(fio, v, bind(shell_10d3<X>, placeholders::_1), "Z"); //train gc & cache, it is just a delay
     do {
         itv = test<X>(fio, v, bind(shell_10d3<X>, placeholders::_1), "Z");
-        eps = int(double(abs(itv - tv))/tv*100);
+        eps = int(double(xabs(itv - tv))/tv*100);
         tv = itv;
     } while (eps > 10 && chrono::steady_clock::now() < tp);
 #endif
@@ -334,6 +335,7 @@ L:
     test<X>(fio, v, bind(septenaryquick_stb_sa<X>, placeholders::_1), "septenaryquick_stb_sa");
 #endif
     test<X>(fio, v, bind(qsort_safe<X>, placeholders::_1, 0, SS - 1), "qsort_safe");
+    test<X>(fio, v, bind(qsort_safe_nss<X>, placeholders::_1, 0, SS - 1), "qsort_safe_nss");
     test<X>(fio, v, bind(qsort_lomuto<X>, placeholders::_1, 0, SS - 1), "qsort_lomuto");
     test<X>(fio, v, bind(dualPivotQuicksort<X>, placeholders::_1), "qsort_dualpivot");
     test<X>(fio, v, bind(stl_sort<X>, placeholders::_1), "stlsort");

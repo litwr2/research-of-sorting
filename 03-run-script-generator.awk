@@ -58,7 +58,7 @@ BEGIN {
     ss["spin"] = 0
     ss["flat_stable"] = 0
     ss["bubble"] = 0
-    ss["combo"] = 0
+    ss["combo"] = 1
     ss["selection"] = 0
     ss["tree_stl"] = 0
     ss["tree_boost"] = 0
@@ -90,16 +90,16 @@ BEGIN {
     ss["splaymerge_sa"] = 0
 
     t["INT32"] = 1
-    t["INT1P4"] = 0
-    t["INT64"] = 0
-    t["INT128"] = 0
-    t["FLOAT"] = 0
-    t["STRINGS"] = 0
+    t["INT1P4"] = 1
+    t["INT64"] = 1
+    t["INT128"] = 1
+    t["FLOAT"] = 1
+    t["STRINGS"] = 1
     t["CSTRINGS"] = 1
-    t["STRINGS_SHORT"] = 0
-    t["CSTRINGS_SHORT"] = 0
-    t["STRINGS_LONG"] = 0
-    t["CSTRINGS_LONG"] = 0
+    t["STRINGS_SHORT"] = 1
+    t["CSTRINGS_SHORT"] = 1
+    t["STRINGS_LONG"] = 1
+    t["CSTRINGS_LONG"] = 1
 
     ft["RANDOM"] = 1
     ft["ORDERED"] = 1
@@ -112,7 +112,7 @@ BEGIN {
     ft["SLOW_QSORT_HOARE"] = 1
     ft["SLOW_QSORT_HOARE_L"] = 1
 
-    for (SS = 1*100*1000; SS <= 1*100*1000; SS *= 10) {
+    for (SS = 1*1*1000; SS <= 1*1*1000; SS *= 10) {
            nSS = "1e" int(log(SS)/log(10) + .5)
            for (i1 in t)
                for (i2 in ft) {

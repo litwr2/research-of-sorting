@@ -51,6 +51,7 @@ using namespace std;
 //#define LOW_VARIATION2
 //#define LOW_VARIATION100
 //#define SLOW_QSORT_HOARE
+//#define SLOW_QSORT_HOARE_L
 
 #ifdef LOW_VARIATION1
 #define LOW_VARIATION_CONST 1

@@ -14,15 +14,15 @@ loop:
                     swap(*(pj - 1), *pj);
             goto cont;
         }
-loop2:
         if (sp == 0) {
            pLBound = (T*)gLBound;
            pUBound = (T*)gUBound;
            sp = stack_sz;
         }
+loop2:
         pi = pLBound;
         pj = pUBound;
-        x = *(T*)(((size_t)pi + (size_t)pj)/2 & ~(sizeof(T*) - 1));
+        x = pi[(pj - pi)/2];
 #ifdef MEDIAN3
         if (*pi < x) {  //median of 3
             if (x >= *pj)
@@ -71,14 +71,14 @@ loop:
                     swap(*(pj - 1), *pj);
             goto cont;
         }
-loop2:
         if (sp == 0) {
            pLBound = (const char**)gLBound;
            pUBound = (const char**)gUBound;
            sp = stack_sz;
         }
+loop2:
         pi = pLBound, pj = pUBound;
-        x = *(const char**)(((size_t)pi + (size_t)pj)/2 & ~(sizeof(const char**) - 1));
+        x = pi[(pj - pi)/2];
 #ifdef MEDIAN3
         if (strcmp(*pi, x) < 0) {  //median of 3
             if (strcmp(x, *pj) >= 0)
@@ -121,8 +121,8 @@ cont:
 template <class T>
 void qsort_safe_nss(vector<T> &a, int LBound, int UBound) {
     using namespace SafeQuicksortWithInsertionSortNoSystemStack;
-    stack_sz = 2*(int)(log(UBound - LBound)/log(2) + 1);
-    //stack_sz = 8*(int)(log(UBound - LBound));
+    //stack_sz = 2*(int)(log(UBound - LBound)/log(2) + 1); //the minimalistic variant
+    stack_sz = 8*(int)(log(UBound - LBound));
     T *lbub[stack_sz];
     stack = (void**)lbub;
     sp = stack_sz;
